@@ -131,7 +131,11 @@ class SkillRegistry:
                     "GRASP_EFFECT_NOT_ACHIEVED",
                 ),
             ),
-            description="Grasp one reachable known object with an empty gripper.",
+            description=(
+                "Grasp one reachable known object with an empty gripper. Picking an "
+                "object removes it from any target region it occupied, which may free "
+                "that target for a later Place."
+            ),
         )
         place = SkillSpec(
             name="place",
@@ -160,7 +164,11 @@ class SkillRegistry:
                 ),
                 EffectTemplate("targets.{target}.occupied", True, "TARGET_NOT_OCCUPIED"),
             ),
-            description="Release one held object at the centre of a reachable target.",
+            description=(
+                "Release one held object at the centre of an empty reachable target. "
+                "The object becomes that target's occupant; temporary targets use the "
+                "same Place behavior as destination targets."
+            ),
         )
         return cls((pick, place))
 

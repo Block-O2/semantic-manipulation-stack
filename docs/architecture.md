@@ -138,9 +138,17 @@ any other untrusted planner response.
 
 A planner may return a structured `CANNOT` plan with `missing_capabilities` for
 a well-formed goal that the registry cannot execute. For example,
-`push_to_edge` reports the missing `push` capability, while an occupied target
-reports `clear_occupied_target`. Capability gaps are explicit outcomes and are
-never converted into hidden simulator edits.
+`push_to_edge` reports the missing `push` capability. An occupied target is not
+automatically a capability gap: when `occupied_by` identifies a movable object
+and a free alternate target exists, the deterministic planner searches a small
+Pick / Place state space and composes a rearrangement plan. Capability gaps are
+explicit outcomes and are never converted into hidden simulator edits.
+
+The same symbolic Pick / Place transition model is used by the bounded search
+and by `PlanValidator`'s projected precondition checking. Picking an object
+removes it from its prior target occupancy; placing it adds it to the new
+target. This allows multi-step plans to remain strictly validated without
+embedding rearrangement policy in `AgentRuntime`.
 
 ## Result hierarchy
 

@@ -147,7 +147,7 @@ class WorldModel:
         targets: dict[str, TargetState] = {}
         for target_name in target_names:
             target_pose = self.pose(target_name)
-            occupied = False
+            occupied_by: list[str] = []
             for object_name in object_names:
                 inside = self.is_inside_target(
                     object_name,
@@ -155,12 +155,19 @@ class WorldModel:
                     margin=self.thresholds.inside_margin,
                 )
                 relations[WorldState.relation_key(object_name, target_name)] = inside
-                occupied = occupied or inside
+                if inside:
+                    occupied_by.append(object_name)
             targets[target_name] = TargetState(
                 exists=True,
                 pose=PoseState.from_pose(target_pose),
                 reachable=self._semantically_reachable(target_pose),
-                occupied=occupied,
+                occupied=bool(occupied_by),
+                occupied_by=tuple(sorted(occupied_by)),
+                role=(
+                    "temporary"
+                    if target_name in self._env.scene_config.temporary_target_names
+                    else "destination"
+                ),
             )
 
         for first_name in object_names:

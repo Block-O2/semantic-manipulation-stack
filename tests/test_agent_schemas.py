@@ -25,7 +25,13 @@ def world_state(*, holding: str | None = None, inside: bool = False) -> WorldSta
             "red_cube": ObjectState(True, pose, holding == "red_cube", True),
         },
         targets={
-            "blue_target": TargetState(True, pose, True, inside),
+            "blue_target": TargetState(
+                True,
+                pose,
+                True,
+                inside,
+                ("red_cube",) if inside else (),
+            ),
         },
         relations={"red_cube_inside_blue_target": inside},
     )

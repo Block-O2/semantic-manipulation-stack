@@ -10,6 +10,7 @@ from abc import ABC, abstractmethod
 from collections.abc import Sequence
 from typing import Any
 
+from planner.composition import compose_inside_plan
 from planner.registry import SkillRegistry
 from planner.schema import (
     Goal,
@@ -17,7 +18,6 @@ from planner.schema import (
     Plan,
     PlannerFailureContext,
     PlannerResult,
-    PlanStep,
 )
 from world import WorldState
 
@@ -72,33 +72,14 @@ class RuleBasedPlanner(PlannerBackend):
             return PlannerResult.from_plan(Plan.cannot_plan("Requested object is unreachable."))
         if not target_state.reachable:
             return PlannerResult.from_plan(Plan.cannot_plan("Requested target is unreachable."))
-        if target_state.occupied:
-            return PlannerResult.from_plan(
-                Plan.capability_gap(
-                    ["clear_occupied_target"],
-                    "The destination is occupied and the baseline planner cannot rearrange it.",
-                )
+        steps = compose_inside_plan(goal, world_state, skill_registry)
+        if steps is None:
+            detail = (
+                "The destination occupancy is known but its occupying object is unknown."
+                if target_state.occupied and not target_state.occupied_by
+                else "No legal Pick / Place composition was found within the bounded horizon."
             )
-        holding = world_state.robot.holding
-        if holding not in {None, goal.object_name}:
-            return PlannerResult.from_plan(
-                Plan.cannot_plan("The gripper holds another object and no release skill is available.")
-            )
-        if holding == goal.object_name:
-            steps = [
-                PlanStep(
-                    "place",
-                    {"object": goal.object_name, "target": goal.target_name},
-                )
-            ]
-        else:
-            steps = [
-                PlanStep("pick", {"object": goal.object_name}),
-                PlanStep(
-                    "place",
-                    {"object": goal.object_name, "target": goal.target_name},
-                ),
-            ]
+            return PlannerResult.from_plan(Plan.cannot_plan(detail))
         return PlannerResult.from_plan(Plan.ready(steps))
 
 
@@ -176,7 +157,24 @@ class OpenAICompatiblePlanner(PlannerBackend):
             "required_output": {
                 "ready": {
                     "status": "ready",
-                    "steps": [{"skill": "pick", "args": {"object": "red_cube"}}],
+                    "steps": [
+                        {"skill": "pick", "args": {"object": "green_cube"}},
+                        {
+                            "skill": "place",
+                            "args": {
+                                "object": "green_cube",
+                                "target": "temporary_area",
+                            },
+                        },
+                        {"skill": "pick", "args": {"object": "red_cube"}},
+                        {
+                            "skill": "place",
+                            "args": {
+                                "object": "red_cube",
+                                "target": "blue_target",
+                            },
+                        },
+                    ],
                 },
                 "cannot_plan": {
                     "status": "cannot_plan",
@@ -216,10 +214,14 @@ class OpenAICompatiblePlanner(PlannerBackend):
                     "content": (
                         "You are a semantic robot task planner. Use only the supplied "
                         "skill registry. Return exactly one JSON object matching one of "
-                        "the required output schemas. You may reason about multiple objects "
-                        "and temporary_area, but never invent skills. Return CAPABILITY_GAP "
-                        "when registered skills cannot express the requested effect. Never "
-                        "emit code or low-level commands."
+                        "the required output schemas. Compose registered skills across "
+                        "multiple steps when their effects can achieve the goal. Target "
+                        "occupied_by identifies movable blockers, and a target with role "
+                        "temporary is a normal valid Place destination for staging. Do not "
+                        "return CAPABILITY_GAP when a Pick / Place composition can solve the "
+                        "state. Return it only when the registered skills genuinely lack the "
+                        "required physical interaction. Never invent skills, emit code, or "
+                        "emit low-level commands."
                     ),
                 },
                 {"role": "user", "content": json.dumps(prompt, sort_keys=True)},

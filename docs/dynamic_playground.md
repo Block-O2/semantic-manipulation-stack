@@ -13,9 +13,10 @@ The deterministic default scene contains:
 - `temporary_area`, which accepts the same normal Place execution as a target.
 
 Cube positions can be randomized with the existing environment reset option.
-World state reports each entity's pose, existence, and reachability. It also
-derives `inside`, `occupied`, `left_of`, `right_of`, and symmetric `near`
-relations from geometry. Relation tolerances live in `SemanticThresholds`.
+World state reports each entity's pose, existence, and reachability. Targets
+also expose the geometry-derived `occupied_by` object list. It derives
+`inside`, `occupied`, `left_of`, `right_of`, and symmetric `near` relations
+from geometry. Relation tolerances live in `SemanticThresholds`.
 
 ## Interactive use
 
@@ -81,7 +82,9 @@ The scenarios cover:
 - a dropped object followed by Agent-level replanning;
 - a reachable target move with no unnecessary replan;
 - an unreachable target move and clean refusal;
-- an occupied target reported as `clear_occupied_target` capability gap;
+- an initially occupied target solved by composing four Pick / Place steps;
+- target occupancy introduced after Pick, followed by replanning and a
+  five-step rearrangement plan;
 - a `push_to_edge` goal reported as a missing `push` capability.
 
 ## Supported goals and capability gaps
@@ -90,6 +93,13 @@ The scenarios cover:
 skills. The goal schema can also represent `left_of`, `near`, and
 `push_to_edge`, so planners and interfaces do not have to encode these ideas as
 free text. They are deliberately not executable in Milestone 5.
+
+For `inside` goals, the deterministic planner performs a bounded breadth-first
+search over legal Pick and Place transitions. If another movable object occupies
+the requested target, the search can stage it in an empty target—preferring a
+target whose semantic role is `temporary`—and then finish the original goal.
+The search uses entity state and Skill preconditions rather than literal cube or
+destination names.
 
 When a request is semantically valid but unsupported, a planner returns a
 `CANNOT` plan with `missing_capabilities` and a human-readable detail. This is a

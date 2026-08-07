@@ -5,6 +5,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Any, Mapping
 
+from planner.composition import SymbolicManipulationState
 from planner.effects import derive_expected_effects
 from planner.registry import ArgumentKind, SkillRegistry
 from planner.schema import Plan, PlannerResult, PlanStatus
@@ -49,7 +50,7 @@ class PlanValidator:
         if plan.status is PlanStatus.CANNOT_PLAN:
             return PlanValidationResult(True, plan, ())
 
-        projection = world_state.flattened()
+        projection = SymbolicManipulationState.from_world_state(world_state)
         errors: list[str] = []
         for index, step in enumerate(plan.steps):
             spec = self.registry.get(step.skill)
@@ -80,7 +81,7 @@ class PlanValidator:
             if entity_error:
                 continue
 
-            failures = self.registry.check_preconditions(step, projection)
+            failures = self.registry.check_preconditions(step, projection.flattened())
             for failure in failures:
                 errors.append(
                     f"STEP_{index}_PRECONDITION_{failure.reason}: "
@@ -91,7 +92,16 @@ class PlanValidator:
                 continue
 
             expected = derive_expected_effects(self.registry, step)
+            try:
+                projection = projection.apply(step)
+            except ValueError as exc:
+                errors.append(f"STEP_{index}_NO_SYMBOLIC_TRANSITION: {exc}")
+                continue
+            projected_values = projection.flattened()
             for effect in expected.effects:
-                projection[effect.path] = effect.expected
+                if projected_values.get(effect.path, "<missing>") != effect.expected:
+                    errors.append(
+                        f"STEP_{index}_INVALID_SYMBOLIC_EFFECT: {effect.path}"
+                    )
 
         return PlanValidationResult(not errors, plan, tuple(errors))

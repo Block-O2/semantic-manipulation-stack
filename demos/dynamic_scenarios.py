@@ -1,4 +1,4 @@
-"""Run six scripted Dynamic World Playground scenarios."""
+"""Run scripted Dynamic World Playground scenarios."""
 
 from __future__ import annotations
 
@@ -42,6 +42,10 @@ def _result_record(name: str, result: AgentResult) -> dict[str, Any]:
         "goal_satisfied": result.final_world_state.relations.get(
             "red_cube_inside_blue_target", False
         ),
+        "final_occupancy": {
+            target: list(state.occupied_by)
+            for target, state in result.final_world_state.targets.items()
+        },
         "trace": list(result.trace),
     }
 
@@ -56,6 +60,9 @@ def run_scenario(name: str) -> dict[str, Any]:
         registry = SkillRegistry.standard()
         triggered = False
 
+        if name == "occupy":
+            controller.place_object_in_target("green_cube", "blue_target")
+
         def change_world(event: AgentBoundaryEvent) -> None:
             nonlocal triggered
             if triggered or event.step.skill != "place":
@@ -66,7 +73,7 @@ def run_scenario(name: str) -> dict[str, Any]:
                 controller.move_target("blue_target", 0.20, 0.10)
             elif name == "move_unreachable":
                 controller.move_target("blue_target", 0.50, 0.50)
-            elif name == "occupy":
+            elif name == "occupy_after_pick":
                 controller.place_object_in_target("green_cube", "blue_target")
             else:
                 return
@@ -104,6 +111,7 @@ def main() -> None:
         "move_reachable",
         "move_unreachable",
         "occupy",
+        "occupy_after_pick",
         "capability_gap",
     )
     parser.add_argument("--scenario", choices=(*choices, "all"), default="all")
@@ -123,7 +131,18 @@ def main() -> None:
             not item["success"] and item["failure_reason"] == "CANNOT_PLAN"
         ),
         "occupy": lambda item: bool(
-            not item["success"] and item["failure_reason"] == "CAPABILITY_GAP"
+            item["success"]
+            and item["planner_calls"] == 1
+            and item["replans"] == 0
+            and item["executed_steps"] == 4
+            and item["final_occupancy"]["blue_target"] == ["red_cube"]
+            and item["final_occupancy"]["temporary_area"] == ["green_cube"]
+        ),
+        "occupy_after_pick": lambda item: bool(
+            item["success"]
+            and item["planner_calls"] == 2
+            and item["replans"] == 1
+            and item["executed_steps"] == 6
         ),
         "capability_gap": lambda item: bool(
             not item["success"]

@@ -56,6 +56,8 @@ def _compact_state(state: WorldState) -> dict[str, object]:
                 "position": value.pose.position if value.pose else None,
                 "reachable": value.reachable,
                 "occupied": value.occupied,
+                "occupied_by": list(value.occupied_by),
+                "role": value.role,
             }
             for name, value in state.targets.items()
         },

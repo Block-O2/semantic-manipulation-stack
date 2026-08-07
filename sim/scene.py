@@ -52,6 +52,12 @@ class SceneConfig:
         return ("red_target", "blue_target", "temporary_area")
 
     @property
+    def temporary_target_names(self) -> tuple[str, ...]:
+        """Targets preferred for reversible staging, but usable by normal Place."""
+
+        return ("temporary_area",)
+
+    @property
     def cube_xy_positions(self) -> dict[str, tuple[float, float]]:
         return {
             "red_cube": self.red_cube_xy,

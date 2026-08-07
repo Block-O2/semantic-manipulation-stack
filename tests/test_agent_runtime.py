@@ -65,7 +65,11 @@ class FakeWorldMachine:
 
     def place(self) -> None:
         obj = replace(self.state.objects["red_cube"], grasped=False)
-        target = replace(self.state.targets["blue_target"], occupied=True)
+        target = replace(
+            self.state.targets["blue_target"],
+            occupied=True,
+            occupied_by=("red_cube",),
+        )
         self.state = replace(
             self.state,
             robot=RobotState(None),
@@ -317,7 +321,7 @@ def test_unreachable_target_move_triggers_precondition_replan() -> None:
     assert any("TARGET_UNREACHABLE" in line for line in result.trace)
 
 
-def test_target_occupancy_triggers_capability_gap_on_replan() -> None:
+def test_unknown_target_occupant_causes_clean_cannot_plan_on_replan() -> None:
     machine = FakeWorldMachine()
     planner = RuleBasedPlanner()
     occupied = False
@@ -331,11 +335,10 @@ def test_target_occupancy_triggers_capability_gap_on_replan() -> None:
     result = runtime_for(machine, planner).run(GOAL, before_step=occupy_before_place)
 
     assert not result.success
-    assert result.failure_reason is AgentFailure.CAPABILITY_GAP
+    assert result.failure_reason is AgentFailure.CANNOT_PLAN
     assert result.replans == 1
-    assert result.plan_history[-1].missing_capabilities == (
-        "clear_occupied_target",
-    )
+    assert result.plan_history[-1].missing_capabilities == ()
+    assert "occupying object is unknown" in (result.failure_detail or "")
 
 
 def test_object_removal_is_observed_before_execution() -> None:

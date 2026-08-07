@@ -72,6 +72,14 @@ class TargetState:
     pose: PoseState | None
     reachable: bool
     occupied: bool
+    occupied_by: tuple[str, ...] = ()
+    role: str = "destination"
+
+    def __post_init__(self) -> None:
+        if self.occupied_by and not self.occupied:
+            raise ValueError("occupied_by requires occupied=True")
+        if self.role not in {"destination", "temporary"}:
+            raise ValueError(f"unknown target role {self.role!r}")
 
     def to_dict(self) -> dict[str, Any]:
         return {
@@ -79,6 +87,8 @@ class TargetState:
             "pose": self.pose.to_dict() if self.pose else None,
             "reachable": self.reachable,
             "occupied": self.occupied,
+            "occupied_by": list(self.occupied_by),
+            "role": self.role,
         }
 
 
@@ -132,7 +142,13 @@ class WorldState:
             return getattr(state, parts[2])
         if len(parts) == 3 and parts[0] == "targets":
             state = self.targets.get(parts[1])
-            if state is None or parts[2] not in {"exists", "reachable", "occupied"}:
+            if state is None or parts[2] not in {
+                "exists",
+                "reachable",
+                "occupied",
+                "occupied_by",
+                "role",
+            }:
                 raise KeyError(path)
             return getattr(state, parts[2])
         if len(parts) == 2 and parts[0] == "relations" and parts[1] in self.relations:
@@ -149,6 +165,8 @@ class WorldState:
             values[f"targets.{name}.exists"] = state.exists
             values[f"targets.{name}.reachable"] = state.reachable
             values[f"targets.{name}.occupied"] = state.occupied
+            values[f"targets.{name}.occupied_by"] = state.occupied_by
+            values[f"targets.{name}.role"] = state.role
         for name, value in self.relations.items():
             values[f"relations.{name}"] = value
         return values

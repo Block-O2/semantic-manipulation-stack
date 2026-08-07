@@ -70,7 +70,9 @@ hierarchy.
 - deterministic offline planner for tests and evaluation
 - optional, isolated OpenAI-compatible LLM planner adapter
 - three movable cubes, two target trays, and a temporary placement area
-- geometric `inside`, `occupied`, `left_of`, `right_of`, and `near` relations
+- geometric `inside`, `occupied`, `occupied_by`, `left_of`, `right_of`, and
+  `near` relations
+- bounded symbolic composition of existing Pick and Place skills
 - explicit capability-gap plans for valid but unsupported goals
 - an interactive semantic-step playground with observable world changes
 
@@ -248,7 +250,6 @@ The repository does **not** yet provide:
 - ROS integration;
 - obstacle-aware or general-purpose motion planning;
 - execution of relation goals such as `left_of`, `near`, or `push_to_edge`;
-- automatic clearing of an occupied target;
 - general-purpose manipulation beyond the known cube and target scene;
 - production safety, real-robot validation, or formal safety guarantees.
 

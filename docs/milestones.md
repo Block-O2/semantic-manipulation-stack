@@ -38,6 +38,13 @@ relations; explicit external world modifications; semantic-step inspection;
 reachable and unreachable target changes; occupied-target handling; structured
 capability gaps; and deterministic dynamic-world scenarios.
 
+### Occupied-target skill-composition exploration ✅
+
+Geometry-derived `occupied_by` state and a bounded symbolic search demonstrate
+that the planner can clear a destination by composing only the existing Pick
+and Place skills. No recovery policy or simulator access was added to
+`AgentRuntime`.
+
 ## M6 — PushSkill
 
 Explore a classical, deterministic push implementation behind the existing
