@@ -133,7 +133,9 @@ class PlaceSkill(Skill):
 
     def check_preconditions(self) -> SkillResult | None:
         self._transition(SkillPhase.CHECK_PRECONDITIONS)
-        if self.object_name not in self._world.object_names:
+        if self.object_name not in self._world.object_names or (
+            hasattr(self._world, "exists") and not self._world.exists(self.object_name)
+        ):
             return self._failure_result(
                 _FailureEvent(
                     SkillPhase.CHECK_PRECONDITIONS,
@@ -179,6 +181,18 @@ class PlaceSkill(Skill):
                 _FailureEvent(
                     SkillPhase.CHECK_PRECONDITIONS,
                     SkillFailure.TARGET_POSE_UNAVAILABLE,
+                    None,
+                ),
+                attempts=0,
+            )
+        if hasattr(self._world, "is_target_occupied") and self._world.is_target_occupied(
+            self.target_name,
+            exclude_object=self.object_name,
+        ):
+            return self._failure_result(
+                _FailureEvent(
+                    SkillPhase.CHECK_PRECONDITIONS,
+                    SkillFailure.TARGET_OCCUPIED,
                     None,
                 ),
                 attempts=0,

@@ -64,8 +64,12 @@ class TopDownCubePlacePoseGenerator(PlacePoseGenerator):
         self,
         *,
         geometry: PlaceGeometry = PlaceGeometry(),
-        supported_objects: frozenset[str] = frozenset({"red_cube"}),
-        supported_targets: frozenset[str] = frozenset({"blue_target"}),
+        supported_objects: frozenset[str] = frozenset(
+            {"red_cube", "green_cube", "blue_cube"}
+        ),
+        supported_targets: frozenset[str] = frozenset(
+            {"red_target", "blue_target", "temporary_area"}
+        ),
     ) -> None:
         self.geometry = geometry
         self.supported_objects = supported_objects

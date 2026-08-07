@@ -11,7 +11,13 @@ from planner import (
     ScriptedPlanner,
     SkillRegistry,
 )
-from runtime import AgentFailure, AgentRuntime, AgentStepEvent, SkillExecutor
+from runtime import (
+    AgentBoundaryEvent,
+    AgentFailure,
+    AgentRuntime,
+    AgentStepEvent,
+    SkillExecutor,
+)
 from skills import Skill, SkillPhase, SkillResult
 from world import ObjectState, PoseState, RobotState, TargetState, WorldState
 
@@ -70,6 +76,35 @@ class FakeWorldMachine:
 
     def lose_object(self) -> None:
         obj = replace(self.state.objects["red_cube"], grasped=False, reachable=True)
+        self.state = replace(
+            self.state,
+            robot=RobotState(None),
+            objects={"red_cube": obj},
+        )
+
+    def set_target_reachable(self, reachable: bool) -> None:
+        target = replace(
+            self.state.targets["blue_target"],
+            reachable=reachable,
+            pose=PoseState(
+                (0.20, 0.10, 0.803) if reachable else (0.50, 0.50, 0.803),
+                (0.0, 0.0, 0.0, 1.0),
+            ),
+        )
+        self.state = replace(self.state, targets={"blue_target": target})
+
+    def occupy_target(self) -> None:
+        target = replace(self.state.targets["blue_target"], occupied=True)
+        self.state = replace(self.state, targets={"blue_target": target})
+
+    def remove_object(self) -> None:
+        obj = replace(
+            self.state.objects["red_cube"],
+            exists=False,
+            pose=None,
+            grasped=False,
+            reachable=False,
+        )
         self.state = replace(
             self.state,
             robot=RobotState(None),
@@ -239,3 +274,99 @@ def test_invalid_plans_consume_replan_budget_then_stop() -> None:
     assert result.failure_reason is AgentFailure.AGENT_REPLAN_EXHAUSTED
     assert result.planner_calls == 2
     assert result.replans == 1
+
+
+def test_reachable_target_move_is_reobserved_without_replanning() -> None:
+    machine = FakeWorldMachine()
+    planner = RuleBasedPlanner()
+    moved = False
+
+    def move_before_place(event: AgentBoundaryEvent) -> None:
+        nonlocal moved
+        if event.step.skill == "place" and not moved:
+            machine.set_target_reachable(True)
+            moved = True
+
+    result = runtime_for(machine, planner).run(GOAL, before_step=move_before_place)
+
+    assert result.success
+    assert result.planner_calls == 1
+    assert result.replans == 0
+    assert result.executed_steps[1].world_before.targets[
+        "blue_target"
+    ].pose.position == (0.20, 0.10, 0.803)
+
+
+def test_unreachable_target_move_triggers_precondition_replan() -> None:
+    machine = FakeWorldMachine()
+    planner = RuleBasedPlanner()
+    moved = False
+
+    def move_before_place(event: AgentBoundaryEvent) -> None:
+        nonlocal moved
+        if event.step.skill == "place" and not moved:
+            machine.set_target_reachable(False)
+            moved = True
+
+    result = runtime_for(machine, planner).run(GOAL, before_step=move_before_place)
+
+    assert not result.success
+    assert result.failure_reason is AgentFailure.CANNOT_PLAN
+    assert result.planner_calls == 2
+    assert result.replans == 1
+    assert any("TARGET_UNREACHABLE" in line for line in result.trace)
+
+
+def test_target_occupancy_triggers_capability_gap_on_replan() -> None:
+    machine = FakeWorldMachine()
+    planner = RuleBasedPlanner()
+    occupied = False
+
+    def occupy_before_place(event: AgentBoundaryEvent) -> None:
+        nonlocal occupied
+        if event.step.skill == "place" and not occupied:
+            machine.occupy_target()
+            occupied = True
+
+    result = runtime_for(machine, planner).run(GOAL, before_step=occupy_before_place)
+
+    assert not result.success
+    assert result.failure_reason is AgentFailure.CAPABILITY_GAP
+    assert result.replans == 1
+    assert result.plan_history[-1].missing_capabilities == (
+        "clear_occupied_target",
+    )
+
+
+def test_object_removal_is_observed_before_execution() -> None:
+    machine = FakeWorldMachine()
+    planner = RuleBasedPlanner()
+    removed = False
+
+    def remove_before_pick(event: AgentBoundaryEvent) -> None:
+        nonlocal removed
+        if not removed:
+            machine.remove_object()
+            removed = True
+
+    result = runtime_for(machine, planner).run(GOAL, before_step=remove_before_pick)
+
+    assert not result.success
+    assert result.failure_reason is AgentFailure.CANNOT_PLAN
+    assert result.executed_steps == ()
+    assert result.replans == 1
+    assert any("OBJECT_NOT_FOUND" in line for line in result.trace)
+
+
+def test_push_goal_returns_explicit_capability_gap() -> None:
+    machine = FakeWorldMachine()
+    result = runtime_for(machine, RuleBasedPlanner()).run(
+        Goal.push_to_edge(
+            "Push the red cube to the edge of the table.", "red_cube"
+        )
+    )
+
+    assert not result.success
+    assert result.failure_reason is AgentFailure.CAPABILITY_GAP
+    assert result.plan_history[-1].missing_capabilities == ("push",)
+    assert result.executed_steps == ()

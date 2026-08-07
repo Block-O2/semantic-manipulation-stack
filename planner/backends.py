@@ -11,7 +11,14 @@ from collections.abc import Sequence
 from typing import Any
 
 from planner.registry import SkillRegistry
-from planner.schema import Goal, Plan, PlannerFailureContext, PlannerResult, PlanStep
+from planner.schema import (
+    Goal,
+    GoalRelation,
+    Plan,
+    PlannerFailureContext,
+    PlannerResult,
+    PlanStep,
+)
 from world import WorldState
 
 
@@ -43,6 +50,18 @@ class RuleBasedPlanner(PlannerBackend):
         failure_context: PlannerFailureContext | None = None,
     ) -> PlannerResult:
         self.calls += 1
+        if goal.relation is not GoalRelation.INSIDE:
+            missing = {
+                GoalRelation.LEFT_OF: "place_left_of",
+                GoalRelation.NEAR: "place_near",
+                GoalRelation.PUSH_TO_EDGE: "push",
+            }[goal.relation]
+            return PlannerResult.from_plan(
+                Plan.capability_gap(
+                    [missing],
+                    f"No registered skill can achieve relation {goal.relation.value!r}.",
+                )
+            )
         object_state = world_state.objects.get(goal.object_name)
         target_state = world_state.targets.get(goal.target_name)
         if object_state is None or not object_state.exists:
@@ -53,6 +72,13 @@ class RuleBasedPlanner(PlannerBackend):
             return PlannerResult.from_plan(Plan.cannot_plan("Requested object is unreachable."))
         if not target_state.reachable:
             return PlannerResult.from_plan(Plan.cannot_plan("Requested target is unreachable."))
+        if target_state.occupied:
+            return PlannerResult.from_plan(
+                Plan.capability_gap(
+                    ["clear_occupied_target"],
+                    "The destination is occupied and the baseline planner cannot rearrange it.",
+                )
+            )
         holding = world_state.robot.holding
         if holding not in {None, goal.object_name}:
             return PlannerResult.from_plan(
@@ -156,6 +182,12 @@ class OpenAICompatiblePlanner(PlannerBackend):
                     "status": "cannot_plan",
                     "reason": "semantic reason",
                 },
+                "capability_gap": {
+                    "status": "cannot_plan",
+                    "reason": "CAPABILITY_GAP",
+                    "missing_capabilities": ["push"],
+                    "detail": "why registered skills are insufficient",
+                },
             },
         }
 
@@ -184,7 +216,10 @@ class OpenAICompatiblePlanner(PlannerBackend):
                     "content": (
                         "You are a semantic robot task planner. Use only the supplied "
                         "skill registry. Return exactly one JSON object matching one of "
-                        "the required output schemas. Never emit code or low-level commands."
+                        "the required output schemas. You may reason about multiple objects "
+                        "and temporary_area, but never invent skills. Return CAPABILITY_GAP "
+                        "when registered skills cannot express the requested effect. Never "
+                        "emit code or low-level commands."
                     ),
                 },
                 {"role": "user", "content": json.dumps(prompt, sort_keys=True)},

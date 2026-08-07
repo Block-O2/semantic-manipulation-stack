@@ -9,6 +9,9 @@ from typing import Any, Mapping
 
 class GoalRelation(str, Enum):
     INSIDE = "inside"
+    LEFT_OF = "left_of"
+    NEAR = "near"
+    PUSH_TO_EDGE = "push_to_edge"
 
 
 @dataclass(frozen=True)
@@ -23,6 +26,18 @@ class Goal:
         if not text.strip() or not object_name or not target_name:
             raise ValueError("goal text, object name, and target name are required")
         return cls(text, GoalRelation.INSIDE, object_name, target_name)
+
+    @classmethod
+    def put_left_of(cls, text: str, object_name: str, reference_name: str) -> "Goal":
+        return cls(text, GoalRelation.LEFT_OF, object_name, reference_name)
+
+    @classmethod
+    def move_near(cls, text: str, object_name: str, reference_name: str) -> "Goal":
+        return cls(text, GoalRelation.NEAR, object_name, reference_name)
+
+    @classmethod
+    def push_to_edge(cls, text: str, object_name: str) -> "Goal":
+        return cls(text, GoalRelation.PUSH_TO_EDGE, object_name, "table_edge")
 
     def to_dict(self) -> dict[str, str]:
         return {
@@ -69,20 +84,48 @@ class Plan:
     status: PlanStatus
     steps: tuple[PlanStep, ...]
     reason: str | None = None
+    missing_capabilities: tuple[str, ...] = ()
+    detail: str | None = None
 
     @classmethod
     def ready(cls, steps: list[PlanStep] | tuple[PlanStep, ...]) -> "Plan":
-        return cls(PlanStatus.READY, tuple(steps), None)
+        return cls(PlanStatus.READY, tuple(steps), None, (), None)
 
     @classmethod
-    def cannot_plan(cls, reason: str) -> "Plan":
+    def cannot_plan(
+        cls,
+        reason: str,
+        *,
+        missing_capabilities: tuple[str, ...] = (),
+        detail: str | None = None,
+    ) -> "Plan":
         if not reason.strip():
             raise ValueError("CANNOT_PLAN requires a semantic reason")
-        return cls(PlanStatus.CANNOT_PLAN, (), reason)
+        return cls(
+            PlanStatus.CANNOT_PLAN,
+            (),
+            reason,
+            tuple(missing_capabilities),
+            detail,
+        )
+
+    @classmethod
+    def capability_gap(
+        cls,
+        missing_capabilities: list[str] | tuple[str, ...],
+        detail: str,
+    ) -> "Plan":
+        if not missing_capabilities:
+            raise ValueError("CAPABILITY_GAP requires at least one missing capability")
+        return cls.cannot_plan(
+            "CAPABILITY_GAP",
+            missing_capabilities=tuple(missing_capabilities),
+            detail=detail,
+        )
 
     @classmethod
     def from_dict(cls, payload: Mapping[str, Any]) -> "Plan":
-        allowed = {"status", "steps", "reason"}
+        allowed = {"status", "steps", "reason", "missing_capabilities", "detail"}
         unknown = set(payload) - allowed
         if unknown:
             raise ValueError(f"unknown plan fields: {sorted(unknown)}")
@@ -93,15 +136,29 @@ class Plan:
             raise ValueError(f"invalid plan status: {status_raw!r}") from exc
 
         if status is PlanStatus.CANNOT_PLAN:
-            if set(payload) - {"status", "reason"}:
+            if set(payload) - {"status", "reason", "missing_capabilities", "detail"}:
                 raise ValueError("CANNOT_PLAN must not contain steps")
             reason = payload.get("reason")
             if not isinstance(reason, str) or not reason.strip():
                 raise ValueError("CANNOT_PLAN requires a semantic reason")
-            return cls.cannot_plan(reason)
+            missing = payload.get("missing_capabilities", [])
+            detail = payload.get("detail")
+            if not isinstance(missing, list) or not all(
+                isinstance(item, str) and item for item in missing
+            ):
+                raise ValueError("missing_capabilities must be an array of strings")
+            if detail is not None and not isinstance(detail, str):
+                raise ValueError("CANNOT_PLAN detail must be a string")
+            if reason == "CAPABILITY_GAP" and not missing:
+                raise ValueError("CAPABILITY_GAP requires missing_capabilities")
+            return cls.cannot_plan(
+                reason,
+                missing_capabilities=tuple(missing),
+                detail=detail,
+            )
 
-        if "reason" in payload:
-            raise ValueError("ready plans must not contain a reason")
+        if {"reason", "missing_capabilities", "detail"} & set(payload):
+            raise ValueError("ready plans must not contain failure fields")
         steps_raw = payload.get("steps")
         if not isinstance(steps_raw, list):
             raise ValueError("ready plan requires a steps array")
@@ -114,7 +171,15 @@ class Plan:
 
     def to_dict(self) -> dict[str, Any]:
         if self.status is PlanStatus.CANNOT_PLAN:
-            return {"status": self.status.value, "reason": self.reason}
+            payload: dict[str, Any] = {
+                "status": self.status.value,
+                "reason": self.reason,
+            }
+            if self.missing_capabilities:
+                payload["missing_capabilities"] = list(self.missing_capabilities)
+            if self.detail:
+                payload["detail"] = self.detail
+            return payload
         return {
             "status": self.status.value,
             "steps": [step.to_dict() for step in self.steps],

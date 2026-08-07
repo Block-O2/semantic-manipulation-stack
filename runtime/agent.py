@@ -7,6 +7,7 @@ from typing import Any
 
 from planner import (
     Goal,
+    GoalRelation,
     Plan,
     PlannerBackend,
     PlannerFailureContext,
@@ -19,6 +20,7 @@ from planner import (
 )
 from runtime.agent_results import (
     AgentFailure,
+    AgentBoundaryEvent,
     AgentResult,
     AgentStepEvent,
     ExecutedAgentStep,
@@ -31,10 +33,18 @@ from world import WorldState
 
 WorldObserver = Callable[[], WorldState]
 StepHook = Callable[[AgentStepEvent], None]
+BeforeStepHook = Callable[[AgentBoundaryEvent], None]
 
 
 def goal_is_satisfied(goal: Goal, state: WorldState) -> bool:
-    relation = WorldState.relation_key(goal.object_name, goal.target_name)
+    relation = {
+        GoalRelation.INSIDE: WorldState.relation_key,
+        GoalRelation.LEFT_OF: WorldState.left_of_key,
+        GoalRelation.NEAR: WorldState.near_key,
+    }.get(goal.relation)
+    if relation is None:
+        return False
+    relation = relation(goal.object_name, goal.target_name)
     return state.relations.get(relation, False)
 
 
@@ -96,7 +106,13 @@ class AgentRuntime:
             trace=tuple(trace),
         )
 
-    def run(self, goal: Goal, *, after_step: StepHook | None = None) -> AgentResult:
+    def run(
+        self,
+        goal: Goal,
+        *,
+        before_step: BeforeStepHook | None = None,
+        after_step: StepHook | None = None,
+    ) -> AgentResult:
         trace: list[str] = []
         executed: list[ExecutedAgentStep] = []
         plans: list[Plan] = []
@@ -173,6 +189,11 @@ class AgentRuntime:
 
             if candidate_plan.status is PlanStatus.CANNOT_PLAN:
                 self._emit(trace, f"CANNOT_PLAN: {candidate_plan.reason}")
+                failure_reason = (
+                    AgentFailure.CAPABILITY_GAP
+                    if candidate_plan.reason == "CAPABILITY_GAP"
+                    else AgentFailure.CANNOT_PLAN
+                )
                 return self._result(
                     success=False,
                     goal=goal,
@@ -180,8 +201,8 @@ class AgentRuntime:
                     replans=replans,
                     executed=executed,
                     state=state,
-                    failure_reason=AgentFailure.CANNOT_PLAN,
-                    failure_detail=candidate_plan.reason,
+                    failure_reason=failure_reason,
+                    failure_detail=candidate_plan.detail or candidate_plan.reason,
                     plans=plans,
                     trace=trace,
                 )
@@ -191,6 +212,37 @@ class AgentRuntime:
                 state = self._observer()
                 if goal_is_satisfied(goal, state):
                     self._emit(trace, "GOAL CHECK: SATISFIED")
+                    self._emit(trace, "AGENT SUCCESS")
+                    return self._result(
+                        success=True,
+                        goal=goal,
+                        planner_calls=planner_calls,
+                        replans=replans,
+                        executed=executed,
+                        state=state,
+                        failure_reason=None,
+                        failure_detail=None,
+                        plans=plans,
+                        trace=trace,
+                    )
+
+                self._emit(
+                    trace,
+                    f"READY TO EXECUTE: {step.skill}({step.args})",
+                )
+                if before_step is not None:
+                    before_step(
+                        AgentBoundaryEvent(
+                            sequence=len(executed),
+                            plan_version=len(plans),
+                            plan_step_index=plan_step_index,
+                            step=step,
+                            world_state=state,
+                        )
+                    )
+                state = self._observer()
+                if goal_is_satisfied(goal, state):
+                    self._emit(trace, "GOAL CHECK: SATISFIED AFTER WORLD UPDATE")
                     self._emit(trace, "AGENT SUCCESS")
                     return self._result(
                         success=True,

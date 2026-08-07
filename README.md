@@ -4,10 +4,10 @@ A modular manipulation playground for exploring how language-model agents,
 semantic skills, classical controllers, learned policies, and world-state
 feedback can work together in robotics.
 
-The current implementation runs a Franka Panda in MuJoCo / robosuite, executes
-validated Pick and Place plans, verifies their semantic effects against
-simulator ground truth, and replans only when a meaningful execution event
-invalidates the current plan.
+The current implementation runs a Franka Panda in a dynamic MuJoCo / robosuite
+tabletop world, executes validated Pick and Place plans, verifies their semantic
+effects against simulator ground truth, and replans only when a meaningful
+execution event invalidates the current plan.
 
 ## What this is
 
@@ -46,6 +46,8 @@ flowchart TD
     W --> X["Expected-effect verification"]
     X --> SR["SemanticResidual"]
     SR -->|"event-triggered replan"| A
+
+    WC["Playground WorldController"] -. "explicit external change" .-> SIM
 ```
 
 `AgentRuntime` never sends joint commands or simulator actions. See
@@ -67,6 +69,10 @@ hierarchy.
 - event-triggered replanning with a bounded replan budget
 - deterministic offline planner for tests and evaluation
 - optional, isolated OpenAI-compatible LLM planner adapter
+- three movable cubes, two target trays, and a temporary placement area
+- geometric `inside`, `occupied`, `left_of`, `right_of`, and `near` relations
+- explicit capability-gap plans for valid but unsupported goals
+- an interactive semantic-step playground with observable world changes
 
 The validated nominal baseline is 20/20 randomized Pick-to-Place tasks, with
 one planner call and zero replans per successful nominal task.
@@ -148,6 +154,24 @@ Interactive macOS viewer:
 mjpython -m demos.semantic_agent
 ```
 
+Dynamic-world playground (pauses before every semantic step):
+
+```bash
+python -m demos.dynamic_playground --no-render --inspect-seconds 0
+mjpython -m demos.dynamic_playground
+```
+
+At a pause, commands such as `move object red_cube -0.05 -0.10`,
+`move target blue_target 0.20 0.10`, `drop`, `occupy blue_target green_cube`,
+`remove red_cube`, and `restore red_cube` make explicit world changes. Run
+`help` in the demo for the complete command list.
+
+Run all deterministic dynamic scenarios with:
+
+```bash
+python -m demos.dynamic_scenarios --scenario all
+```
+
 Controlled object-loss recovery:
 
 ```bash
@@ -193,6 +217,7 @@ planner/      Goal/Plan schemas, SkillRegistry, effects, validation, backends
 runtime/      SkillExecutor, AgentRuntime, result hierarchy, skill factory
 evaluation/   Nominal trials and evaluation-only controlled disturbances
 demos/        Runnable headless and interactive examples
+playground/   Explicit external world-state modification tools
 tests/        Offline deterministic and headless simulation tests
 docs/         Architecture and milestone notes
 ```
@@ -210,7 +235,7 @@ docs/         Architecture and milestone notes
 
 ## Milestones
 
-Milestones M0 through M4 are implemented and validated. Later milestones are
+Milestones M0 through M5 are implemented and validated. Later milestones are
 exploratory directions rather than commitments. See
 [docs/milestones.md](docs/milestones.md).
 
@@ -222,6 +247,8 @@ The repository does **not** yet provide:
 - VLA models, ACT, reinforcement learning, or imitation learning;
 - ROS integration;
 - obstacle-aware or general-purpose motion planning;
+- execution of relation goals such as `left_of`, `near`, or `push_to_edge`;
+- automatic clearing of an occupied target;
 - general-purpose manipulation beyond the known cube and target scene;
 - production safety, real-robot validation, or formal safety guarantees.
 
@@ -230,8 +257,7 @@ approximations for the current tabletop scenario.
 
 ## Roadmap
 
-Near-term exploration may add an interactive dynamic-world playground, richer
-spatial relations, a classical `PushSkill`, and disturbance benchmarks. Later
-experiments may place a learned policy behind the existing Skill interface or
-compose trusted skills dynamically. These directions should preserve the same
-validation and execution boundaries.
+Near-term exploration may add a classical `PushSkill` and broader disturbance
+benchmarks. Later experiments may place a learned policy behind the existing
+Skill interface or compose trusted skills dynamically. These directions should
+preserve the same validation and execution boundaries.

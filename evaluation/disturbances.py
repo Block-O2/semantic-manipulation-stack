@@ -2,10 +2,10 @@
 
 from __future__ import annotations
 
-import numpy as np
-
+from playground import WorldController
 from runtime import AgentStepEvent
 from sim import SemanticTabletopEnv
+from world import WorldModel
 
 
 class ObjectLostAfterPick:
@@ -17,18 +17,16 @@ class ObjectLostAfterPick:
         *,
         table_position: tuple[float, float, float] = (-0.05, -0.10, 0.825),
     ) -> None:
-        self._env = env
-        self._position = np.asarray(table_position, dtype=np.float64)
+        self._controller = WorldController(env, WorldModel(env))
+        self._position = table_position
         self.triggered = False
 
     def __call__(self, event: AgentStepEvent) -> None:
         if self.triggered or event.step.skill != "pick" or not event.task_result.success:
             return
-        joint = self._env.red_cube.joints[0]
-        qpos = np.concatenate([self._position, np.array([1.0, 0.0, 0.0, 0.0])])
-        self._env.sim.data.set_joint_qpos(joint, qpos)
-        self._env.sim.data.set_joint_qvel(joint, np.zeros(6, dtype=np.float64))
-        self._env.sim.forward()
+        self._controller.move_object(
+            "red_cube", self._position[0], self._position[1], z=self._position[2]
+        )
         self.triggered = True
 
 
@@ -41,14 +39,14 @@ class TargetUnreachableAfterPick:
         *,
         target_position: tuple[float, float, float] = (0.50, 0.50, 0.803),
     ) -> None:
-        self._env = env
-        self._position = np.asarray(target_position, dtype=np.float64)
+        self._controller = WorldController(env, WorldModel(env))
+        self._position = target_position
         self.triggered = False
 
     def __call__(self, event: AgentStepEvent) -> None:
         if self.triggered or event.step.skill != "pick" or not event.task_result.success:
             return
-        body_id = self._env._object_body_ids["blue_target"]
-        self._env.sim.model.body_pos[body_id] = self._position
-        self._env.sim.forward()
+        self._controller.move_target(
+            "blue_target", self._position[0], self._position[1]
+        )
         self.triggered = True

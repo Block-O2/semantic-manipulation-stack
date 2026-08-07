@@ -77,6 +77,16 @@ def test_plan_parsing_is_strict_and_supports_cannot_plan() -> None:
         Plan.from_dict({"steps": [], "python": "move_robot()"})
 
 
+def test_capability_gap_round_trips_without_inventing_a_skill() -> None:
+    plan = Plan.capability_gap(["push"], "Push is not registered.")
+
+    parsed = Plan.from_dict(plan.to_dict())
+
+    assert parsed.reason == "CAPABILITY_GAP"
+    assert parsed.missing_capabilities == ("push",)
+    assert parsed.steps == ()
+
+
 def test_validator_accepts_projected_pick_place_preconditions() -> None:
     registry = SkillRegistry.standard()
     validator = PlanValidator(registry)

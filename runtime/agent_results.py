@@ -13,6 +13,7 @@ from world import WorldState
 
 class AgentFailure(str, Enum):
     CANNOT_PLAN = "CANNOT_PLAN"
+    CAPABILITY_GAP = "CAPABILITY_GAP"
     AGENT_REPLAN_EXHAUSTED = "AGENT_REPLAN_EXHAUSTED"
 
 
@@ -92,6 +93,15 @@ class AgentResult:
             "plan_history": [plan.to_dict() for plan in self.plan_history],
             "trace": list(self.trace),
         }
+
+
+@dataclass(frozen=True)
+class AgentBoundaryEvent:
+    sequence: int
+    plan_version: int
+    plan_step_index: int
+    step: PlanStep
+    world_state: WorldState
 
 
 @dataclass(frozen=True)

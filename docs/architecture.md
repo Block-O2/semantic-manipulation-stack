@@ -24,6 +24,8 @@ flowchart TD
     WS --> EV["Expected-effect comparison"]
     EV --> RES["SemanticResidual"]
     RES --> A
+
+    WC["Playground WorldController"] -. "external intervention" .-> SIM
 ```
 
 ## Abstraction boundaries
@@ -43,6 +45,13 @@ flowchart TD
 
 `AgentRuntime` must never control joints, call manipulation primitives, or
 construct simulator actions directly.
+
+Before every semantic step, the runtime emits an `AgentBoundaryEvent`, invokes
+an optional inspection hook, and observes the world again. The hook may pause a
+demo or apply an explicit test disturbance, but the runtime never receives a
+simulator handle. If the refreshed state still satisfies the next step's
+preconditions, execution continues without replanning; otherwise the semantic
+change is recorded and routed back through the planner.
 
 ### SkillExecutor
 
@@ -100,6 +109,10 @@ containing only task-relevant facts:
 - grasp and target occupancy state;
 - named relations such as `red_cube_inside_blue_target`.
 
+The dynamic playground additionally derives `left_of`, `right_of`, and `near`
+from object geometry using configurable `SemanticThresholds`. These relations
+are observations, not promises that a corresponding execution Skill exists.
+
 Each `SkillSpec` contains symbolic expected effects. For example, Pick expects
 the robot to hold the requested object and the object to be grasped. After the
 Skill returns, these effects are compared with a fresh state. Any mismatch is a
@@ -123,6 +136,12 @@ machine-readable `SkillRegistry`. Validation rejects:
 The optional LLM adapter cannot execute code. Its output is treated exactly like
 any other untrusted planner response.
 
+A planner may return a structured `CANNOT` plan with `missing_capabilities` for
+a well-formed goal that the registry cannot execute. For example,
+`push_to_edge` reports the missing `push` capability, while an occupied target
+reports `clear_occupied_target`. Capability gaps are explicit outcomes and are
+never converted into hidden simulator edits.
+
 ## Result hierarchy
 
 Results remain layered rather than collapsed:
@@ -145,8 +164,15 @@ AgentResult
 This hierarchy makes failures attributable to the layer that owns them while
 preserving lower-level evidence for evaluation and debugging.
 
-## Evaluation-only disturbances
+## Explicit world changes
 
-Controlled disturbances live under `evaluation/` and may alter MuJoCo state to
-create reproducible experiments. They are not production behaviors, are not
-available to planner output, and do not add simulator hacks to Pick or Place.
+`playground.WorldController` is the dedicated boundary for moving, dropping,
+removing, or restoring scene entities outside normal robot execution. It is
+used by interactive demos and controlled evaluations. It is not available to
+planner output and is never used as hidden recovery by Agent, Skill, Primitive,
+or Robot layers.
+
+Only `CartesianController` constructs robosuite robot action vectors. Direct
+MuJoCo state editing in `WorldController` represents an external world event,
+not a robot command, and is intentionally isolated from the production control
+chain.

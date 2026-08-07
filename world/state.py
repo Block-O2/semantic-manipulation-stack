@@ -9,6 +9,21 @@ from robot import Pose
 
 
 @dataclass(frozen=True)
+class SemanticThresholds:
+    """Simple geometric thresholds used for deterministic semantic relations."""
+
+    near_distance: float = 0.12
+    left_right_tolerance: float = 0.02
+    inside_margin: float = 0.0
+
+    def __post_init__(self) -> None:
+        if self.near_distance <= 0.0:
+            raise ValueError("near_distance must be positive")
+        if self.left_right_tolerance < 0.0 or self.inside_margin < 0.0:
+            raise ValueError("relation tolerances must be non-negative")
+
+
+@dataclass(frozen=True)
 class PoseState:
     position: tuple[float, float, float]
     quaternion: tuple[float, float, float, float]
@@ -79,6 +94,18 @@ class WorldState:
     @staticmethod
     def relation_key(object_name: str, target_name: str) -> str:
         return f"{object_name}_inside_{target_name}"
+
+    @staticmethod
+    def left_of_key(first: str, second: str) -> str:
+        return f"{first}_left_of_{second}"
+
+    @staticmethod
+    def right_of_key(first: str, second: str) -> str:
+        return f"{first}_right_of_{second}"
+
+    @staticmethod
+    def near_key(first: str, second: str) -> str:
+        return f"{first}_near_{second}"
 
     def to_dict(self) -> dict[str, Any]:
         return {

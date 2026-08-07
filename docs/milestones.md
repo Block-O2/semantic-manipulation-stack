@@ -31,10 +31,12 @@ Goal → Plan → Validate → Execute → Observe → Compare → Replan, with 
 `WorldState`, machine-readable Skill contracts, expected semantic effects,
 `SemanticResidual`, bounded event-triggered replanning, and `AgentResult`.
 
-## M5 — Dynamic World Playground
+## M5 — Dynamic World Playground ✅
 
-Explore interactive disturbances, richer spatial relations, explicit capability
-gaps, and systematic disturbance evaluation.
+Three cubes, two target trays and a temporary area; configurable geometric
+relations; explicit external world modifications; semantic-step inspection;
+reachable and unreachable target changes; occupied-target handling; structured
+capability gaps; and deterministic dynamic-world scenarios.
 
 ## M6 — PushSkill
 

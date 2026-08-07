@@ -131,7 +131,9 @@ class PickSkill(Skill):
 
     def check_preconditions(self) -> SkillResult | None:
         self._transition(SkillPhase.CHECK_PRECONDITIONS)
-        if self.object_name not in self._world.object_names:
+        if self.object_name not in self._world.object_names or (
+            hasattr(self._world, "exists") and not self._world.exists(self.object_name)
+        ):
             return self._failure_result(
                 _FailureEvent(
                     SkillPhase.CHECK_PRECONDITIONS,

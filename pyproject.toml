@@ -32,6 +32,7 @@ include = [
     "primitives*",
     "skills*",
     "planner*",
+    "playground*",
     "runtime*",
     "evaluation*",
     "demos*",

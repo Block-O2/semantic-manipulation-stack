@@ -144,6 +144,7 @@ class SkillRegistry:
                 ConditionTemplate("robot.holding", "{object}", "OBJECT_NOT_GRASPED"),
                 ConditionTemplate("targets.{target}.exists", True, "TARGET_NOT_FOUND"),
                 ConditionTemplate("targets.{target}.reachable", True, "TARGET_UNREACHABLE"),
+                ConditionTemplate("targets.{target}.occupied", False, "TARGET_OCCUPIED"),
             ),
             expected_effects=(
                 EffectTemplate("robot.holding", None, "RELEASE_EFFECT_NOT_ACHIEVED"),

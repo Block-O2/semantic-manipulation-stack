@@ -49,13 +49,15 @@ class GraspGenerator(ABC):
 
 
 class TopDownCubeGraspGenerator(GraspGenerator):
-    """One deterministic top-down candidate for the known red cube."""
+    """One deterministic top-down candidate for each playground cube."""
 
     def __init__(
         self,
         *,
         geometry: GraspGeometry = GraspGeometry(),
-        supported_objects: frozenset[str] = frozenset({"red_cube"}),
+        supported_objects: frozenset[str] = frozenset(
+            {"red_cube", "green_cube", "blue_cube"}
+        ),
     ) -> None:
         self.geometry = geometry
         self.supported_objects = supported_objects

@@ -5,6 +5,7 @@ from runtime.results import TaskResult
 from runtime.agent import AgentRuntime, goal_is_satisfied
 from runtime.agent_results import (
     AgentFailure,
+    AgentBoundaryEvent,
     AgentResult,
     AgentStepEvent,
     ExecutedAgentStep,
@@ -13,6 +14,7 @@ from runtime.skill_factory import SemanticSkillFactory, SkillFactory
 
 __all__ = [
     "AgentFailure",
+    "AgentBoundaryEvent",
     "AgentResult",
     "AgentRuntime",
     "AgentStepEvent",
