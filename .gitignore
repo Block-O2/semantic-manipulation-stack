@@ -1,0 +1,24 @@
+# Python environments and caches
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Packaging output
+build/
+dist/
+*.egg-info/
+
+# Local configuration and logs
+.env
+.env.*
+*.log
+
+# macOS and editor metadata
+.DS_Store
+.idea/
+.vscode/
+*.swp
+*~

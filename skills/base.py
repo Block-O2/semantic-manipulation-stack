@@ -1,0 +1,85 @@
+"""Minimal task-level skill contracts and semantic result types."""
+
+from __future__ import annotations
+
+from abc import ABC, abstractmethod
+from dataclasses import dataclass
+from enum import Enum
+
+from primitives import PrimitiveResult
+
+
+class SkillPhase(str, Enum):
+    IDLE = "IDLE"
+    CHECK_PRECONDITIONS = "CHECK_PRECONDITIONS"
+    GENERATE_GRASP = "GENERATE_GRASP"
+    OPEN_GRIPPER = "OPEN_GRIPPER"
+    MOVE_TO_PREGRASP = "MOVE_TO_PREGRASP"
+    APPROACH = "APPROACH"
+    CLOSE_GRIPPER = "CLOSE_GRIPPER"
+    VERIFY_GRASP = "VERIFY_GRASP"
+    LIFT = "LIFT"
+    VERIFY_SUCCESS = "VERIFY_SUCCESS"
+    RECOVERY = "RECOVERY"
+    RECOVERY_OPEN_GRIPPER = "RECOVERY_OPEN_GRIPPER"
+    RECOVERY_RETREAT = "RECOVERY_RETREAT"
+    RECOVERY_REFRESH_OBJECT_STATE = "RECOVERY_REFRESH_OBJECT_STATE"
+    RECOVERY_RECOMPUTE_GRASP = "RECOVERY_RECOMPUTE_GRASP"
+    GENERATE_PLACE_POSE = "GENERATE_PLACE_POSE"
+    MOVE_ABOVE_TARGET = "MOVE_ABOVE_TARGET"
+    DESCEND = "DESCEND"
+    VERIFY_RELEASE = "VERIFY_RELEASE"
+    RETREAT = "RETREAT"
+    RECOVERY_RETREAT_SLIGHTLY = "RECOVERY_RETREAT_SLIGHTLY"
+    RECOVERY_REFRESH_WORLD_STATE = "RECOVERY_REFRESH_WORLD_STATE"
+    RECOVERY_RECOMPUTE_PLACE = "RECOVERY_RECOMPUTE_PLACE"
+    SUCCESS = "SUCCESS"
+    FAILED = "FAILED"
+
+
+class SkillFailure(str, Enum):
+    OBJECT_NOT_FOUND = "OBJECT_NOT_FOUND"
+    OBJECT_ALREADY_GRASPED = "OBJECT_ALREADY_GRASPED"
+    OBJECT_POSE_UNAVAILABLE = "OBJECT_POSE_UNAVAILABLE"
+    OBJECT_NOT_GRASPED = "OBJECT_NOT_GRASPED"
+    TARGET_NOT_FOUND = "TARGET_NOT_FOUND"
+    TARGET_POSE_UNAVAILABLE = "TARGET_POSE_UNAVAILABLE"
+    NO_VALID_GRASP = "NO_VALID_GRASP"
+    NO_VALID_PLACE = "NO_VALID_PLACE"
+    TARGET_UNREACHABLE = "TARGET_UNREACHABLE"
+    TARGET_OUTSIDE_WORKSPACE = "TARGET_OUTSIDE_WORKSPACE"
+    MOTION_TIMEOUT = "MOTION_TIMEOUT"
+    POSITION_NOT_CONVERGED = "POSITION_NOT_CONVERGED"
+    ORIENTATION_NOT_CONVERGED = "ORIENTATION_NOT_CONVERGED"
+    NO_CONTACT_GRASP = "NO_CONTACT_GRASP"
+    GRASP_LOST = "GRASP_LOST"
+    CUBE_NOT_LIFTED = "CUBE_NOT_LIFTED"
+    CUBE_NOT_WITH_GRIPPER = "CUBE_NOT_WITH_GRIPPER"
+    OBJECT_STILL_GRASPED = "OBJECT_STILL_GRASPED"
+    OBJECT_OUTSIDE_TARGET = "OBJECT_OUTSIDE_TARGET"
+    OBJECT_UNSTABLE = "OBJECT_UNSTABLE"
+    RECOVERY_FAILED = "RECOVERY_FAILED"
+
+
+@dataclass(frozen=True)
+class SkillResult:
+    success: bool
+    skill: str
+    object_name: str | None
+    phase: SkillPhase
+    reason: SkillFailure | None
+    attempts: int
+    primitive_result: PrimitiveResult | None
+    trace: tuple[str, ...]
+
+
+class Skill(ABC):
+    """Small reusable contract for semantic robot skills."""
+
+    @abstractmethod
+    def check_preconditions(self) -> SkillResult | None:
+        """Return a semantic failure, or ``None`` when execution may proceed."""
+
+    @abstractmethod
+    def execute(self) -> SkillResult:
+        """Execute the skill and return a semantic result."""

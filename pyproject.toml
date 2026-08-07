@@ -1,0 +1,38 @@
+[build-system]
+requires = ["setuptools>=69"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "semantic-manipulation-stack"
+version = "0.1.0"
+description = "A modular semantic manipulation stack built on robosuite and MuJoCo"
+readme = "README.md"
+requires-python = ">=3.10,<3.13"
+dependencies = [
+    # robosuite 1.5.2 accesses MjData.qM, removed by newer MuJoCo releases.
+    "mujoco>=3.3,<3.4",
+    "numpy>=1.24,<2",
+    "robosuite==1.5.2",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8,<10"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra"
+pythonpath = ["."]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = [
+    "sim*",
+    "robot*",
+    "world*",
+    "primitives*",
+    "skills*",
+    "planner*",
+    "runtime*",
+    "evaluation*",
+    "demos*",
+]
