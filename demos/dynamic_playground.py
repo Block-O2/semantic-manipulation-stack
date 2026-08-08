@@ -61,6 +61,15 @@ def _compact_state(state: WorldState) -> dict[str, object]:
             }
             for name, value in state.targets.items()
         },
+        "push_regions": {
+            name: {
+                "center": value.center,
+                "lower_xy": value.lower_xy,
+                "upper_xy": value.upper_xy,
+                "reachable": value.reachable,
+            }
+            for name, value in state.push_regions.items()
+        },
         "true_relations": [
             name for name, value in sorted(state.relations.items()) if value
         ],

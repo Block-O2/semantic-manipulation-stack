@@ -41,6 +41,8 @@ def goal_is_satisfied(goal: Goal, state: WorldState) -> bool:
         GoalRelation.INSIDE: WorldState.relation_key,
         GoalRelation.LEFT_OF: WorldState.left_of_key,
         GoalRelation.NEAR: WorldState.near_key,
+        GoalRelation.PUSH_TO_REGION: WorldState.push_region_key,
+        GoalRelation.PUSH_TO_EDGE: WorldState.push_region_key,
     }.get(goal.relation)
     if relation is None:
         return False

@@ -12,6 +12,7 @@ from robot.panda import Pose
 from world.state import (
     ObjectState,
     PoseState,
+    PushRegionState,
     RobotState,
     SemanticThresholds,
     TargetState,
@@ -38,11 +39,18 @@ class WorldModel:
     def object_names(self) -> tuple[str, ...]:
         return self._env.object_names
 
+    @property
+    def push_region_names(self) -> tuple[str, ...]:
+        return self._env.scene_config.push_region_names
+
     def pose(self, name: str) -> Pose:
         return self._env.object_pose(name)
 
     def exists(self, name: str) -> bool:
         return self._env.object_exists(name)
+
+    def is_reachable(self, name: str) -> bool:
+        return self.exists(name) and self._semantically_reachable(self.pose(name))
 
     def snapshot(self) -> dict[str, Pose]:
         return {name: self.pose(name) for name in self.object_names}
@@ -95,6 +103,72 @@ class WorldModel:
             )
             for name in self._env.manipulable_object_names
         )
+
+    def push_region_bounds(self, name: str) -> tuple[NDArray[np.float64], NDArray[np.float64]]:
+        try:
+            lower, upper = self._env.scene_config.push_region_bounds[name]
+        except KeyError as exc:
+            raise KeyError(f"Unknown push region {name!r}") from exc
+        return np.asarray(lower, dtype=np.float64), np.asarray(upper, dtype=np.float64)
+
+    def push_region_center(self, name: str) -> NDArray[np.float64]:
+        try:
+            return self._env.scene_config.push_region_center(name)
+        except KeyError as exc:
+            raise KeyError(f"Unknown push region {name!r}") from exc
+
+    def is_inside_push_region(self, object_name: str, region_name: str) -> bool:
+        if not self.exists(object_name):
+            return False
+        lower, upper = self.push_region_bounds(region_name)
+        xy = self.pose(object_name).position[:2]
+        return bool(np.all(xy >= lower) and np.all(xy <= upper))
+
+    def is_on_table(self, object_name: str, *, height_tolerance: float = 0.04) -> bool:
+        if height_tolerance <= 0.0:
+            raise ValueError("height_tolerance must be positive")
+        if not self.exists(object_name):
+            return False
+        pose = self.pose(object_name)
+        expected_z = (
+            self._env.scene_config.table_top_z
+            + self._env.scene_config.cube_half_size
+        )
+        half_x = 0.5 * self._env.scene_config.table_size[0]
+        half_y = 0.5 * self._env.scene_config.table_size[1]
+        return bool(
+            abs(float(pose.position[2]) - expected_z) <= height_tolerance
+            and abs(float(pose.position[0])) <= half_x
+            and abs(float(pose.position[1])) <= half_y
+        )
+
+    def is_push_path_safe(
+        self,
+        start_position: NDArray[np.float64],
+        end_position: NDArray[np.float64],
+        *,
+        margin: float | None = None,
+    ) -> bool:
+        clearance = (
+            self._env.scene_config.cube_half_size if margin is None else margin
+        )
+        if clearance < 0.0:
+            raise ValueError("push-path margin must be non-negative")
+        half_x = 0.5 * self._env.scene_config.table_size[0] - clearance
+        half_y = 0.5 * self._env.scene_config.table_size[1] - clearance
+        for position in (start_position, end_position):
+            if (
+                abs(float(position[0])) > half_x
+                or abs(float(position[1])) > half_y
+            ):
+                return False
+        return True
+
+    def holding_object(self) -> str | None:
+        for name in self._env.manipulable_object_names:
+            if self.is_grasped(name):
+                return name
+        return None
 
     def is_stable(self, name: str, *, maximum_speed: float = 0.03) -> bool:
         """Return whether object translation is below a configured speed."""
@@ -170,6 +244,24 @@ class WorldModel:
                 ),
             )
 
+        push_regions: dict[str, PushRegionState] = {}
+        for region_name in self.push_region_names:
+            lower, upper = self.push_region_bounds(region_name)
+            center = self.push_region_center(region_name)
+            push_regions[region_name] = PushRegionState(
+                exists=True,
+                reachable=self._semantically_reachable(
+                    Pose(center, np.array([0.0, 0.0, 0.0, 1.0]))
+                ),
+                center=tuple(float(value) for value in center),
+                lower_xy=tuple(float(value) for value in lower),
+                upper_xy=tuple(float(value) for value in upper),
+            )
+            for object_name in object_names:
+                relations[
+                    WorldState.push_region_key(object_name, region_name)
+                ] = self.is_inside_push_region(object_name, region_name)
+
         for first_name in object_names:
             first = objects[first_name]
             for second_name in object_names:
@@ -198,4 +290,5 @@ class WorldModel:
             objects=objects,
             targets=targets,
             relations=relations,
+            push_regions=push_regions,
         )

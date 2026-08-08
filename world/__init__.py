@@ -4,6 +4,7 @@ from world.world_model import WorldModel
 from world.state import (
     ObjectState,
     PoseState,
+    PushRegionState,
     RobotState,
     SemanticThresholds,
     TargetState,
@@ -13,6 +14,7 @@ from world.state import (
 __all__ = [
     "ObjectState",
     "PoseState",
+    "PushRegionState",
     "RobotState",
     "SemanticThresholds",
     "TargetState",

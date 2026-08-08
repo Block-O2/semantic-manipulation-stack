@@ -64,7 +64,7 @@ effects between steps without bypassing this boundary.
 
 ### Skill
 
-A Skill represents a semantic action such as Pick or Place. Skills own:
+A Skill represents a semantic action such as Pick, Place, or Push. Skills own:
 
 - task-level preconditions;
 - an explicit finite-state execution sequence;
@@ -74,6 +74,19 @@ A Skill represents a semantic action such as Pick or Place. Skills own:
 Ordinary grasp retries and release retries remain inside their corresponding
 skills. They are not promoted into Agent-level replanning events unless the
 Skill ultimately fails or its expected semantic effect is absent.
+
+`PushSkill` is the first nonprehensile capability. The planner sees only
+`Push(object, target)`. A dedicated geometry generator converts the observed
+object pose and named push-region bounds into pre-push, contact, end, and
+retreat poses. The Skill then uses the same generic Cartesian primitives as
+Pick and Place. It does not inspect robosuite actions or MuJoCo state.
+
+Push contact is currently a documented geometric proxy: after approaching the
+contact pose, the Skill checks end-effector-to-object proximity through the
+read-only `WorldModel`. Physical success is stricter than robot trajectory
+completion: the cube must move by the minimum displacement, finish inside the
+requested semantic region, and remain on the table. One local retry may
+retreat, refresh the object pose, recompute geometry, and try again.
 
 ### Manipulation primitive
 
@@ -107,7 +120,9 @@ containing only task-relevant facts:
 - known object and target poses;
 - existence and simple reachability;
 - grasp and target occupancy state;
-- named relations such as `red_cube_inside_blue_target`.
+- named relations such as `red_cube_inside_blue_target`;
+- dedicated semantic push regions and relations such as
+  `red_cube_inside_right_side`.
 
 The dynamic playground additionally derives `left_of`, `right_of`, and `near`
 from object geometry using configurable `SemanticThresholds`. These relations
@@ -137,18 +152,24 @@ The optional LLM adapter cannot execute code. Its output is treated exactly like
 any other untrusted planner response.
 
 A planner may return a structured `CANNOT` plan with `missing_capabilities` for
-a well-formed goal that the registry cannot execute. For example,
-`push_to_edge` reports the missing `push` capability. An occupied target is not
-automatically a capability gap: when `occupied_by` identifies a movable object
-and a free alternate target exists, the deterministic planner searches a small
-Pick / Place state space and composes a rearrangement plan. Capability gaps are
-explicit outcomes and are never converted into hidden simulator edits.
+a well-formed goal that the registry cannot execute. Supported push goals now
+produce a validated `Push` step; a genuinely unsupported action such as
+`open_drawer` still reports an explicit capability gap. An occupied target is
+not automatically a capability gap: when `occupied_by` identifies a movable
+object and a free alternate target exists, the deterministic planner searches a
+small symbolic state space and composes a rearrangement plan. Capability gaps
+are explicit outcomes and are never converted into hidden simulator edits.
 
-The same symbolic Pick / Place transition model is used by the bounded search
-and by `PlanValidator`'s projected precondition checking. Picking an object
-removes it from its prior target occupancy; placing it adds it to the new
-target. This allows multi-step plans to remain strictly validated without
-embedding rearrangement policy in `AgentRuntime`.
+The same symbolic transition model is used by bounded planning and by
+`PlanValidator`'s projected precondition checking. Picking an object removes it
+from prior occupancy, placing adds it to a Place target, and pushing moves it
+into the requested push region. This allows multi-step plans to remain strictly
+validated without embedding rearrangement or push policy in `AgentRuntime`.
+
+The classical implementation is one backend for the semantic Push contract.
+A future learned implementation could be selected by the skill factory while
+retaining the registry, validator, Agent, result, and controller boundaries.
+No learned backend is present in this repository.
 
 ## Result hierarchy
 

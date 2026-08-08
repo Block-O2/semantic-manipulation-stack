@@ -68,6 +68,16 @@ def test_move_linear_interpolates_on_straight_line_with_bounded_steps() -> None:
     np.testing.assert_allclose(points[-1], target.position)
 
 
+def test_move_linear_at_target_does_not_advance_simulation() -> None:
+    robot = FakeRobot(START)
+    primitives = ManipulationPrimitives(robot, workspace=WORKSPACE)
+
+    result = primitives.move_linear(START)
+
+    assert result == PrimitiveResult(True, None, 0, 0.0, 0.0)
+    assert robot.targets == []
+
+
 def test_linear_waypoints_slerp_orientation_with_bounded_angle() -> None:
     target = Pose.from_values(
         START.position,

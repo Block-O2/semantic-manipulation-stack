@@ -361,15 +361,13 @@ def test_object_removal_is_observed_before_execution() -> None:
     assert any("OBJECT_NOT_FOUND" in line for line in result.trace)
 
 
-def test_push_goal_returns_explicit_capability_gap() -> None:
+def test_open_drawer_goal_returns_explicit_capability_gap() -> None:
     machine = FakeWorldMachine()
     result = runtime_for(machine, RuleBasedPlanner()).run(
-        Goal.push_to_edge(
-            "Push the red cube to the edge of the table.", "red_cube"
-        )
+        Goal.open_drawer("Open the drawer.")
     )
 
     assert not result.success
     assert result.failure_reason is AgentFailure.CAPABILITY_GAP
-    assert result.plan_history[-1].missing_capabilities == ("push",)
+    assert result.plan_history[-1].missing_capabilities == ("open_drawer",)
     assert result.executed_steps == ()

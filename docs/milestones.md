@@ -45,15 +45,19 @@ that the planner can clear a destination by composing only the existing Pick
 and Place skills. No recovery policy or simulator access was added to
 `AgentRuntime`.
 
-## M6 — PushSkill
+## M6 — Classical PushSkill ✅
 
-Explore a classical, deterministic push implementation behind the existing
-Skill and primitive boundaries.
+Semantic `Push(object, target)` planning and validation; a dedicated
+`right_side` push region; deterministic push geometry; an explicit Cartesian
+Push FSM; displacement, region, and tabletop success checks; and one bounded
+local contact-recovery attempt. The full Agent path and 20 randomized valid
+placements are verified without adding simulator access above the controller
+boundary.
 
 ## M7 — Hybrid Learned Skill
 
-Experiment with a learned policy, such as ACT, behind the same trusted Skill
-interface and validation boundaries.
+Potentially experiment with a learned policy behind the same trusted Skill
+interface and validation boundaries. No learned policy is implemented yet.
 
 ## M8 — Skill Composition / Code-as-Skill
 

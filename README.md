@@ -5,9 +5,9 @@ semantic skills, classical controllers, learned policies, and world-state
 feedback can work together in robotics.
 
 The current implementation runs a Franka Panda in a dynamic MuJoCo / robosuite
-tabletop world, executes validated Pick and Place plans, verifies their semantic
-effects against simulator ground truth, and replans only when a meaningful
-execution event invalidates the current plan.
+tabletop world, executes validated Pick, Place, and classical Push plans,
+verifies their semantic effects against simulator ground truth, and replans
+only when a meaningful execution event invalidates the current plan.
 
 ## What this is
 
@@ -35,7 +35,7 @@ flowchart TD
     subgraph D["Deterministic execution boundary"]
         V --> A["AgentRuntime"]
         A --> E["SkillExecutor"]
-        E --> S["PickSkill / PlaceSkill"]
+        E --> S["PickSkill / PlaceSkill / PushSkill"]
         S --> M["ManipulationPrimitives"]
         M --> R["PandaRobot"]
         R --> C["CartesianController"]
@@ -52,7 +52,8 @@ flowchart TD
 
 `AgentRuntime` never sends joint commands or simulator actions. See
 [docs/architecture.md](docs/architecture.md) for the layer contracts and result
-hierarchy.
+hierarchy and [docs/push_skill.md](docs/push_skill.md) for the classical Push
+geometry, FSM, evaluation protocol, and limits.
 
 ## Current capabilities
 
@@ -62,7 +63,8 @@ hierarchy.
 - interpolated `move_to_pose` and straight-line `move_linear` primitives
 - gripper open, close, and bounded wait primitives
 - simulator-ground-truth `WorldModel` and serializable `WorldState`
-- explicit Pick and Place finite-state machines with local recovery
+- explicit Pick, Place, and classical Cartesian Push finite-state machines
+  with bounded local recovery
 - machine-readable `SkillRegistry` with preconditions and expected effects
 - strict structured-plan parsing and deterministic validation
 - semantic effect verification through `SemanticResidual`
@@ -72,12 +74,13 @@ hierarchy.
 - three movable cubes, two target trays, and a temporary placement area
 - geometric `inside`, `occupied`, `occupied_by`, `left_of`, `right_of`, and
   `near` relations
-- bounded symbolic composition of existing Pick and Place skills
+- bounded symbolic composition of registered Pick, Place, and Push effects
+- a dedicated `right_side` semantic push region, separate from Place targets
 - explicit capability-gap plans for valid but unsupported goals
 - an interactive semantic-step playground with observable world changes
 
-The validated nominal baseline is 20/20 randomized Pick-to-Place tasks, with
-one planner call and zero replans per successful nominal task.
+The validated nominal baselines are 20/20 randomized Pick-to-Place tasks and
+20/20 randomized classical Push tasks for the supported `right_side` region.
 
 ## Example: closed-loop recovery
 
@@ -190,9 +193,11 @@ python -m demos.robot_motion --no-render --inspect-seconds 0
 python -m demos.grasp_test --no-render --inspect-seconds 0
 python -m demos.pick_test --no-render --inspect-seconds 0
 python -m demos.pick_place_task --no-render --inspect-seconds 0
+python -m demos.push_test --no-render --inspect-seconds 0
 
 python -m evaluation.agent_trials --trials 20 --seed 59
 python -m evaluation.agent_disturbances
+python -m evaluation.push_trials --trials 20 --seed 127
 ```
 
 To use the optional LLM planner, configure an OpenAI-compatible endpoint. These
@@ -214,7 +219,7 @@ sim/          MuJoCo / robosuite environment and tabletop scene
 robot/        Panda abstraction and the only robosuite action-vector controller
 world/        Ground-truth WorldModel and serializable semantic WorldState
 primitives/   Safe Cartesian and gripper manipulation primitives
-skills/       Pick and Place FSMs with skill-local recovery
+skills/       Pick, Place, and classical Push FSMs with local recovery
 planner/      Goal/Plan schemas, SkillRegistry, effects, validation, backends
 runtime/      SkillExecutor, AgentRuntime, result hierarchy, skill factory
 evaluation/   Nominal trials and evaluation-only controlled disturbances
@@ -237,7 +242,7 @@ docs/         Architecture and milestone notes
 
 ## Milestones
 
-Milestones M0 through M5 are implemented and validated. Later milestones are
+Milestones M0 through M6 are implemented and validated. Later milestones are
 exploratory directions rather than commitments. See
 [docs/milestones.md](docs/milestones.md).
 
@@ -249,7 +254,9 @@ The repository does **not** yet provide:
 - VLA models, ACT, reinforcement learning, or imitation learning;
 - ROS integration;
 - obstacle-aware or general-purpose motion planning;
-- execution of relation goals such as `left_of`, `near`, or `push_to_edge`;
+- execution of relation goals such as `left_of` or `near`;
+- push destinations other than the explicit `right_side` v1 region;
+- obstacle-aware, curved, force-controlled, or multi-object push planning;
 - general-purpose manipulation beyond the known cube and target scene;
 - production safety, real-robot validation, or formal safety guarantees.
 
@@ -258,7 +265,7 @@ approximations for the current tabletop scenario.
 
 ## Roadmap
 
-Near-term exploration may add a classical `PushSkill` and broader disturbance
-benchmarks. Later experiments may place a learned policy behind the existing
-Skill interface or compose trusted skills dynamically. These directions should
-preserve the same validation and execution boundaries.
+Near-term exploration may broaden deterministic push directions and disturbance
+benchmarks. A later experiment could place a learned implementation behind the
+same trusted semantic `Push(object, target)` interface. No ACT, VLA, or learned
+push backend is implemented today.

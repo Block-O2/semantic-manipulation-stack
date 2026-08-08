@@ -39,6 +39,10 @@ def test_headless_environment_exposes_expected_state() -> None:
         assert semantic.targets["temporary_area"].reachable
         assert semantic.targets["temporary_area"].role == "temporary"
         assert semantic.targets["temporary_area"].occupied_by == ()
+        assert tuple(semantic.push_regions) == ("right_side",)
+        assert semantic.push_regions["right_side"].reachable
+        assert semantic.push_regions["right_side"].lower_xy == (0.18, -0.25)
+        assert not semantic.relations["red_cube_inside_right_side"]
         assert not semantic.relations["red_cube_inside_blue_target"]
     finally:
         env.close()

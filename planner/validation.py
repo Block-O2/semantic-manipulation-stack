@@ -78,6 +78,12 @@ class PlanValidator:
                 if argument.kind is ArgumentKind.TARGET and value not in world_state.targets:
                     errors.append(f"STEP_{index}_UNKNOWN_TARGET: {value}")
                     entity_error = True
+                if (
+                    argument.kind is ArgumentKind.PUSH_REGION
+                    and value not in world_state.push_regions
+                ):
+                    errors.append(f"STEP_{index}_UNKNOWN_PUSH_REGION: {value}")
+                    entity_error = True
             if entity_error:
                 continue
 

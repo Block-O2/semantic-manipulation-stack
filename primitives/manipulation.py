@@ -208,6 +208,18 @@ class ManipulationPrimitives:
                 None,
                 None,
             )
+        position_error, orientation_error = self._errors(start, target)
+        if (
+            position_error <= position_tolerance
+            and orientation_error <= orientation_tolerance
+        ):
+            return PrimitiveResult(
+                True,
+                None,
+                0,
+                position_error,
+                orientation_error,
+            )
         waypoints = self.linear_waypoints(
             start,
             target,

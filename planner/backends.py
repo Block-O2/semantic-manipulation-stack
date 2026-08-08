@@ -10,7 +10,7 @@ from abc import ABC, abstractmethod
 from collections.abc import Sequence
 from typing import Any
 
-from planner.composition import compose_inside_plan
+from planner.composition import compose_inside_plan, compose_push_plan
 from planner.registry import SkillRegistry
 from planner.schema import (
     Goal,
@@ -50,11 +50,15 @@ class RuleBasedPlanner(PlannerBackend):
         failure_context: PlannerFailureContext | None = None,
     ) -> PlannerResult:
         self.calls += 1
-        if goal.relation is not GoalRelation.INSIDE:
+        if goal.relation in {
+            GoalRelation.LEFT_OF,
+            GoalRelation.NEAR,
+            GoalRelation.OPEN_DRAWER,
+        }:
             missing = {
                 GoalRelation.LEFT_OF: "place_left_of",
                 GoalRelation.NEAR: "place_near",
-                GoalRelation.PUSH_TO_EDGE: "push",
+                GoalRelation.OPEN_DRAWER: "open_drawer",
             }[goal.relation]
             return PlannerResult.from_plan(
                 Plan.capability_gap(
@@ -62,14 +66,45 @@ class RuleBasedPlanner(PlannerBackend):
                     f"No registered skill can achieve relation {goal.relation.value!r}.",
                 )
             )
+
         object_state = world_state.objects.get(goal.object_name)
-        target_state = world_state.targets.get(goal.target_name)
         if object_state is None or not object_state.exists:
             return PlannerResult.from_plan(Plan.cannot_plan("Requested object does not exist."))
-        if target_state is None or not target_state.exists:
-            return PlannerResult.from_plan(Plan.cannot_plan("Requested target does not exist."))
         if not object_state.reachable:
             return PlannerResult.from_plan(Plan.cannot_plan("Requested object is unreachable."))
+
+        if goal.relation in {
+            GoalRelation.PUSH_TO_REGION,
+            GoalRelation.PUSH_TO_EDGE,
+        }:
+            if skill_registry.get("push") is None:
+                return PlannerResult.from_plan(
+                    Plan.capability_gap(
+                        ["push"],
+                        "No registered skill can execute a physical push.",
+                    )
+                )
+            region = world_state.push_regions.get(goal.target_name)
+            if region is None or not region.exists:
+                return PlannerResult.from_plan(
+                    Plan.cannot_plan("Requested push region does not exist.")
+                )
+            if not region.reachable:
+                return PlannerResult.from_plan(
+                    Plan.cannot_plan("Requested push region is unreachable.")
+                )
+            steps = compose_push_plan(goal, world_state, skill_registry)
+            if steps is None:
+                return PlannerResult.from_plan(
+                    Plan.cannot_plan(
+                        "Current semantic preconditions do not permit a Push plan."
+                    )
+                )
+            return PlannerResult.from_plan(Plan.ready(steps))
+
+        target_state = world_state.targets.get(goal.target_name)
+        if target_state is None or not target_state.exists:
+            return PlannerResult.from_plan(Plan.cannot_plan("Requested target does not exist."))
         if not target_state.reachable:
             return PlannerResult.from_plan(Plan.cannot_plan("Requested target is unreachable."))
         steps = compose_inside_plan(goal, world_state, skill_registry)
@@ -176,6 +211,18 @@ class OpenAICompatiblePlanner(PlannerBackend):
                         },
                     ],
                 },
+                "ready_push": {
+                    "status": "ready",
+                    "steps": [
+                        {
+                            "skill": "push",
+                            "args": {
+                                "object": "red_cube",
+                                "target": "right_side",
+                            },
+                        }
+                    ],
+                },
                 "cannot_plan": {
                     "status": "cannot_plan",
                     "reason": "semantic reason",
@@ -183,7 +230,7 @@ class OpenAICompatiblePlanner(PlannerBackend):
                 "capability_gap": {
                     "status": "cannot_plan",
                     "reason": "CAPABILITY_GAP",
-                    "missing_capabilities": ["push"],
+                    "missing_capabilities": ["open_drawer"],
                     "detail": "why registered skills are insufficient",
                 },
             },
@@ -219,9 +266,11 @@ class OpenAICompatiblePlanner(PlannerBackend):
                         "occupied_by identifies movable blockers, and a target with role "
                         "temporary is a normal valid Place destination for staging. Do not "
                         "return CAPABILITY_GAP when a Pick / Place composition can solve the "
-                        "state. Return it only when the registered skills genuinely lack the "
-                        "required physical interaction. Never invent skills, emit code, or "
-                        "emit low-level commands."
+                        "state. Push accepts an object and one of the supplied semantic "
+                        "push_regions; never emit raw Cartesian coordinates. Return "
+                        "CAPABILITY_GAP only when registered skills genuinely lack the "
+                        "required physical interaction. Never invent skills, emit code, "
+                        "or emit low-level commands."
                     ),
                 },
                 {"role": "user", "content": json.dumps(prompt, sort_keys=True)},

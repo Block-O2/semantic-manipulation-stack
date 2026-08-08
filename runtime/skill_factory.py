@@ -6,7 +6,7 @@ from typing import Protocol
 
 from planner import PlanStep
 from primitives import ManipulationPrimitives
-from skills import PickSkill, PlaceSkill, Skill
+from skills import PickSkill, PlaceSkill, PushSkill, Skill
 from world import WorldModel
 
 
@@ -27,6 +27,13 @@ class SemanticSkillFactory:
             return PickSkill(step.args["object"], self._world, self._primitives)
         if step.skill == "place":
             return PlaceSkill(
+                step.args["object"],
+                step.args["target"],
+                self._world,
+                self._primitives,
+            )
+        if step.skill == "push":
+            return PushSkill(
                 step.args["object"],
                 step.args["target"],
                 self._world,

@@ -58,6 +58,32 @@ class SceneConfig:
         return ("temporary_area",)
 
     @property
+    def push_region_bounds(
+        self,
+    ) -> dict[str, tuple[tuple[float, float], tuple[float, float]]]:
+        """Axis-aligned semantic regions expressed as lower / upper XY bounds."""
+
+        return {
+            # A named semantic strip, inset from the physical table edge.
+            "right_side": ((0.18, -0.25), (0.34, 0.25)),
+        }
+
+    @property
+    def push_region_names(self) -> tuple[str, ...]:
+        return tuple(self.push_region_bounds)
+
+    def push_region_center(self, name: str) -> FloatArray:
+        lower, upper = self.push_region_bounds[name]
+        return np.array(
+            [
+                0.5 * (lower[0] + upper[0]),
+                0.5 * (lower[1] + upper[1]),
+                self.table_top_z + self.cube_half_size,
+            ],
+            dtype=np.float64,
+        )
+
+    @property
     def cube_xy_positions(self) -> dict[str, tuple[float, float]]:
         return {
             "red_cube": self.red_cube_xy,

@@ -85,14 +85,16 @@ The scenarios cover:
 - an initially occupied target solved by composing four Pick / Place steps;
 - target occupancy introduced after Pick, followed by replanning and a
   five-step rearrangement plan;
-- a `push_to_edge` goal reported as a missing `push` capability.
+- an `open_drawer` goal reported as an explicit capability gap.
 
 ## Supported goals and capability gaps
 
 `put_inside(object, target)` is executable through registered Pick and Place
-skills. The goal schema can also represent `left_of`, `near`, and
-`push_to_edge`, so planners and interfaces do not have to encode these ideas as
-free text. They are deliberately not executable in Milestone 5.
+skills. `push_to_region(object, target)` and the `push_to_edge` shorthand are
+executable through the classical Push skill for the `right_side` semantic
+region. The schema can also represent `left_of`, `near`, and `open_drawer` so
+planners and interfaces do not have to encode them as free text; those actions
+remain deliberately unsupported.
 
 For `inside` goals, the deterministic planner performs a bounded breadth-first
 search over legal Pick and Place transitions. If another movable object occupies

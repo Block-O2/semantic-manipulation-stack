@@ -80,9 +80,7 @@ def run_scenario(name: str) -> dict[str, Any]:
             triggered = True
 
         goal = (
-            Goal.push_to_edge(
-                "Push the red cube to the edge of the table.", "red_cube"
-            )
+            Goal.open_drawer("Open the drawer.")
             if name == "capability_gap"
             else INSIDE_GOAL
         )
@@ -147,7 +145,7 @@ def main() -> None:
         "capability_gap": lambda item: bool(
             not item["success"]
             and item["failure_reason"] == "CAPABILITY_GAP"
-            and item["missing_capabilities"] == ["push"]
+            and item["missing_capabilities"] == ["open_drawer"]
         ),
     }
     if not all(expectations[item["scenario"]](item) for item in records):

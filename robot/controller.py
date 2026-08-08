@@ -48,8 +48,11 @@ class CartesianController:
         self.max_rotation_delta = float(max_rotation_delta)
         self.position_tolerance = float(position_tolerance)
         self.orientation_tolerance = float(orientation_tolerance)
+        # Start neutral until the robot abstraction receives an explicit
+        # open / close request. This prevents an arm-only first motion from
+        # unexpectedly sweeping nearby objects with the fingers.
         # robosuite standard: -1 opens, +1 closes.
-        self._gripper_command = -1.0
+        self._gripper_command = 0.0
 
         low, high = self._env.action_spec
         if low.shape != (7,) or high.shape != (7,):

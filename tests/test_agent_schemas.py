@@ -52,12 +52,16 @@ def test_skill_registry_contains_machine_readable_pick_and_place_contracts() -> 
 
     payload = registry.to_dict()
 
-    assert registry.names == ("pick", "place")
+    assert registry.names == ("pick", "place", "push")
     assert payload["pick"]["arguments"][0]["kind"] == "object"
     assert payload["pick"]["expected_effects"][0]["path"] == "robot.holding"
     assert any(
         effect["mismatch_code"] == "PLACE_EFFECT_NOT_ACHIEVED"
         for effect in payload["place"]["expected_effects"]
+    )
+    assert payload["push"]["arguments"][1]["kind"] == "push_region"
+    assert payload["push"]["expected_effects"][0]["path"] == (
+        "relations.{object}_inside_{target}"
     )
 
 

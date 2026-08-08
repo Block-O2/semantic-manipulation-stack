@@ -13,6 +13,7 @@ from world import WorldState
 class ArgumentKind(str, Enum):
     OBJECT = "object"
     TARGET = "target"
+    PUSH_REGION = "push_region"
 
 
 @dataclass(frozen=True)
@@ -170,7 +171,44 @@ class SkillRegistry:
                 "same Place behavior as destination targets."
             ),
         )
-        return cls((pick, place))
+        push = SkillSpec(
+            name="push",
+            arguments=(
+                SkillArgument("object", ArgumentKind.OBJECT, "Object to push"),
+                SkillArgument(
+                    "target",
+                    ArgumentKind.PUSH_REGION,
+                    "Named semantic tabletop push region",
+                ),
+            ),
+            preconditions=(
+                ConditionTemplate("objects.{object}.exists", True, "OBJECT_NOT_FOUND"),
+                ConditionTemplate(
+                    "objects.{object}.reachable", True, "OBJECT_UNREACHABLE"
+                ),
+                ConditionTemplate("robot.holding", None, "GRIPPER_NOT_EMPTY"),
+                ConditionTemplate(
+                    "push_regions.{target}.exists", True, "INVALID_PUSH_TARGET"
+                ),
+                ConditionTemplate(
+                    "push_regions.{target}.reachable",
+                    True,
+                    "PUSH_PATH_OUTSIDE_WORKSPACE",
+                ),
+            ),
+            expected_effects=(
+                EffectTemplate(
+                    "relations.{object}_inside_{target}",
+                    True,
+                    "PUSH_TARGET_NOT_REACHED",
+                ),
+            ),
+            description=(
+                "Push one reachable object with an empty gripper into a named "
+                "semantic tabletop region using a straight Cartesian motion."
+            ),
+        )
+        return cls((pick, place, push))
 
     @property
     def names(self) -> tuple[str, ...]:

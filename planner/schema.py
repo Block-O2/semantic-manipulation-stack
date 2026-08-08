@@ -11,7 +11,9 @@ class GoalRelation(str, Enum):
     INSIDE = "inside"
     LEFT_OF = "left_of"
     NEAR = "near"
+    PUSH_TO_REGION = "push_to_region"
     PUSH_TO_EDGE = "push_to_edge"
+    OPEN_DRAWER = "open_drawer"
 
 
 @dataclass(frozen=True)
@@ -36,8 +38,27 @@ class Goal:
         return cls(text, GoalRelation.NEAR, object_name, reference_name)
 
     @classmethod
+    def push_to_region(
+        cls,
+        text: str,
+        object_name: str,
+        target_name: str,
+    ) -> "Goal":
+        if not text.strip() or not object_name or not target_name:
+            raise ValueError("push goal text, object name, and target name are required")
+        return cls(text, GoalRelation.PUSH_TO_REGION, object_name, target_name)
+
+    @classmethod
     def push_to_edge(cls, text: str, object_name: str) -> "Goal":
-        return cls(text, GoalRelation.PUSH_TO_EDGE, object_name, "table_edge")
+        """Backward-compatible shorthand for the supported right-side region."""
+
+        if not text.strip() or not object_name:
+            raise ValueError("push goal text and object name are required")
+        return cls(text, GoalRelation.PUSH_TO_EDGE, object_name, "right_side")
+
+    @classmethod
+    def open_drawer(cls, text: str, drawer_name: str = "drawer") -> "Goal":
+        return cls(text, GoalRelation.OPEN_DRAWER, drawer_name, drawer_name)
 
     def to_dict(self) -> dict[str, str]:
         return {

@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import Any
 
 from robot import Pose
@@ -93,6 +93,26 @@ class TargetState:
 
 
 @dataclass(frozen=True)
+class PushRegionState:
+    """Planner-visible, non-Place semantic region on the tabletop."""
+
+    exists: bool
+    reachable: bool
+    center: tuple[float, float, float]
+    lower_xy: tuple[float, float]
+    upper_xy: tuple[float, float]
+
+    def to_dict(self) -> dict[str, Any]:
+        return {
+            "exists": self.exists,
+            "reachable": self.reachable,
+            "center": list(self.center),
+            "lower_xy": list(self.lower_xy),
+            "upper_xy": list(self.upper_xy),
+        }
+
+
+@dataclass(frozen=True)
 class WorldState:
     """Semantic snapshot shared by deterministic code and planner prompts."""
 
@@ -100,6 +120,7 @@ class WorldState:
     objects: dict[str, ObjectState]
     targets: dict[str, TargetState]
     relations: dict[str, bool]
+    push_regions: dict[str, PushRegionState] = field(default_factory=dict)
 
     @staticmethod
     def relation_key(object_name: str, target_name: str) -> str:
@@ -117,6 +138,10 @@ class WorldState:
     def near_key(first: str, second: str) -> str:
         return f"{first}_near_{second}"
 
+    @staticmethod
+    def push_region_key(object_name: str, region_name: str) -> str:
+        return f"{object_name}_inside_{region_name}"
+
     def to_dict(self) -> dict[str, Any]:
         return {
             "robot": self.robot.to_dict(),
@@ -125,6 +150,10 @@ class WorldState:
             },
             "targets": {
                 name: state.to_dict() for name, state in sorted(self.targets.items())
+            },
+            "push_regions": {
+                name: state.to_dict()
+                for name, state in sorted(self.push_regions.items())
             },
             "relations": dict(sorted(self.relations.items())),
         }
@@ -151,6 +180,11 @@ class WorldState:
             }:
                 raise KeyError(path)
             return getattr(state, parts[2])
+        if len(parts) == 3 and parts[0] == "push_regions":
+            state = self.push_regions.get(parts[1])
+            if state is None or parts[2] not in {"exists", "reachable"}:
+                raise KeyError(path)
+            return getattr(state, parts[2])
         if len(parts) == 2 and parts[0] == "relations" and parts[1] in self.relations:
             return self.relations[parts[1]]
         raise KeyError(path)
@@ -167,6 +201,9 @@ class WorldState:
             values[f"targets.{name}.occupied"] = state.occupied
             values[f"targets.{name}.occupied_by"] = state.occupied_by
             values[f"targets.{name}.role"] = state.role
+        for name, state in self.push_regions.items():
+            values[f"push_regions.{name}.exists"] = state.exists
+            values[f"push_regions.{name}.reachable"] = state.reachable
         for name, value in self.relations.items():
             values[f"relations.{name}"] = value
         return values
