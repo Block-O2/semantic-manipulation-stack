@@ -56,8 +56,17 @@ boundary.
 
 ## M7 — Hybrid Learned Skill
 
-Potentially experiment with a learned policy behind the same trusted Skill
-interface and validation boundaries. No learned policy is implemented yet.
+Experiment with learned physical implementations behind the same trusted Skill
+interface and validation boundaries. A one-step BC sanity baseline now exists;
+ACT and chunk policies remain future work.
+
+### Pluggable backend and imitation-data preparation ✅
+
+`PushSkill` now delegates physical attempts to a `PushBackend`, with classical
+and deliberately simple one-step BC implementations. A 20 Hz state/action NPZ
+pipeline, episode-level split, action-window helper, NumPy MLP checkpoint, and
+matched physical comparison establish the baseline. This is preparation for
+future chunk policies; ACT itself is not implemented.
 
 ## M8 — Skill Composition / Code-as-Skill
 

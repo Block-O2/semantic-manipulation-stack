@@ -3,12 +3,13 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from collections.abc import Callable
 from typing import TYPE_CHECKING
 
 import numpy as np
 from numpy.typing import ArrayLike, NDArray
 
-from robot.controller import CartesianController, MotionResult
+from robot.controller import CartesianCommandEvent, CartesianController, MotionResult
 
 if TYPE_CHECKING:
     from sim.environment import SemanticTabletopEnv
@@ -67,6 +68,23 @@ class PandaRobot:
             position_tolerance=position_tolerance,
             orientation_tolerance=orientation_tolerance,
         )
+
+    def command_end_effector_once(self, target: Pose) -> MotionResult:
+        """Execute one absolute Cartesian command through the trusted controller."""
+
+        return self._controller.command_pose_once(target)
+
+    def add_command_observer(
+        self,
+        observer: Callable[[CartesianCommandEvent], None],
+    ) -> None:
+        self._controller.add_command_observer(observer)
+
+    def remove_command_observer(
+        self,
+        observer: Callable[[CartesianCommandEvent], None],
+    ) -> None:
+        self._controller.remove_command_observer(observer)
 
     def open_gripper(self, *, steps: int = 40) -> None:
         self._controller.set_gripper(open=True, steps=steps)

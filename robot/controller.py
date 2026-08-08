@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from collections.abc import Callable
 from typing import TYPE_CHECKING
 
 import numpy as np
@@ -25,6 +26,16 @@ class MotionResult:
     steps: int
     position_error: float
     orientation_error: float
+
+
+@dataclass(frozen=True)
+class CartesianCommandEvent:
+    """One absolute Cartesian command at one simulator control timestep."""
+
+    step: int
+    current_pose: "Pose"
+    target_pose: "Pose"
+    gripper_command: float
 
 
 class CartesianController:
@@ -53,6 +64,8 @@ class CartesianController:
         # unexpectedly sweeping nearby objects with the fingers.
         # robosuite standard: -1 opens, +1 closes.
         self._gripper_command = 0.0
+        self._command_step = 0
+        self._command_observers: list[Callable[[CartesianCommandEvent], None]] = []
 
         low, high = self._env.action_spec
         if low.shape != (7,) or high.shape != (7,):
@@ -106,6 +119,52 @@ class CartesianController:
         action[6] = self._gripper_command
         return action, float(np.linalg.norm(position_error)), float(np.linalg.norm(rotation_error))
 
+    def add_command_observer(
+        self,
+        observer: Callable[[CartesianCommandEvent], None],
+    ) -> None:
+        if observer not in self._command_observers:
+            self._command_observers.append(observer)
+
+    def remove_command_observer(
+        self,
+        observer: Callable[[CartesianCommandEvent], None],
+    ) -> None:
+        if observer in self._command_observers:
+            self._command_observers.remove(observer)
+
+    def _notify_command(self, current: "Pose", target: "Pose") -> None:
+        event = CartesianCommandEvent(
+            self._command_step,
+            current,
+            target,
+            self._gripper_command,
+        )
+        self._command_step += 1
+        for observer in tuple(self._command_observers):
+            observer(event)
+
+    def command_pose_once(self, target: "Pose") -> MotionResult:
+        """Submit one trusted OSC pose command for one control timestep."""
+
+        current = self._env.end_effector_pose()
+        action, _, _ = self._action_for_pose(target)
+        self._notify_command(current, target)
+        self._env.step(action)
+        self._env.render_if_enabled()
+        updated = self._env.end_effector_pose()
+        position_error = float(np.linalg.norm(target.position - updated.position))
+        orientation_error = float(
+            np.linalg.norm(self.orientation_error(target.quaternion, updated.quaternion))
+        )
+        return MotionResult(
+            position_error <= self.position_tolerance
+            and orientation_error <= self.orientation_tolerance,
+            1,
+            position_error,
+            orientation_error,
+        )
+
     def move_to_pose(
         self,
         target: "Pose",
@@ -135,7 +194,9 @@ class CartesianController:
         orientation_error = float("inf")
         stable_steps = 0
         for step in range(1, max_steps + 1):
+            current = self._env.end_effector_pose()
             action, position_error, orientation_error = self._action_for_pose(target)
+            self._notify_command(current, target)
             self._env.step(action)
             self._env.render_if_enabled()
 
@@ -158,8 +219,10 @@ class CartesianController:
             raise ValueError("steps must be positive")
         self._gripper_command = -1.0 if open else 1.0
         for _ in range(steps):
+            current = self._env.end_effector_pose()
             action = np.zeros(7, dtype=np.float64)
             action[6] = self._gripper_command
+            self._notify_command(current, current)
             self._env.step(action)
             self._env.render_if_enabled()
 
@@ -169,7 +232,9 @@ class CartesianController:
         if steps < 0:
             raise ValueError("steps must be non-negative")
         for _ in range(steps):
+            current = self._env.end_effector_pose()
             action = np.zeros(7, dtype=np.float64)
             action[6] = self._gripper_command
+            self._notify_command(current, current)
             self._env.step(action)
             self._env.render_if_enabled()

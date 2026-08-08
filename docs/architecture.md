@@ -14,7 +14,9 @@ flowchart TD
     V --> A["AgentRuntime"]
     A --> E["SkillExecutor"]
     E --> S["Skill"]
+    S --> PB["PushBackend (for PushSkill)"]
     S --> PR["ManipulationPrimitives"]
+    PB --> PR
     PR --> R["PandaRobot"]
     R --> C["CartesianController"]
     C --> SIM["robosuite / MuJoCo"]
@@ -166,10 +168,25 @@ from prior occupancy, placing adds it to a Place target, and pushing moves it
 into the requested push region. This allows multi-step plans to remain strictly
 validated without embedding rearrangement or push policy in `AgentRuntime`.
 
-The classical implementation is one backend for the semantic Push contract.
-A future learned implementation could be selected by the skill factory while
-retaining the registry, validator, Agent, result, and controller boundaries.
-No learned backend is present in this repository.
+The classical implementation is the reliable backend for the semantic Push
+contract. An experimental one-step BC backend demonstrates that a learned
+implementation can be selected while retaining the registry, validator, Agent,
+result, and controller boundaries. It is a weak baseline, not ACT or a
+production-capable learned policy.
+
+Push physical execution is now selected behind a narrow `PushBackend`
+protocol. `PushSkill` owns semantic verification and retry policy;
+`ClassicalPushBackend` owns scripted geometry and motion, while the experimental
+`BCPushBackend` predicts one absolute EE xyz at a time. Backend injection occurs
+in `SemanticSkillFactory`, so AgentRuntime, SkillExecutor, planner, and registry
+remain backend-independent.
+
+For imitation data, `CartesianController` publishes a read-only command event
+immediately before each simulator control step. A recorder combines that event
+with read-only `WorldModel` state. The observer cannot submit actions and does
+not expose raw MuJoCo state. Learned predictions return through a bounded
+primitive and the normal Panda/controller path; policy code never calls
+`env.step()` or constructs robosuite vectors.
 
 ## Result hierarchy
 

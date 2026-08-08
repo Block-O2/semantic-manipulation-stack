@@ -12,7 +12,7 @@ from planner import Goal, PlanValidator, RuleBasedPlanner, SkillRegistry
 from playground import WorldController
 from primitives import ManipulationPrimitives
 from robot import PandaRobot, Pose
-from runtime import AgentRuntime, SemanticSkillFactory
+from runtime import AgentRuntime, SemanticSkillFactory, create_push_backend
 from sim import make_environment
 from world import WorldModel
 
@@ -24,6 +24,12 @@ def main() -> None:
     parser.add_argument("--inspect-seconds", type=float, default=8.0)
     parser.add_argument("--cube-x", type=float)
     parser.add_argument("--cube-y", type=float)
+    parser.add_argument(
+        "--push-backend",
+        choices=("classical", "bc"),
+        default="classical",
+    )
+    parser.add_argument("--checkpoint")
     args = parser.parse_args()
 
     env = make_environment(render=not args.no_render, seed=113)
@@ -57,6 +63,10 @@ def main() -> None:
                     "requested cube position intersects the initialized robot geometry"
                 )
         registry = SkillRegistry.standard()
+        push_backend = create_push_backend(
+            args.push_backend,
+            checkpoint=args.checkpoint,
+        )
         initial = world.pose("red_cube").position.copy()
         goal = Goal.push_to_region(
             f"Push the red cube toward {args.target}.",
@@ -68,7 +78,11 @@ def main() -> None:
             registry=registry,
             validator=PlanValidator(registry),
             observer=world.semantic_state,
-            skill_factory=SemanticSkillFactory(world, primitives),
+            skill_factory=SemanticSkillFactory(
+                world,
+                primitives,
+                push_backend=push_backend,
+            ),
             max_replans=0,
             logger=print,
         ).run(goal)

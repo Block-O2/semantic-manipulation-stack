@@ -15,6 +15,9 @@ dist/
 .env
 .env.*
 *.log
+data/*.npz
+checkpoints/*.npz
+checkpoints/*.json
 
 # macOS and editor metadata
 .DS_Store

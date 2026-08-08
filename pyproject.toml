@@ -35,5 +35,7 @@ include = [
     "playground*",
     "runtime*",
     "evaluation*",
+    "datasets*",
+    "learning*",
     "demos*",
 ]

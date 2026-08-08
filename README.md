@@ -5,7 +5,7 @@ semantic skills, classical controllers, learned policies, and world-state
 feedback can work together in robotics.
 
 The current implementation runs a Franka Panda in a dynamic MuJoCo / robosuite
-tabletop world, executes validated Pick, Place, and classical Push plans,
+tabletop world, executes validated Pick, Place, and pluggable Push plans,
 verifies their semantic effects against simulator ground truth, and replans
 only when a meaningful execution event invalidates the current plan.
 
@@ -36,7 +36,9 @@ flowchart TD
         V --> A["AgentRuntime"]
         A --> E["SkillExecutor"]
         E --> S["PickSkill / PlaceSkill / PushSkill"]
+        S --> PB["Classical or BC PushBackend"]
         S --> M["ManipulationPrimitives"]
+        PB --> M
         M --> R["PandaRobot"]
         R --> C["CartesianController"]
         C --> SIM["MuJoCo / robosuite"]
@@ -53,7 +55,9 @@ flowchart TD
 `AgentRuntime` never sends joint commands or simulator actions. See
 [docs/architecture.md](docs/architecture.md) for the layer contracts and result
 hierarchy and [docs/push_skill.md](docs/push_skill.md) for the classical Push
-geometry, FSM, evaluation protocol, and limits.
+geometry, FSM, evaluation protocol, and limits. See
+[docs/learned_push_backend.md](docs/learned_push_backend.md) for the replaceable
+backend and imitation-data contracts.
 
 ## Current capabilities
 
@@ -76,6 +80,10 @@ geometry, FSM, evaluation protocol, and limits.
   `near` relations
 - bounded symbolic composition of registered Pick, Place, and Push effects
 - a dedicated `right_side` semantic push region, separate from Place targets
+- pluggable classical and one-step BC physical Push backends
+- 20 Hz state/action trajectory recording and a validated local NPZ format
+- action-chunk extraction with explicit padding masks
+- a dependency-free NumPy one-step BC training and checkpoint baseline
 - explicit capability-gap plans for valid but unsupported goals
 - an interactive semantic-step playground with observable world changes
 
@@ -198,6 +206,16 @@ python -m demos.push_test --no-render --inspect-seconds 0
 python -m evaluation.agent_trials --trials 20 --seed 59
 python -m evaluation.agent_disturbances
 python -m evaluation.push_trials --trials 20 --seed 127
+
+python -m datasets.collect_push_demos \
+  --episodes 50 --seed 123 --output data/push_demos_50_seed123.npz
+python -m datasets.inspect_push_dataset data/push_demos_50_seed123.npz
+python -m learning.train_push_bc \
+  --dataset data/push_demos_50_seed123.npz \
+  --checkpoint checkpoints/push_bc.npz
+python -m evaluation.push_backend_comparison \
+  --dataset data/push_demos_50_seed123.npz \
+  --checkpoint checkpoints/push_bc.npz --trials 20
 ```
 
 To use the optional LLM planner, configure an OpenAI-compatible endpoint. These
@@ -219,7 +237,9 @@ sim/          MuJoCo / robosuite environment and tabletop scene
 robot/        Panda abstraction and the only robosuite action-vector controller
 world/        Ground-truth WorldModel and serializable semantic WorldState
 primitives/   Safe Cartesian and gripper manipulation primitives
-skills/       Pick, Place, and classical Push FSMs with local recovery
+skills/       Semantic skills plus classical and BC Push physical backends
+datasets/     State/action schemas, trajectory recording, NPZ I/O, windowing
+learning/     Dependency-free one-step Push BC baseline and checkpoint tooling
 planner/      Goal/Plan schemas, SkillRegistry, effects, validation, backends
 runtime/      SkillExecutor, AgentRuntime, result hierarchy, skill factory
 evaluation/   Nominal trials and evaluation-only controlled disturbances
@@ -251,7 +271,8 @@ exploratory directions rather than commitments. See
 The repository does **not** yet provide:
 
 - camera perception or visual scene understanding;
-- VLA models, ACT, reinforcement learning, or imitation learning;
+- VLA, ACT, Transformer, CVAE, reinforcement-learning, image-based, or
+  high-performing learned policies;
 - ROS integration;
 - obstacle-aware or general-purpose motion planning;
 - execution of relation goals such as `left_of` or `near`;
@@ -265,7 +286,7 @@ approximations for the current tabletop scenario.
 
 ## Roadmap
 
-Near-term exploration may broaden deterministic push directions and disturbance
-benchmarks. A later experiment could place a learned implementation behind the
-same trusted semantic `Push(object, target)` interface. No ACT, VLA, or learned
-push backend is implemented today.
+Near-term exploration may add chunk BC and compare prediction horizon against
+execution horizon before attempting ACT. The current one-step BC backend is a
+deliberately weak state-based baseline (0/20 matched physical rollouts), not a
+claim of learned manipulation reliability. No ACT or VLA backend exists.

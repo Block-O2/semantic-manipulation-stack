@@ -10,15 +10,13 @@ from collections import Counter
 import numpy as np
 
 from planner import Goal, PlanValidator, RuleBasedPlanner, SkillRegistry
+from evaluation.push_sampling import prepare_push_scene, sample_valid_cube_position
 from playground import WorldController
 from primitives import ManipulationPrimitives
-from robot import PandaRobot, Pose
+from robot import PandaRobot
 from runtime import AgentRuntime, SemanticSkillFactory
 from sim import make_environment
 from world import WorldModel
-
-
-EVALUATION_STANDBY_POSITION = np.array([-0.25, -0.25, 1.10])
 
 
 def run_evaluation(*, trials: int, seed: int) -> dict[str, object]:
@@ -43,42 +41,15 @@ def run_evaluation(*, trials: int, seed: int) -> dict[str, object]:
             world = WorldModel(env)
             robot = PandaRobot(env)
             primitives = ManipulationPrimitives(robot)
-            standby = Pose(
-                EVALUATION_STANDBY_POSITION,
-                robot.pose.quaternion,
-            )
-            standby_result = primitives.move_to_pose(standby)
-            if not standby_result.success:
-                raise RuntimeError("could not move robot to evaluation standby pose")
-            open_result = primitives.open_gripper()
-            if not open_result.success:
-                raise RuntimeError("could not open gripper during evaluation setup")
             controller = WorldController(env, world)
-            controller.remove_object("green_cube")
-            controller.remove_object("blue_cube")
-            for _ in range(100):
-                sampled = np.array(
-                    [
-                        rng.uniform(-0.10, 0.08),
-                        rng.uniform(-0.15, 0.12),
-                    ]
-                )
-                controller.move_object(
-                    "red_cube",
-                    float(sampled[0]),
-                    float(sampled[1]),
-                )
-                primitives.wait(steps=10)
-                settled = world.pose("red_cube").position
-                if (
-                    np.linalg.norm(settled[:2] - sampled) <= 0.003
-                    and world.is_on_table("red_cube")
-                ):
-                    break
-                placement_rejections += 1
-            else:
-                raise RuntimeError("could not sample a physically valid cube position")
-            initial = world.pose("red_cube").position.copy()
+            prepare_push_scene(world, robot, primitives, controller)
+            initial, rejected = sample_valid_cube_position(
+                world,
+                primitives,
+                controller,
+                rng,
+            )
+            placement_rejections += rejected
             registry = SkillRegistry.standard()
             result = AgentRuntime(
                 planner=RuleBasedPlanner(),

@@ -11,6 +11,7 @@ learning, force control, or a learned contact model.
 AgentRuntime
 → SkillExecutor
 → PushSkill
+→ ClassicalPushBackend
 → ManipulationPrimitives
 → PandaRobot
 → CartesianController
@@ -53,6 +54,11 @@ For `NO_PUSH_CONTACT`, `INSUFFICIENT_DISPLACEMENT`, or
 refresh the object pose, recompute geometry, and retry. Structural failures are
 returned immediately as a structured `SkillResult`.
 
+`PushSkill` owns preconditions, final semantic verification, result creation,
+and the retry decision. `ClassicalPushBackend` owns the geometry and physical
+FSM phases between generation and retreat. The split preserves the same trace
+while allowing a different physical backend to implement one bounded attempt.
+
 ## Running and evaluating
 
 ```bash
@@ -77,7 +83,8 @@ without narrowing the sampling bounds.
 - contact uses proximity rather than raw MuJoCo contact pairs;
 - goals are single predicates, so a Push-then-Pick/Place conjunction is not yet
   represented cleanly;
-- no learned Push backend exists.
+- the experimental one-step BC backend is not reliable enough for task use.
 
-A future backend can implement the same semantic Skill contract and be selected
-by the skill factory without changing planner validation or AgentRuntime.
+Additional backends can implement the same `PushBackend` contract and be
+selected by the skill factory without changing planner validation or
+AgentRuntime.

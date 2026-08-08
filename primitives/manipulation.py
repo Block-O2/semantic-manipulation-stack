@@ -330,6 +330,43 @@ class ManipulationPrimitives:
             orientation_error,
         )
 
+    def command_cartesian_once(
+        self,
+        target: Pose,
+        *,
+        max_cartesian_step: float = 0.05,
+    ) -> PrimitiveResult:
+        """Execute one bounded absolute Cartesian command for learned policies."""
+
+        if max_cartesian_step <= 0.0:
+            raise ValueError("max_cartesian_step must be positive")
+        current = self._robot.pose
+        position_error, orientation_error = self._errors(current, target)
+        if not self.workspace.contains(target.position):
+            return PrimitiveResult(
+                False,
+                PrimitiveFailure.TARGET_OUTSIDE_WORKSPACE,
+                0,
+                position_error,
+                orientation_error,
+            )
+        if position_error > max_cartesian_step:
+            return PrimitiveResult(
+                False,
+                PrimitiveFailure.CARTESIAN_STEP_TOO_LARGE,
+                0,
+                position_error,
+                orientation_error,
+            )
+        motion = self._robot.command_end_effector_once(target)
+        return PrimitiveResult(
+            True,
+            None,
+            motion.steps,
+            motion.position_error,
+            motion.orientation_error,
+        )
+
     def open_gripper(self, *, steps: int = 40) -> PrimitiveResult:
         self._robot.open_gripper(steps=steps)
         return PrimitiveResult(True, None, steps, None, None)
