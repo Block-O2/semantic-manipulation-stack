@@ -27,6 +27,7 @@ class BottleEnv(ManipulationEnv):
         *,
         scene: BottleSceneConfig = DEFAULT_SCENE,
         has_renderer: bool = False,
+        has_offscreen_renderer: bool = False,
         seed: int = 0,
         controller_configs: dict[str, Any] | None = None,
     ) -> None:
@@ -56,7 +57,7 @@ class BottleEnv(ManipulationEnv):
             initialization_noise=None,
             use_camera_obs=False,
             has_renderer=has_renderer,
-            has_offscreen_renderer=False,
+            has_offscreen_renderer=has_offscreen_renderer,
             render_camera="frontview",
             render_collision_mesh=False,
             render_visual_mesh=True,
@@ -251,5 +252,11 @@ class BottleEnv(ManipulationEnv):
             self.render()
 
 
-def make_bottle_env(*, render: bool = False, seed: int = 0) -> BottleEnv:
-    return BottleEnv(has_renderer=render, seed=seed)
+def make_bottle_env(
+    *, render: bool = False, offscreen: bool = False, seed: int = 0
+) -> BottleEnv:
+    return BottleEnv(
+        has_renderer=render,
+        has_offscreen_renderer=offscreen,
+        seed=seed,
+    )

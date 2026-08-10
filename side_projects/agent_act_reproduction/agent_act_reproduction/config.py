@@ -1,4 +1,4 @@
-"""Shared, explicit schemas and Bottle task constants."""
+"""Shared, explicit schemas and three fixed-task scene constants."""
 
 from __future__ import annotations
 
@@ -77,3 +77,59 @@ class BottleSceneConfig:
 
 
 DEFAULT_SCENE = BottleSceneConfig()
+
+
+@dataclass(frozen=True)
+class TissueSceneConfig:
+    """Rigid-sheet approximation used by the fixed tissue demo."""
+
+    table_size: tuple[float, float, float] = (0.8, 0.8, 0.05)
+    table_offset: tuple[float, float, float] = (0.0, 0.0, 0.8)
+    tissue_xy: tuple[float, float] = (0.04, -0.075)
+    tissue_half_size: tuple[float, float, float] = (0.045, 0.004, 0.045)
+    tissue_center_z: float = 0.845
+    box_xy: tuple[float, float] = (0.04, -0.135)
+    pull_target: tuple[float, float, float] = (0.04, 0.16, 0.90)
+    random_xy_m: float = 0.006
+    random_yaw_rad: float = 0.04
+    control_freq_hz: int = 20
+    max_episode_steps: int = 300
+
+    @property
+    def table_top_z(self) -> float:
+        return self.table_offset[2]
+
+
+@dataclass(frozen=True)
+class DrawSceneConfig:
+    """Vertical pen and paper geometry for one fixed horizontal stroke."""
+
+    table_size: tuple[float, float, float] = (0.8, 0.8, 0.05)
+    table_offset: tuple[float, float, float] = (0.0, 0.0, 0.8)
+    pen_radius: float = 0.022
+    pen_half_height: float = 0.055
+    pen_xy: tuple[float, float] = (-0.11, -0.10)
+    paper_xy: tuple[float, float] = (0.07, 0.08)
+    paper_half_size: tuple[float, float, float] = (0.14, 0.11, 0.003)
+    line_start_xy: tuple[float, float] = (-0.015, 0.08)
+    line_end_xy: tuple[float, float] = (0.30, 0.08)
+    random_xy_m: float = 0.006
+    control_freq_hz: int = 20
+    max_episode_steps: int = 440
+    marker_count: int = 72
+
+    @property
+    def table_top_z(self) -> float:
+        return self.table_offset[2]
+
+    @property
+    def paper_top_z(self) -> float:
+        return self.table_top_z + 2.0 * self.paper_half_size[2]
+
+    @property
+    def pen_initial_z(self) -> float:
+        return self.table_top_z + 0.105
+
+
+DEFAULT_TISSUE_SCENE = TissueSceneConfig()
+DEFAULT_DRAW_SCENE = DrawSceneConfig()

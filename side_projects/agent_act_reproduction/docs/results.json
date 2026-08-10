@@ -15,54 +15,137 @@
       "use_vae": true
     },
     "implementation": "Hugging Face LeRobot ACTPolicy",
-    "parameters": 1072804,
+    "parameters_per_policy": 1072804,
     "version": "0.4.4"
   },
-  "dataset": {
-    "episodes": 50,
-    "mean_episode_length": 226.8,
-    "successful_episodes": 50,
-    "timesteps": 11340
-  },
-  "evaluation": {
-    "nominal": {
-      "failure_distribution": {},
-      "mean_episode_length": 162.05,
-      "successes": 20,
-      "trials": 20
-    },
-    "ood_3cm": {
-      "failure_distribution": {
-        "height_ok": 9,
-        "inside_shelf_xy": 9
+  "tasks": {
+    "bottle": {
+      "dataset": {
+        "episodes": 50,
+        "mean_episode_length": 226.8,
+        "successful_episodes": 50,
+        "timesteps": 11340
       },
-      "mean_episode_length": 232.75,
-      "successes": 11,
-      "trials": 20
+      "evaluation": {
+        "nominal": {
+          "mean_episode_length": 162.05,
+          "successes": 20,
+          "trials": 20
+        },
+        "ood_3cm": {
+          "mean_episode_length": 232.75,
+          "successes": 11,
+          "trials": 20
+        },
+        "small_perturbation_1cm": {
+          "mean_episode_length": 161.65,
+          "successes": 20,
+          "trials": 20
+        }
+      },
+      "expert_gate": {
+        "mean_episode_length": 226.35,
+        "perturbation_m": 0.01,
+        "successes": 20,
+        "trials": 20
+      },
+      "gif": {
+        "bytes": 355282,
+        "episode_length": 160,
+        "fps": 10,
+        "frames": 81,
+        "resolution": "640x360",
+        "seed": 4000
+      },
+      "training": {
+        "best_validation_loss": 0.0472144339647558,
+        "device": "mps",
+        "final_train_loss": 0.048859622329473495,
+        "steps": 2000,
+        "training_seconds": 50.60545083298348
+      }
     },
-    "small_perturbation_1cm": {
-      "failure_distribution": {},
-      "mean_episode_length": 161.65,
-      "successes": 20,
-      "trials": 20
+    "draw": {
+      "dataset": {
+        "episodes": 50,
+        "mean_episode_length": 193.7,
+        "successful_episodes": 50,
+        "timesteps": 9685
+      },
+      "evaluation": {
+        "nominal": {
+          "mean_episode_length": 154.0,
+          "successes": 20,
+          "trials": 20
+        },
+        "small_perturbation_6mm": {
+          "mean_episode_length": 290.35,
+          "successes": 11,
+          "trials": 20
+        }
+      },
+      "expert_gate": {
+        "mean_episode_length": 193.4,
+        "perturbation_m": 0.006,
+        "successes": 20,
+        "trials": 20
+      },
+      "gif": {
+        "bytes": 403535,
+        "episode_length": 154,
+        "fps": 10,
+        "frames": 78,
+        "resolution": "640x360",
+        "seed": 5100
+      },
+      "training": {
+        "best_validation_loss": 0.05466703596,
+        "device": "mps",
+        "final_train_loss": 0.0666774,
+        "steps": 2500,
+        "training_seconds": 64.19997
+      }
+    },
+    "tissue": {
+      "dataset": {
+        "episodes": 50,
+        "mean_episode_length": 131.48,
+        "successful_episodes": 50,
+        "timesteps": 6574
+      },
+      "evaluation": {
+        "nominal": {
+          "mean_episode_length": 115.0,
+          "successes": 20,
+          "trials": 20
+        },
+        "small_perturbation_6mm": {
+          "mean_episode_length": 115.4,
+          "successes": 20,
+          "trials": 20
+        }
+      },
+      "expert_gate": {
+        "mean_episode_length": 131.2,
+        "perturbation_m": 0.006,
+        "successes": 20,
+        "trials": 20
+      },
+      "gif": {
+        "bytes": 268138,
+        "episode_length": 115,
+        "fps": 10,
+        "frames": 58,
+        "resolution": "640x360",
+        "seed": 5000
+      },
+      "training": {
+        "best_validation_loss": 0.0331751563,
+        "device": "mps",
+        "final_train_loss": 0.03826547,
+        "steps": 2000,
+        "training_seconds": 49.909
+      }
     }
-  },
-  "expert_gate": {
-    "failure_distribution": {},
-    "mean_episode_length": 226.35,
-    "successes": 20,
-    "trials": 20
-  },
-  "training": {
-    "batch_size": 64,
-    "best_validation_loss": 0.0472144339647558,
-    "best_validation_step": 1900,
-    "device": "mps",
-    "final_train_loss": 0.048859622329473495,
-    "final_validation_loss": 0.04757756946815385,
-    "learning_rate": 0.0003,
-    "seed": 7,
-    "steps": 2000,
-    "training_seconds": 50.60545083298348
   }
 }

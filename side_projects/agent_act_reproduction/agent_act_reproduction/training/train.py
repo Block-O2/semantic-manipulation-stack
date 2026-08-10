@@ -60,6 +60,8 @@ def train(
     batch_size: int,
     learning_rate: float,
     seed: int,
+    task_name: str = "bottle",
+    n_action_steps: int = 8,
 ) -> dict[str, object]:
     random.seed(seed)
     np.random.seed(seed)
@@ -70,7 +72,7 @@ def train(
     validation_count = max(1, episode_count // 10)
     train_ids = set(range(episode_count - validation_count))
     validation_ids = set(range(episode_count - validation_count, episode_count))
-    architecture = ACTArchitecture()
+    architecture = ACTArchitecture(n_action_steps=n_action_steps)
     normalization = compute_normalization(arrays, train_ids)
     train_dataset = BottleACTDataset(
         arrays,
@@ -150,6 +152,7 @@ def train(
         for key, stat in normalization.items()
     }
     metadata = {
+        "task_name": task_name,
         "act_implementation": "Hugging Face LeRobot ACTPolicy",
         "lerobot_version": "0.4.4",
         "torch_version": torch.__version__,
@@ -200,6 +203,8 @@ def main() -> None:
     parser.add_argument("--batch-size", type=int, default=64)
     parser.add_argument("--learning-rate", type=float, default=3e-4)
     parser.add_argument("--seed", type=int, default=7)
+    parser.add_argument("--task-name", choices=("bottle", "tissue", "draw"), default="bottle")
+    parser.add_argument("--n-action-steps", type=int, default=8)
     args = parser.parse_args()
     train(
         dataset_path=args.dataset,
@@ -209,6 +214,8 @@ def main() -> None:
         batch_size=args.batch_size,
         learning_rate=args.learning_rate,
         seed=args.seed,
+        task_name=args.task_name,
+        n_action_steps=args.n_action_steps,
     )
 
 

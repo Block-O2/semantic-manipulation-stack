@@ -5,7 +5,11 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 
 
-AVAILABLE_CAPABILITIES = ("place_bottle_on_shelf",)
+AVAILABLE_CAPABILITIES = (
+    "place_bottle_on_shelf",
+    "pull_tissue_from_box",
+    "draw_horizontal_line",
+)
 
 
 @dataclass(frozen=True)
@@ -44,6 +48,28 @@ class MockAgent:
             return AgentResponse(
                 status="OK",
                 request=SkillRequest(skill="place_bottle_on_shelf", args={}),
+                available_capabilities=AVAILABLE_CAPABILITIES,
+            )
+        tissue_terms = ("tissue", "纸巾", "抽纸", "纸")
+        pull_terms = ("pull", "extract", "抽", "拉出", "取出")
+        if any(term in normalized for term in tissue_terms) and any(
+            term in normalized for term in pull_terms
+        ):
+            return AgentResponse(
+                status="OK",
+                request=SkillRequest(skill="pull_tissue_from_box", args={}),
+                available_capabilities=AVAILABLE_CAPABILITIES,
+            )
+        pen_terms = ("pen", "笔", "marker")
+        draw_terms = ("draw", "画", "横线", "一横", "line")
+        fixed_line_terms = ("横线", "一横", "horizontal line")
+        if (
+            any(term in normalized for term in pen_terms)
+            and any(term in normalized for term in draw_terms)
+        ) or any(term in normalized for term in fixed_line_terms):
+            return AgentResponse(
+                status="OK",
+                request=SkillRequest(skill="draw_horizontal_line", args={}),
                 available_capabilities=AVAILABLE_CAPABILITIES,
             )
         return AgentResponse(

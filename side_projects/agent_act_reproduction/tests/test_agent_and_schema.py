@@ -20,7 +20,26 @@ def test_mock_agent_refuses_unknown_capability() -> None:
     response = MockAgent().select("Draw a circle.")
     assert response.status == "CANNOT_EXECUTE"
     assert response.request is None
-    assert response.available_capabilities == ("place_bottle_on_shelf",)
+    assert response.available_capabilities == (
+        "place_bottle_on_shelf",
+        "pull_tissue_from_box",
+        "draw_horizontal_line",
+    )
+
+
+def test_mock_agent_routes_tissue_and_draw() -> None:
+    tissue = MockAgent().select("帮我抽一张纸")
+    draw = MockAgent().select("画一横")
+    assert tissue.request is not None
+    assert tissue.request.skill == "pull_tissue_from_box"
+    assert draw.request is not None
+    assert draw.request.skill == "draw_horizontal_line"
+
+
+def test_mock_agent_rejects_untrained_compound_task() -> None:
+    response = MockAgent().select("把瓶子放到纸巾盒里，再画一个三角形")
+    assert response.status == "CANNOT_EXECUTE"
+    assert response.request is None
 
 
 def test_schemas_have_fixed_dimensions_and_unique_names() -> None:
@@ -80,3 +99,12 @@ def test_runtime_has_no_expert_import() -> None:
         if isinstance(node, ast.ImportFrom)
     }
     assert all("expert" not in module for module in imported_modules)
+
+    three_task_path = runtime_path.with_name("execute_tasks.py")
+    three_task_tree = ast.parse(three_task_path.read_text())
+    three_task_imports = {
+        node.module or ""
+        for node in ast.walk(three_task_tree)
+        if isinstance(node, ast.ImportFrom)
+    }
+    assert all("expert" not in module for module in three_task_imports)

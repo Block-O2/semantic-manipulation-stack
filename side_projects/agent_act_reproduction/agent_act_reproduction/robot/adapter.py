@@ -5,9 +5,6 @@ from __future__ import annotations
 import numpy as np
 from robosuite.utils import transform_utils as T
 
-from agent_act_reproduction.sim import BottleEnv
-
-
 class PandaCartesianAdapter:
     """Execute one absolute XYZ + gripper command per policy timestep.
 
@@ -21,7 +18,7 @@ class PandaCartesianAdapter:
 
     def __init__(
         self,
-        env: BottleEnv,
+        env,
         *,
         max_position_delta_m: float = 0.05,
         max_rotation_delta_rad: float = 0.5,

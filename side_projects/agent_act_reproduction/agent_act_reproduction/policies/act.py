@@ -4,12 +4,15 @@ from __future__ import annotations
 
 from dataclasses import asdict, dataclass
 from pathlib import Path
-from typing import Any
+from typing import Any, Protocol
 
 import numpy as np
 import torch
 
-from agent_act_reproduction.tasks import BottleObservation
+
+class PolicyObservation(Protocol):
+    robot_state: np.ndarray
+    environment_state: np.ndarray
 
 
 @dataclass(frozen=True)
@@ -98,7 +101,7 @@ class ACTMotorPolicy:
         return torch.from_numpy(normalized).unsqueeze(0).to(self.device)
 
     @torch.no_grad()
-    def select_action(self, observation: BottleObservation) -> np.ndarray:
+    def select_action(self, observation: PolicyObservation) -> np.ndarray:
         batch = {
             "observation.state": self._normalize("observation.state", observation.robot_state),
             "observation.environment_state": self._normalize(
