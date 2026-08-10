@@ -1,0 +1,488 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta
+      name="description"
+      content="用中文拆解一个固定工作区、预定义任务、task-specific ACT policy 的 Hackathon 风格机械臂系统。"
+    >
+    <title>Hackathon 版 Agent + ACT 机械臂系统，到底是什么？</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="script.js" defer></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">跳到正文</a>
+
+    <header class="site-header">
+      <a class="brand" href="#top" aria-label="返回页面顶部">
+        <span class="brand-mark" aria-hidden="true">A</span>
+        <span>Agent + ACT 拆解说明</span>
+      </a>
+      <nav aria-label="页面导航">
+        <a href="#demos">三个 Demo</a>
+        <a href="#architecture">系统架构</a>
+        <a href="#difficulty">实现难度</a>
+        <a href="#boundary">能力边界</a>
+      </nav>
+    </header>
+
+    <main id="main-content">
+      <section class="hero" id="top" aria-labelledby="hero-title">
+        <div class="hero-copy">
+          <p class="eyebrow">固定工作区 · 预定义任务 · 模仿学习执行</p>
+          <h1 id="hero-title">Hackathon 版 Agent + ACT 机械臂系统，<em>到底是什么？</em></h1>
+          <p class="hero-subtitle">
+            用 MuJoCo 复现三个固定 Demo，并拆解其技术结构、实现难度与能力边界。
+          </p>
+          <p class="hero-lead">
+            先说结论：它更接近“自然语言选择一个已有任务，再由对应的动作策略完成执行”，
+            而不是一个面对任意场景、任意指令都能自己想办法的通用机器人。
+          </p>
+          <a class="primary-link" href="#architecture">先看执行链条 <span aria-hidden="true">↓</span></a>
+        </div>
+
+        <aside class="hero-panel" aria-label="当前复现状态">
+          <div class="panel-heading">
+            <span class="status-dot" aria-hidden="true"></span>
+            <span>当前复现进度</span>
+          </div>
+          <div class="hero-metric hero-metric-main">
+            <strong>1 / 3</strong>
+            <span>Demo 已完成</span>
+          </div>
+          <dl class="metric-list">
+            <div>
+              <dt>Bottle nominal</dt>
+              <dd>20 / 20</dd>
+            </div>
+            <div>
+              <dt>±1 cm 扰动</dt>
+              <dd>20 / 20</dd>
+            </div>
+            <div>
+              <dt>±3 cm OOD</dt>
+              <dd>11 / 20</dd>
+            </div>
+          </dl>
+          <p class="panel-note">这些数字来自当前 Bottle S1 的实际 MuJoCo 评估。</p>
+        </aside>
+      </section>
+
+      <section class="section section-demos" id="demos" aria-labelledby="demos-title">
+        <div class="section-heading">
+          <p class="section-index">01 / DEMOS</p>
+          <h2 id="demos-title">三个 Demo，看起来相似，实际各自独立</h2>
+          <p>
+            第一版不训练一个“什么都会”的模型，而是每个任务分别采数据、分别训练一个 ACT policy。
+          </p>
+        </div>
+
+        <div class="demo-grid">
+          <article class="demo-card is-complete">
+            <div class="card-topline">
+              <span class="demo-number">Demo 01</span>
+              <span class="status-badge status-complete">已完成 · Bottle S1</span>
+            </div>
+            <h3>把瓶子放到架子上</h3>
+            <p class="demo-description">
+              Panda 接近瓶子、抓取、抬起、移动到架子、释放并后退。瓶子位置只做小范围随机。
+            </p>
+
+            <div
+              class="media-stack"
+              data-demo-media
+              data-video="assets/bottle-demo.mp4"
+              data-image="assets/bottle-scene.png"
+            >
+              <div class="video-shell">
+                <video class="demo-video" controls muted playsinline preload="metadata" hidden aria-label="Bottle Demo 视频"></video>
+                <div class="media-fallback" data-video-fallback>
+                  <span class="play-symbol" aria-hidden="true"></span>
+                  <strong>视频文件尚未放入</strong>
+                  <span>放入 assets/bottle-demo.mp4 后会自动显示</span>
+                </div>
+              </div>
+              <figure class="scene-thumb">
+                <img class="scene-image" alt="MuJoCo 中 Panda 把瓶子放到架子上的场景" hidden>
+                <div class="scene-placeholder bottle-scene" data-image-fallback role="img" aria-label="Bottle 场景示意占位图">
+                  <span class="scene-label">MuJoCo scene</span>
+                  <span class="table-shape" aria-hidden="true"></span>
+                  <span class="robot-shape" aria-hidden="true"></span>
+                  <span class="bottle-shape" aria-hidden="true"></span>
+                  <span class="shelf-shape" aria-hidden="true"></span>
+                </div>
+                <figcaption>当前为场景示意；真实缩略图可后续直接替换。</figcaption>
+              </figure>
+            </div>
+
+            <div class="task-essence">
+              <span>任务本质</span>
+              <p>在固定几何中，复现一段完整的单任务抓取—搬运—放置动作。</p>
+            </div>
+            <ul class="result-chips" aria-label="Bottle 实验结果">
+              <li>50 条 demonstration</li>
+              <li>11,340 timesteps</li>
+              <li>±1 cm：20 / 20</li>
+            </ul>
+          </article>
+
+          <article class="demo-card is-upcoming">
+            <div class="card-topline">
+              <span class="demo-number">Demo 02</span>
+              <span class="status-badge status-upcoming">即将补充 · Coming soon</span>
+            </div>
+            <h3>从纸巾盒抽出一张纸</h3>
+            <p class="demo-description">
+              第一版把纸巾简化为薄刚性片：移动到固定夹取点，闭合夹爪，再沿固定方向抽出。
+            </p>
+
+            <div
+              class="media-stack"
+              data-demo-media
+              data-video="assets/tissue-demo.mp4"
+              data-image="assets/tissue-scene.png"
+            >
+              <div class="video-shell">
+                <video class="demo-video" controls muted playsinline preload="metadata" hidden aria-label="Tissue Demo 视频"></video>
+                <div class="media-fallback upcoming-fallback" data-video-fallback>
+                  <span class="coming-symbol" aria-hidden="true">02</span>
+                  <strong>即将补充</strong>
+                  <span>Tissue 尚未进入实现阶段</span>
+                </div>
+              </div>
+              <figure class="scene-thumb">
+                <img class="scene-image" alt="MuJoCo 中 Panda 抽取刚性纸巾片的场景" hidden>
+                <div class="scene-placeholder tissue-scene" data-image-fallback role="img" aria-label="Tissue 场景占位图">
+                  <span class="scene-label">scene placeholder</span>
+                  <span class="tissue-box-shape" aria-hidden="true"></span>
+                  <span class="tissue-sheet-shape" aria-hidden="true"></span>
+                  <span class="pull-line" aria-hidden="true"></span>
+                </div>
+                <figcaption>暂未完成仿真与媒体采集。</figcaption>
+              </figure>
+            </div>
+
+            <div class="task-essence">
+              <span>任务本质</span>
+              <p>在固定夹取位置闭合夹爪，再执行一条单方向拉出轨迹。</p>
+            </div>
+          </article>
+
+          <article class="demo-card is-upcoming">
+            <div class="card-topline">
+              <span class="demo-number">Demo 03</span>
+              <span class="status-badge status-upcoming">即将补充 · Coming soon</span>
+            </div>
+            <h3>拿笔在纸上画一横</h3>
+            <p class="demo-description">
+              抓笔、移动到固定起点、下压接触纸面、水平移动、抬起；用笔尖接触轨迹显示横线。
+            </p>
+
+            <div
+              class="media-stack"
+              data-demo-media
+              data-video="assets/draw-demo.mp4"
+              data-image="assets/draw-scene.png"
+            >
+              <div class="video-shell">
+                <video class="demo-video" controls muted playsinline preload="metadata" hidden aria-label="Draw Demo 视频"></video>
+                <div class="media-fallback upcoming-fallback" data-video-fallback>
+                  <span class="coming-symbol" aria-hidden="true">03</span>
+                  <strong>即将补充</strong>
+                  <span>Draw 尚未进入实现阶段</span>
+                </div>
+              </div>
+              <figure class="scene-thumb">
+                <img class="scene-image" alt="MuJoCo 中 Panda 持笔画横线的场景" hidden>
+                <div class="scene-placeholder draw-scene" data-image-fallback role="img" aria-label="Draw 场景占位图">
+                  <span class="scene-label">scene placeholder</span>
+                  <span class="paper-shape" aria-hidden="true"></span>
+                  <span class="pen-shape" aria-hidden="true"></span>
+                  <span class="stroke-shape" aria-hidden="true"></span>
+                </div>
+                <figcaption>暂未完成仿真与媒体采集。</figcaption>
+              </figure>
+            </div>
+
+            <div class="task-essence">
+              <span>任务本质</span>
+              <p>抓住固定物体后，完成一段带接触约束的短水平运动。</p>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="section architecture-section" id="architecture" aria-labelledby="architecture-title">
+        <div class="section-heading section-heading-light">
+          <p class="section-index">02 / ARCHITECTURE</p>
+          <h2 id="architecture-title">一句话经过哪些模块，才变成机械臂动作？</h2>
+          <p>这里没有开放式规划器。整条链路是有边界、可逐段检查的。</p>
+        </div>
+
+        <div class="architecture-layout">
+          <ol class="flow-diagram" aria-label="Agent 加 ACT 执行链">
+            <li>
+              <span class="flow-index">01</span>
+              <strong>自然语言命令</strong>
+              <small>“把瓶子放到架子上”</small>
+            </li>
+            <li>
+              <span class="flow-index">02</span>
+              <strong>Agent / MockAgent</strong>
+              <small>理解有限关键词</small>
+            </li>
+            <li>
+              <span class="flow-index">03</span>
+              <strong>选择预定义任务</strong>
+              <small>place_bottle_on_shelf</small>
+            </li>
+            <li>
+              <span class="flow-index">04</span>
+              <strong>Policy Router</strong>
+              <small>找到 Bottle checkpoint</small>
+            </li>
+            <li class="flow-highlight">
+              <span class="flow-index">05</span>
+              <strong>对应 ACT policy</strong>
+              <small>输出动作 chunks</small>
+            </li>
+            <li>
+              <span class="flow-index">06</span>
+              <strong>Panda 控制接口</strong>
+              <small>笛卡尔目标 + 夹爪</small>
+            </li>
+            <li>
+              <span class="flow-index">07</span>
+              <strong>MuJoCo 执行</strong>
+              <small>真实接触与动力学</small>
+            </li>
+            <li>
+              <span class="flow-index">08</span>
+              <strong>任务成功判定</strong>
+              <small>位置、释放、稳定性</small>
+            </li>
+          </ol>
+
+          <aside class="architecture-notes">
+            <h3>需要抓住的四个事实</h3>
+            <ul>
+              <li><strong>Agent 很薄：</strong>主要把语言映射到系统已经拥有的任务名称。</li>
+              <li><strong>动作来自 ACT：</strong>真正控制抓取、搬运、释放的是 task-specific policy。</li>
+              <li><strong>一项任务一个 policy：</strong>Bottle、Tissue、Draw 第一版分别训练，不共享“通用技能”。</li>
+              <li><strong>失败应诚实返回：</strong>没有对应 capability 时，系统返回 CANNOT_EXECUTE。</li>
+            </ul>
+            <p class="architecture-callout">自然语言只是入口，不会凭空创造新的机械臂能力。</p>
+          </aside>
+        </div>
+      </section>
+
+      <section class="section essence-section" id="essence" aria-labelledby="essence-title">
+        <div class="section-heading">
+          <p class="section-index">03 / ESSENCE</p>
+          <h2 id="essence-title">这个系统的本质</h2>
+        </div>
+
+        <div class="essence-grid">
+          <article class="truth-card truth-positive">
+            <span class="truth-label">它做了什么</span>
+            <h3>把三层工程接口接通</h3>
+            <ul class="check-list">
+              <li>用自然语言选择一个已有 capability</li>
+              <li>路由到这个任务专用的 ACT checkpoint</li>
+              <li>把 learned action 交给 Panda 控制器执行</li>
+              <li>用物理条件判断任务是否真的成功</li>
+            </ul>
+          </article>
+
+          <article class="truth-card truth-negative">
+            <span class="truth-label">它没有做什么</span>
+            <h3>没有解决开放世界机器人问题</h3>
+            <ul class="cross-list">
+              <li>不会自动学会从未训练过的新任务</li>
+              <li>没有通用视觉理解或物体检测</li>
+              <li>没有开放式长程规划和自主纠错</li>
+              <li>没有证明真实世界部署的鲁棒性</li>
+            </ul>
+          </article>
+        </div>
+
+        <p class="essence-statement">
+          更准确的名字是：<strong>语言接口 + policy 路由 + 固定任务 motor skill</strong>，
+          而不是开放世界通用操作系统。
+        </p>
+      </section>
+
+      <section class="section difficulty-section" id="difficulty" aria-labelledby="difficulty-title">
+        <div class="section-heading">
+          <p class="section-index">04 / DIFFICULTY</p>
+          <h2 id="difficulty-title">实现难度如何？</h2>
+          <p>难度不是均匀分布的。语言路由很轻，可靠接触、数据采集和跨场景泛化更难。</p>
+        </div>
+
+        <div class="difficulty-layout">
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th scope="col">模块</th>
+                  <th scope="col">定性难度</th>
+                  <th scope="col">主要工作</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th scope="row">Mock Agent / 任务路由</th>
+                  <td><span class="level level-low">低</span></td>
+                  <td>关键词或 structured output，映射到有限技能表</td>
+                </tr>
+                <tr>
+                  <th scope="row">MuJoCo 场景搭建</th>
+                  <td><span class="level level-low-mid">低到中</span></td>
+                  <td>模型、接触参数、物体重置、成功判据</td>
+                </tr>
+                <tr>
+                  <th scope="row">Scripted expert 采 demonstration</th>
+                  <td><span class="level level-mid">中</span></td>
+                  <td>让轨迹在扰动下持续成功，并保证数据顺序正确</td>
+                </tr>
+                <tr>
+                  <th scope="row">ACT 训练与推理接入</th>
+                  <td><span class="level level-mid">中</span></td>
+                  <td>chunk 数据、归一化、checkpoint、纯 policy rollout</td>
+                </tr>
+                <tr>
+                  <th scope="row">三个固定 Demo 在仿真中跑通</th>
+                  <td><span class="level level-mid-high">中到高</span></td>
+                  <td>逐任务调接触、采数据、训练、定位失败模式</td>
+                </tr>
+                <tr>
+                  <th scope="row">真机部署</th>
+                  <td><span class="level level-high">高</span></td>
+                  <td>标定、安全、时延、硬件误差、sim-to-real 差异</td>
+                </tr>
+                <tr>
+                  <th scope="row">开放场景泛化 / 通用 manipulation</th>
+                  <td><span class="level level-high">高</span></td>
+                  <td>感知、数据规模、新任务、失败恢复与长程规划</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <aside class="difficulty-summary">
+            <span class="summary-kicker">客观结论</span>
+            <p>
+              固定场景下的仿真 Demo 复现，更多是<strong>中等难度的工程集成</strong>；
+              如果上真机、加入视觉感知或要求跨场景泛化，难度会显著提高。
+            </p>
+            <dl>
+              <div>
+                <dt>Bottle expert</dt>
+                <dd>20 / 20</dd>
+              </div>
+              <div>
+                <dt>ACT 训练时间</dt>
+                <dd>50.6 秒 · MPS</dd>
+              </div>
+              <div>
+                <dt>ACT 参数量</dt>
+                <dd>约 107 万</dd>
+              </div>
+            </dl>
+          </aside>
+        </div>
+      </section>
+
+      <section class="section perception-section" id="perception" aria-labelledby="perception-title">
+        <div class="perception-layout">
+          <div>
+            <p class="section-index">05 / PERCEPTION</p>
+            <h2 id="perception-title">为什么外行会觉得它很强？</h2>
+          </div>
+          <div class="perception-copy">
+            <p class="large-quote">“你说一句，它就真的动手做了。”</p>
+            <p>
+              自然语言与机械臂动作连在一起，展示效果天然很强。观众看到的是完整行为，
+              很容易把“选择已有技能”理解成“理解任意要求并现场想出办法”。
+            </p>
+            <p>
+              但底层通常只是从少数预定义技能中选出一个，再运行对应的 task-specific policy。
+              展示是真实的，能力范围也同样真实而有限。
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section boundary-section" id="boundary" aria-labelledby="boundary-title">
+        <div class="section-heading">
+          <p class="section-index">06 / BOUNDARY</p>
+          <h2 id="boundary-title">能力边界：这个 Demo 能证明什么？</h2>
+        </div>
+
+        <div class="boundary-grid">
+          <article>
+            <span class="boundary-icon can-icon" aria-hidden="true">能</span>
+            <h3>它能说明什么</h3>
+            <ul>
+              <li>固定场景下可以整合语言接口与 policy execution</li>
+              <li>ACT 能承担完整的单任务 learned motor execution</li>
+              <li>对训练范围内的小扰动可以有一定鲁棒性</li>
+              <li>成功判定可以基于物理结果，而不是“程序没报错”</li>
+              <li>这种 Hackathon 架构可以清晰、低成本地复现</li>
+            </ul>
+          </article>
+          <article>
+            <span class="boundary-icon cannot-icon" aria-hidden="true">不能</span>
+            <h3>它不能说明什么</h3>
+            <ul>
+              <li>不代表拥有通用操作能力</li>
+              <li>不代表能自动完成训练中没有的新任务</li>
+              <li>不代表能在开放环境中稳定泛化</li>
+              <li>不代表已解决真实世界鲁棒部署</li>
+              <li>不代表拥有复杂长程规划与自主恢复能力</li>
+            </ul>
+          </article>
+        </div>
+
+        <div class="boundary-evidence" aria-label="Bottle 能力边界实测">
+          <div>
+            <span>训练中心附近</span>
+            <strong>20 / 20</strong>
+            <small>nominal</small>
+          </div>
+          <div>
+            <span>训练范围内</span>
+            <strong>20 / 20</strong>
+            <small>±1 cm</small>
+          </div>
+          <div>
+            <span>范围外探测</span>
+            <strong>11 / 20</strong>
+            <small>±3 cm OOD</small>
+          </div>
+          <p>
+            扰动从 ±1 cm 增加到 ±3 cm 后，成功率从 100% 降至 55%。
+            这正是“固定分布 motor policy”而非通用智能的直观证据。
+          </p>
+        </div>
+      </section>
+
+      <section class="conclusion-section" aria-labelledby="conclusion-title">
+        <p class="section-index">07 / CONCLUSION</p>
+        <h2 id="conclusion-title">不神秘，但值得拆开看清楚</h2>
+        <p>
+          如果只看固定工作区、预定义任务、仿真环境下的三个 Demo，这种 Agent + ACT 系统并不神秘，
+          更接近一个清晰可复现的工程集成方案。它的价值主要在于把语言接口、模仿学习 policy 和机器人
+          执行链条打通；但它的能力边界也很明确。
+        </p>
+        <a href="#top">回到顶部 <span aria-hidden="true">↑</span></a>
+      </section>
+    </main>
+
+    <footer>
+      <p>Agent + ACT Reproduction · 静态拆解说明页</p>
+      <p>当前阶段：Bottle S1 完成；Tissue / Draw 尚未实现。</p>
+    </footer>
+  </body>
+</html>

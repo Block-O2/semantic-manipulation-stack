@@ -17,6 +17,12 @@ Only `place_bottle_on_shelf` exists in S1. Tissue and Draw are deliberately
 not implemented. Unknown commands return `CANNOT_EXECUTE` and list the one
 available capability.
 
+## Chinese explainer page
+
+The native HTML / CSS / JS explainer for non-specialists lives in [`web/`](web/).
+Open `web/index.html` directly, or follow [`web/README.md`](web/README.md) to use
+a local static server and later add real Demo videos or scene thumbnails.
+
 ## Important working-directory note
 
 Run commands from this directory, not the repository root:
