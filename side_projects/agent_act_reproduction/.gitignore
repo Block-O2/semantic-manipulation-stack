@@ -1,0 +1,7 @@
+data/*.npz
+data/*.json
+checkpoints/
+outputs/
+*.log
+__pycache__/
+.pytest_cache/

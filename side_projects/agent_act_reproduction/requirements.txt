@@ -1,0 +1,12 @@
+# Tested local runtime for Apple Silicon. LeRobot's visualization dependency
+# advertises NumPy >=2, but this side project does not import it; NumPy 1.26.4
+# is intentionally retained for the parent repository's robosuite stack.
+lerobot==0.4.4
+torch==2.10.0
+torchvision==0.25.0
+mujoco==3.3.7
+robosuite==1.5.2
+numpy==1.26.4
+opencv-python-headless==4.11.0.86
+einops==0.8.2
+pytest>=8,<10

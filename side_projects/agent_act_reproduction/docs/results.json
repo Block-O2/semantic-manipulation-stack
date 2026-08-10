@@ -1,0 +1,68 @@
+{
+  "act": {
+    "architecture": {
+      "chunk_size": 32,
+      "dim_feedforward": 512,
+      "dim_model": 128,
+      "dropout": 0.1,
+      "kl_weight": 1.0,
+      "latent_dim": 16,
+      "n_action_steps": 8,
+      "n_decoder_layers": 1,
+      "n_encoder_layers": 2,
+      "n_heads": 4,
+      "n_vae_encoder_layers": 2,
+      "use_vae": true
+    },
+    "implementation": "Hugging Face LeRobot ACTPolicy",
+    "parameters": 1072804,
+    "version": "0.4.4"
+  },
+  "dataset": {
+    "episodes": 50,
+    "mean_episode_length": 226.8,
+    "successful_episodes": 50,
+    "timesteps": 11340
+  },
+  "evaluation": {
+    "nominal": {
+      "failure_distribution": {},
+      "mean_episode_length": 162.05,
+      "successes": 20,
+      "trials": 20
+    },
+    "ood_3cm": {
+      "failure_distribution": {
+        "height_ok": 9,
+        "inside_shelf_xy": 9
+      },
+      "mean_episode_length": 232.75,
+      "successes": 11,
+      "trials": 20
+    },
+    "small_perturbation_1cm": {
+      "failure_distribution": {},
+      "mean_episode_length": 161.65,
+      "successes": 20,
+      "trials": 20
+    }
+  },
+  "expert_gate": {
+    "failure_distribution": {},
+    "mean_episode_length": 226.35,
+    "successes": 20,
+    "trials": 20
+  },
+  "training": {
+    "batch_size": 64,
+    "best_validation_loss": 0.0472144339647558,
+    "best_validation_step": 1900,
+    "device": "mps",
+    "final_train_loss": 0.048859622329473495,
+    "final_validation_loss": 0.04757756946815385,
+    "learning_rate": 0.0003,
+    "seed": 7,
+    "steps": 2000,
+    "training_seconds": 50.60545083298348
+  }
+}
