@@ -2,7 +2,9 @@
 
 from __future__ import annotations
 
-from dataclasses import asdict, dataclass
+from dataclasses import asdict, dataclass, replace
+from enum import Enum
+import hashlib
 from pathlib import Path
 from typing import Any
 
@@ -28,10 +30,18 @@ class ACTArchitecture:
     n_vae_encoder_layers: int = 2
     dropout: float = 0.1
     kl_weight: float = 1.0
+    temporal_ensemble_coeff: float | None = None
 
     def __post_init__(self) -> None:
         if self.chunk_size <= 0 or not 1 <= self.n_action_steps <= self.chunk_size:
             raise ValueError("ACT horizons must satisfy 1 <= n_action_steps <= chunk_size")
+        if self.temporal_ensemble_coeff is not None and self.n_action_steps != 1:
+            raise ValueError("ACT temporal ensembling requires n_action_steps=1")
+
+
+class ACTExecutionMode(str, Enum):
+    QUEUE = "queue"
+    TEMPORAL_ENSEMBLE = "temporal_ensemble"
 
 
 def build_act_policy(architecture: ACTArchitecture):
@@ -62,6 +72,7 @@ def build_act_policy(architecture: ACTArchitecture):
         n_vae_encoder_layers=architecture.n_vae_encoder_layers,
         dropout=architecture.dropout,
         kl_weight=architecture.kl_weight,
+        temporal_ensemble_coeff=architecture.temporal_ensemble_coeff,
         pretrained_backbone_weights=None,
     )
     return ACTPolicy(config)
@@ -173,13 +184,35 @@ class PushACTDataset(Dataset[dict[str, torch.Tensor]]):
 class ACTMotorPolicy:
     """Local LeRobot checkpoint with its standard action-queue semantics."""
 
-    def __init__(self, checkpoint: str | Path, *, device: str = "auto") -> None:
+    def __init__(
+        self,
+        checkpoint: str | Path,
+        *,
+        device: str = "auto",
+        execution_mode: ACTExecutionMode | str = ACTExecutionMode.QUEUE,
+        temporal_ensemble_coeff: float = 0.01,
+    ) -> None:
         self.checkpoint_path = Path(checkpoint).resolve()
+        self.checkpoint_sha256 = hashlib.sha256(
+            self.checkpoint_path.read_bytes()
+        ).hexdigest()
         self.device = resolve_device(device)
         payload = torch.load(
             self.checkpoint_path, map_location="cpu", weights_only=False
         )
-        self.architecture = ACTArchitecture(**payload["architecture"])
+        checkpoint_architecture = ACTArchitecture(**payload["architecture"])
+        self.execution_mode = ACTExecutionMode(execution_mode)
+        if self.execution_mode is ACTExecutionMode.TEMPORAL_ENSEMBLE:
+            self.architecture = replace(
+                checkpoint_architecture,
+                n_action_steps=1,
+                temporal_ensemble_coeff=temporal_ensemble_coeff,
+            )
+        else:
+            self.architecture = replace(
+                checkpoint_architecture,
+                temporal_ensemble_coeff=None,
+            )
         self.policy = build_act_policy(self.architecture)
         self.policy.load_state_dict(payload["model_state_dict"], strict=True)
         self.policy.to(self.device)
@@ -194,11 +227,17 @@ class ACTMotorPolicy:
         self.metadata: dict[str, Any] = payload["metadata"]
         self.inference_calls = 0
         self._actions_until_inference = 0
+        self._action_timestep = 0
+        self.current_overlap_count = 1
+        self.ensemble_diagnostics: list[dict[str, object]] = []
 
     def reset(self) -> None:
         self.policy.reset()
         self.inference_calls = 0
         self._actions_until_inference = 0
+        self._action_timestep = 0
+        self.current_overlap_count = 1
+        self.ensemble_diagnostics = []
 
     def _normalize_observation(self, observation: np.ndarray) -> torch.Tensor:
         stat = self.stats["observation.state"]
@@ -207,7 +246,9 @@ class ACTMotorPolicy:
 
     @torch.no_grad()
     def select_action(self, observation: np.ndarray) -> np.ndarray:
-        if self._actions_until_inference == 0:
+        if self.execution_mode is ACTExecutionMode.TEMPORAL_ENSEMBLE:
+            self.inference_calls += 1
+        elif self._actions_until_inference == 0:
             self.inference_calls += 1
             self._actions_until_inference = self.architecture.n_action_steps
         normalized = self.policy.select_action(
@@ -219,8 +260,34 @@ class ACTMotorPolicy:
             }
         )[0].detach().cpu().numpy()
         stat = self.stats["action"]
-        self._actions_until_inference -= 1
-        return normalized * stat["std"] + stat["mean"]
+        action = normalized * stat["std"] + stat["mean"]
+        if self.execution_mode is ACTExecutionMode.TEMPORAL_ENSEMBLE:
+            count = min(self._action_timestep + 1, self.architecture.chunk_size)
+            first_source = self._action_timestep - count + 1
+            source_timesteps = list(range(first_source, self._action_timestep + 1))
+            native_weights = (
+                self.policy.temporal_ensembler.ensemble_weights[:count]
+                .detach()
+                .cpu()
+                .numpy()
+            )
+            weights = native_weights / native_weights.sum()
+            self.current_overlap_count = count
+            if self._action_timestep in {0, 1, 2, 4, 8, 16, 31, 32, 64}:
+                self.ensemble_diagnostics.append(
+                    {
+                        "timestep": self._action_timestep,
+                        "overlap_count": count,
+                        "source_prediction_timesteps": source_timesteps,
+                        "normalized_weights_oldest_to_newest": weights.tolist(),
+                        "combined_action_xyz": action.tolist(),
+                    }
+                )
+        else:
+            self._actions_until_inference -= 1
+            self.current_overlap_count = 1
+        self._action_timestep += 1
+        return action
 
     @staticmethod
     def architecture_dict(architecture: ACTArchitecture) -> dict[str, object]:

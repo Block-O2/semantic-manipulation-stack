@@ -9,6 +9,7 @@ import torch
 from datasets import PushDataset, PushEpisode, split_episode_indices
 from learning.act_push import (
     ACTArchitecture,
+    ACTExecutionMode,
     ACTMotorPolicy,
     PushACTDataset,
     build_act_policy,
@@ -35,6 +36,18 @@ def test_act_config_is_standard_state_to_action_contract() -> None:
     assert policy.config.output_features["action"].shape == (3,)
     assert policy.config.chunk_size == 32
     assert policy.config.n_action_steps == 8
+
+
+def test_temporal_ensemble_config_uses_native_h1_mode() -> None:
+    architecture = ACTArchitecture(
+        chunk_size=32,
+        n_action_steps=1,
+        temporal_ensemble_coeff=0.01,
+    )
+    policy = build_act_policy(architecture)
+    assert policy.config.temporal_ensemble_coeff == 0.01
+    assert policy.config.n_action_steps == 1
+    assert hasattr(policy, "temporal_ensembler")
 
 
 def test_act_dataset_stays_inside_episode_and_masks_padding() -> None:
@@ -87,8 +100,101 @@ def test_act_checkpoint_round_trip_and_action_dimension(tmp_path) -> None:
     assert loaded.metadata["test"] is True
 
 
+def test_same_checkpoint_weights_load_for_queue_and_temporal_ensemble(tmp_path) -> None:
+    architecture = ACTArchitecture(
+        chunk_size=4,
+        n_action_steps=2,
+        dim_model=32,
+        n_heads=4,
+        dim_feedforward=64,
+        n_encoder_layers=1,
+        n_decoder_layers=1,
+    )
+    policy = build_act_policy(architecture)
+    checkpoint = tmp_path / "same_weights.pt"
+    torch.save(
+        {
+            "model_state_dict": policy.state_dict(),
+            "architecture": asdict(architecture),
+            "normalization": {
+                "observation.state": {"mean": [0.0] * 10, "std": [1.0] * 10},
+                "action": {"mean": [0.0] * 3, "std": [1.0] * 3},
+            },
+            "metadata": {},
+        },
+        checkpoint,
+    )
+    queue = ACTMotorPolicy(checkpoint, device="cpu")
+    ensemble = ACTMotorPolicy(
+        checkpoint,
+        device="cpu",
+        execution_mode=ACTExecutionMode.TEMPORAL_ENSEMBLE,
+        temporal_ensemble_coeff=0.01,
+    )
+    assert queue.architecture.n_action_steps == 2
+    assert queue.architecture.temporal_ensemble_coeff is None
+    assert ensemble.architecture.n_action_steps == 1
+    assert ensemble.architecture.temporal_ensemble_coeff == 0.01
+    assert queue.checkpoint_sha256 == ensemble.checkpoint_sha256
+    for name, parameter in queue.policy.state_dict().items():
+        torch.testing.assert_close(parameter, ensemble.policy.state_dict()[name])
+
+
+def test_native_temporal_ensemble_uses_history_and_resets(tmp_path) -> None:
+    architecture = ACTArchitecture(
+        chunk_size=4,
+        n_action_steps=1,
+        dim_model=32,
+        n_heads=4,
+        dim_feedforward=64,
+        n_encoder_layers=1,
+        n_decoder_layers=1,
+    )
+    policy = build_act_policy(architecture)
+    checkpoint = tmp_path / "ensemble.pt"
+    torch.save(
+        {
+            "model_state_dict": policy.state_dict(),
+            "architecture": asdict(architecture),
+            "normalization": {
+                "observation.state": {"mean": [0.0] * 10, "std": [1.0] * 10},
+                "action": {"mean": [0.0] * 3, "std": [1.0] * 3},
+            },
+            "metadata": {},
+        },
+        checkpoint,
+    )
+    motor = ACTMotorPolicy(
+        checkpoint,
+        device="cpu",
+        execution_mode="temporal_ensemble",
+        temporal_ensemble_coeff=0.01,
+    )
+    chunks = iter(
+        [
+            torch.tensor([[[0.0] * 3, [1.0] * 3, [2.0] * 3, [3.0] * 3]]),
+            torch.tensor([[[10.0] * 3, [11.0] * 3, [12.0] * 3, [13.0] * 3]]),
+        ]
+    )
+    motor.policy.predict_action_chunk = lambda batch: next(chunks)
+    first = motor.select_action(np.zeros(10))
+    second = motor.select_action(np.zeros(10))
+    newer_weight = np.exp(-0.01)
+    expected = (1.0 + 10.0 * newer_weight) / (1.0 + newer_weight)
+    np.testing.assert_allclose(first, 0.0)
+    np.testing.assert_allclose(second, expected)
+    assert motor.current_overlap_count == 2
+    assert motor.ensemble_diagnostics[-1]["source_prediction_timesteps"] == [0, 1]
+    assert motor.policy.temporal_ensembler.ensembled_actions is not None
+    motor.reset()
+    assert motor.policy.temporal_ensembler.ensembled_actions is None
+    assert motor.ensemble_diagnostics == []
+
+
 def test_act_backend_has_no_expert_or_raw_environment_path() -> None:
     source = inspect.getsource(ACTPushBackend) + inspect.getsource(ACTMotorPolicy)
     assert "expert" not in source.lower()
+    assert "fallback" not in source.lower()
+    assert "scripted" not in source.lower()
     assert "ClassicalPushBackend" not in source
     assert "env.step" not in source

@@ -121,8 +121,8 @@ observe o_t
 → re-observe
 ```
 
-Temporal ensembling can later combine overlapping predictions. It is not
-implemented here.
+Temporal ensembling was not part of this data-preparation milestone. It was
+later enabled only for the standard LeRobot ACT backend, as documented below.
 
 ## One-step BC baseline
 
@@ -205,3 +205,19 @@ negative result: standard ACT made motion smooth but did not recover the hidden
 expert phase from the aliased state/absolute-waypoint interface. See
 [act_push_backend.md](act_push_backend.md) for the fixed config, training,
 physical records, and stopping decision.
+
+### Native ACT Temporal Ensemble
+
+A final inference-only reproduction reused the exact ACT checkpoint and model
+weights, set LeRobot's native `temporal_ensemble_coeff=0.01`, and used
+`n_action_steps=1` with K=32. Every timestep therefore re-observed the same 10D
+state and combined up to 32 overlapping predictions before passing one
+absolute target through the unchanged safety and Cartesian-controller path.
+
+On the same frozen 20 states this mode reached 20/20, versus queue ACT's 0/20.
+All 20 runs reached the existing 7 cm proximity threshold, moved the cube by
+0.208 m on average, and finished with no timeout or unsafe-action rejection.
+This demonstrates useful temporal context for this fixed Push distribution; it
+does not establish open-scene or task-general learned manipulation. The single
+coefficient run completed the requested stopping rule, so no sweep, retraining,
+or robustness extension followed.

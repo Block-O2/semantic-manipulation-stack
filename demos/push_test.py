@@ -32,6 +32,11 @@ def main() -> None:
     parser.add_argument("--checkpoint")
     parser.add_argument("--execution-horizon", type=int)
     parser.add_argument("--device", choices=("auto", "cpu", "mps"), default="auto")
+    parser.add_argument(
+        "--act-execution-mode",
+        choices=("queue", "temporal_ensemble"),
+        default="queue",
+    )
     args = parser.parse_args()
 
     env = make_environment(render=not args.no_render, seed=113)
@@ -70,6 +75,7 @@ def main() -> None:
             checkpoint=args.checkpoint,
             execution_horizon=args.execution_horizon,
             device=args.device,
+            act_execution_mode=args.act_execution_mode,
         )
         initial = world.pose("red_cube").position.copy()
         goal = Goal.push_to_region(

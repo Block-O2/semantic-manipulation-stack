@@ -72,6 +72,9 @@ class BCPushBackend:
     def _reset_policy(self) -> None:
         """Reset optional stateful policy queues at the start of each rollout."""
 
+    def _action_log_metadata(self) -> dict[str, object]:
+        return {}
+
     @staticmethod
     def _failure(
         reason: SkillFailure,
@@ -195,8 +198,10 @@ class BCPushBackend:
                         "predicted_xyz": raw_prediction.tolist(),
                         "executed_xyz": predicted.tolist(),
                         "predicted_step_m": distance,
+                        "executed_step_m": float(np.linalg.norm(predicted - current)),
                         "cube_displacement_m": displacement,
                         "ee_path_length_m": ee_path_length,
+                        **self._action_log_metadata(),
                     }
                 )
                 rollout_step += 1

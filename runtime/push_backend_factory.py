@@ -18,6 +18,8 @@ def create_push_backend(
     checkpoint: str | None = None,
     execution_horizon: int | None = None,
     device: str = "auto",
+    act_execution_mode: str = "queue",
+    temporal_ensemble_coeff: float = 0.01,
 ) -> PushBackend:
     normalized = name.strip().lower()
     if normalized == "classical":
@@ -47,5 +49,10 @@ def create_push_backend(
             raise ValueError("ACT Push backend requires a checkpoint")
         if execution_horizon is not None:
             raise ValueError("ACT uses checkpoint n_action_steps, not a runtime horizon")
-        return ACTPushBackend.from_checkpoint(checkpoint, device=device)
+        return ACTPushBackend.from_checkpoint(
+            checkpoint,
+            device=device,
+            execution_mode=act_execution_mode,
+            temporal_ensemble_coeff=temporal_ensemble_coeff,
+        )
     raise ValueError(f"unknown Push backend {name!r}")

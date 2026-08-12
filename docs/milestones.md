@@ -88,6 +88,17 @@ the frozen matched states: all runs timed out before cube contact. The negative
 result, exact training config, and no-expert/no-fallback runtime boundary are
 recorded in `docs/act_push_backend.md`. No follow-up ablation was started.
 
+### Native ACT Temporal Ensemble ✅
+
+The exact standard-ACT checkpoint was reused without retraining or weight
+changes. LeRobot 0.4.4's native Temporal Ensemble was enabled with K=32,
+`n_action_steps=1`, and coefficient 0.01. On the same frozen 20 states it
+reached 20/20, compared with queue ACT's 0/20; all runs reached cube proximity,
+and none timed out or triggered an unsafe-action rejection. This is a
+fixed-workspace result, not a general manipulation claim. The single requested
+run completed the stopping rule; no coefficient sweep or additional ablation
+was performed.
+
 ## M8 — Skill Composition / Code-as-Skill
 
 Explore dynamic composition of existing trusted skills without allowing

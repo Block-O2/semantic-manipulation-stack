@@ -131,6 +131,7 @@ def test_agent_runtime_remains_push_backend_independent() -> None:
     assert "ClassicalPushBackend" not in source
     assert "BCPushBackend" not in source
     assert "ACTPushBackend" not in source
+    assert "temporal_ensemble" not in source
     assert "checkpoint" not in source
 
 

@@ -271,8 +271,9 @@ exploratory directions rather than commitments. See
 The repository does **not** yet provide:
 
 - camera perception or visual scene understanding;
-- VLA, ACT, Transformer, CVAE, reinforcement-learning, image-based, or
-  high-performing learned policies;
+- camera-conditioned, VLA, reinforcement-learning, or general-purpose learned
+  policies (the available state-only ACT backend is limited to the fixed Push
+  setup described in the evaluation docs);
 - ROS integration;
 - obstacle-aware or general-purpose motion planning;
 - execution of relation goals such as `left_of` or `near`;
@@ -287,8 +288,10 @@ approximations for the current tabletop scenario.
 ## Roadmap
 
 The temporal experiment compares K=10/20/40 Chunk BC and K=20 with H=1/5/20;
-full-chunk H=20 reached 2/20. A fixed standard LeRobot ACT reproduction then
-reached 0/20 on the same states despite smooth, safe motion. See
-`docs/chunk_bc_experiment.md` and `docs/act_push_backend.md`. These are
-diagnostic baselines, not a claim of learned manipulation reliability. No
-follow-up temporal ensemble, history model, image policy, or VLA exists.
+full-chunk H=20 reached 2/20. Standard LeRobot ACT queue execution reached 0/20
+on the same states. A later inference-only run reused those exact weights and
+reached 20/20 with native Temporal Ensemble K=32/H=1 and coefficient 0.01. See
+`docs/chunk_bc_experiment.md` and `docs/act_push_backend.md`. This is a frozen,
+fixed-workspace diagnostic result, not a claim of open-scene learned
+manipulation reliability. No coefficient sweep, history model, image policy,
+or VLA experiment followed.
