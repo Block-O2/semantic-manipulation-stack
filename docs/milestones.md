@@ -57,8 +57,8 @@ boundary.
 ## M7 — Hybrid Learned Skill
 
 Experiment with learned physical implementations behind the same trusted Skill
-interface and validation boundaries. A one-step BC sanity baseline now exists;
-ACT and chunk policies remain future work.
+interface and validation boundaries. One-step, progress-conditioned, and
+deterministic action-chunk BC baselines now exist; ACT remains future work.
 
 ### Pluggable backend and imitation-data preparation ✅
 
@@ -66,7 +66,17 @@ ACT and chunk policies remain future work.
 and deliberately simple one-step BC implementations. A 20 Hz state/action NPZ
 pipeline, episode-level split, action-window helper, NumPy MLP checkpoint, and
 matched physical comparison establish the baseline. This is preparation for
-future chunk policies; ACT itself is not implemented.
+the temporal-policy experiment below; ACT itself is not implemented.
+
+### Temporal aliasing diagnosis and Chunk BC ✅
+
+Dataset motion/transition/nearest-neighbor diagnostics, stratified offline
+metrics, a scalar progress diagnosis, K=10/20/40 deterministic Chunk BC, and a
+matched K=20 execution-horizon comparison are recorded in
+`docs/chunk_bc_experiment.md`. Full-chunk H=20 reached 2/20 while H=1 and H=5
+remained 0/20; the result supports temporal ambiguity and commitment as real
+factors but does not establish a robust learned Push backend. Temporal
+ensembling and ACT were deliberately not implemented.
 
 ## M8 — Skill Composition / Code-as-Skill
 

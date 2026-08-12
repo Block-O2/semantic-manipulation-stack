@@ -10,6 +10,7 @@ from robot import Pose
 from runtime import AgentRuntime, SemanticSkillFactory, create_push_backend
 from skills import (
     BCPushBackend,
+    ChunkBCPushBackend,
     ClassicalPushBackend,
     PushBackend,
     PushExecutionContext,
@@ -80,6 +81,10 @@ def test_push_backend_protocol_and_factory_selection(tmp_path) -> None:
     checkpoint = tmp_path / "policy.npz"
     policy.save(checkpoint, metadata={"test": True})
     assert isinstance(create_push_backend("bc", checkpoint=str(checkpoint)), BCPushBackend)
+    with np.testing.assert_raises(ValueError):
+        create_push_backend(
+            "bc", checkpoint=str(checkpoint), execution_horizon=2
+        )
 
 
 def test_semantic_skill_factory_defaults_to_classical_backend() -> None:
@@ -125,3 +130,18 @@ def test_agent_runtime_remains_push_backend_independent() -> None:
     assert "ClassicalPushBackend" not in source
     assert "BCPushBackend" not in source
     assert "checkpoint" not in source
+
+
+def test_chunk_backend_reuses_unsafe_action_rejection() -> None:
+    class UnsafeChunkPolicy:
+        prediction_horizon = 2
+
+        def predict(self, observation):
+            return np.array([[0.35, 0.35, 1.2], [0.35, 0.35, 1.2]])
+
+    backend = ChunkBCPushBackend(UnsafeChunkPolicy(), execution_horizon=2)
+    result = backend.execute(
+        PushRequest("red_cube", "right_side"),
+        PushExecutionContext(FakeWorld(), FakePrimitives()),
+    )
+    assert result.reason is SkillFailure.POLICY_ACTION_UNSAFE

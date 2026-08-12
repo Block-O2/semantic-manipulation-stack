@@ -71,6 +71,10 @@ def run_backend_trial(
         )
         robot.remove_command_observer(count_command)
         final = world.pose("red_cube").position.copy()
+        target_satisfied = bool(
+            world.is_inside_push_region("red_cube", "right_side")
+            and world.is_on_table("red_cube")
+        )
         skill_result = (
             result.executed_steps[-1].task_result.skill_results[-1]
             if result.executed_steps
@@ -82,6 +86,7 @@ def run_backend_trial(
             "initial_position": initial.tolist(),
             "final_position": final.tolist(),
             "displacement": float(np.linalg.norm(final[:2] - initial[:2])),
+            "target_satisfied": target_satisfied,
             "control_steps": command_steps,
             "attempts": skill_result.attempts if skill_result else 0,
             "failure_reason": (

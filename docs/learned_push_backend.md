@@ -159,27 +159,33 @@ with the command that begins the approach. The one-step conditional mean tends
 to remain near the initial pose or drift until a safety limit fires. We do not
 add semantic phase input merely to improve this baseline.
 
-## Future experiments, not implemented
+## Temporal diagnosis and simple chunk policies
 
-The intended progression is:
+The next milestone implemented two deliberately small extensions without
+changing `Push(object, target)` or the trusted controller boundary:
 
 ```text
 ClassicalPushBackend
         ↓ demonstrations
 OneStep BCPushBackend
-        ↓
-future ChunkBCPushBackend
-        ↓
-future ACTPushBackend
+   ├── ProgressBCPushBackend: [o_t, t/(T-1)] → a_t
+   └── ChunkBCPushBackend: o_t → [a_t ... a_(t+K-1)]
 ```
 
-Infrastructure now supports testing:
+`ChunkBCPushBackend` explicitly separates prediction horizon K from execution
+horizon H. It predicts K absolute Cartesian targets, executes only the first H,
+then re-observes. Every target passes through the same finite check, hard
+rejection, maximum Cartesian step, workspace check, `Pose`, and
+`command_cartesian_once` path as one-step BC. It never receives a primitive,
+controller, robot, simulator, or raw action interface.
 
-- A. one-step BC: `o_t → a_t`;
-- B. chunk BC: `o_t → [a_t ... a_(t+K-1)]`;
-- C. chunk policy plus temporal ensemble;
-- D. ACT with CVAE enabled versus disabled.
+Dataset diagnosis found that 89.78% of action targets are static under a fixed
+3 mm `||a_t-a_(t-1)||` threshold, while only 10.22% change. This is a property
+of absolute target commands: an unchanged target can still mean that the OSC
+controller is moving toward a fixed waypoint, so it must not be confused with
+measured zero EE velocity. The validation moving subset has materially higher
+one-step error than the dominant static-target subset.
 
-The classical expert is nearly deterministic, so a CVAE must earn its
-complexity empirically. No Transformer, CVAE, ACT, image observation, camera,
-LeRobot training, or learned action chunk is implemented in this milestone.
+The measured experiment is in [chunk_bc_experiment.md](chunk_bc_experiment.md).
+No Transformer, recurrent model, temporal ensemble, CVAE, ACT, image
+observation, or controller redesign was added.

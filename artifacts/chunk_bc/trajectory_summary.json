@@ -1,0 +1,122 @@
+[
+  {
+    "file": "trial_01_bc.json",
+    "logged_points": 131,
+    "max_cube_displacement_m": 0.0041282718291128446,
+    "max_predicted_step_m": 0.060679185249324606,
+    "mean_predicted_step_m": 0.003814940977178143,
+    "sample_stride": 5
+  },
+  {
+    "file": "trial_01_chunk_bc_k20_h1.json",
+    "logged_points": 20,
+    "max_cube_displacement_m": 0.0,
+    "max_predicted_step_m": 0.017364630365040722,
+    "mean_predicted_step_m": 0.0075723307418097225,
+    "sample_stride": 5
+  },
+  {
+    "file": "trial_01_chunk_bc_k20_h20.json",
+    "logged_points": 22,
+    "max_cube_displacement_m": 0.0,
+    "max_predicted_step_m": 0.03851894281797553,
+    "mean_predicted_step_m": 0.012262778333254808,
+    "sample_stride": 5
+  },
+  {
+    "file": "trial_01_chunk_bc_k20_h5.json",
+    "logged_points": 13,
+    "max_cube_displacement_m": 0.0,
+    "max_predicted_step_m": 0.02008910394226447,
+    "mean_predicted_step_m": 0.010539016075897075,
+    "sample_stride": 5
+  },
+  {
+    "file": "trial_01_progress_bc.json",
+    "logged_points": 117,
+    "max_cube_displacement_m": 0.0,
+    "max_predicted_step_m": 0.09823124842936586,
+    "mean_predicted_step_m": 0.007435615069041452,
+    "sample_stride": 5
+  },
+  {
+    "file": "trial_02_bc.json",
+    "logged_points": 47,
+    "max_cube_displacement_m": 0.0,
+    "max_predicted_step_m": 0.024038353790558954,
+    "mean_predicted_step_m": 0.010119389499253109,
+    "sample_stride": 5
+  },
+  {
+    "file": "trial_02_chunk_bc_k20_h1.json",
+    "logged_points": 131,
+    "max_cube_displacement_m": 0.0,
+    "max_predicted_step_m": 0.010120235388082993,
+    "mean_predicted_step_m": 0.0019267392252846189,
+    "sample_stride": 5
+  },
+  {
+    "file": "trial_02_chunk_bc_k20_h20.json",
+    "logged_points": 131,
+    "max_cube_displacement_m": 0.03488565917382284,
+    "max_predicted_step_m": 0.06995857599271905,
+    "mean_predicted_step_m": 0.010615096366012539,
+    "sample_stride": 5
+  },
+  {
+    "file": "trial_02_chunk_bc_k20_h5.json",
+    "logged_points": 13,
+    "max_cube_displacement_m": 0.0,
+    "max_predicted_step_m": 0.026407841740007213,
+    "mean_predicted_step_m": 0.00937692960791134,
+    "sample_stride": 5
+  },
+  {
+    "file": "trial_02_progress_bc.json",
+    "logged_points": 60,
+    "max_cube_displacement_m": 0.03752497182752426,
+    "max_predicted_step_m": 0.0984657446935678,
+    "mean_predicted_step_m": 0.007654034335488414,
+    "sample_stride": 5
+  },
+  {
+    "file": "trial_03_bc.json",
+    "logged_points": 131,
+    "max_cube_displacement_m": 0.0,
+    "max_predicted_step_m": 0.03293716856837243,
+    "mean_predicted_step_m": 0.004363976304444149,
+    "sample_stride": 5
+  },
+  {
+    "file": "trial_03_chunk_bc_k20_h1.json",
+    "logged_points": 10,
+    "max_cube_displacement_m": 0.0,
+    "max_predicted_step_m": 0.02323024222475442,
+    "mean_predicted_step_m": 0.011455989190814388,
+    "sample_stride": 5
+  },
+  {
+    "file": "trial_03_chunk_bc_k20_h20.json",
+    "logged_points": 131,
+    "max_cube_displacement_m": 0.06485311107654639,
+    "max_predicted_step_m": 0.04125264204487029,
+    "mean_predicted_step_m": 0.008975145115901412,
+    "sample_stride": 5
+  },
+  {
+    "file": "trial_03_chunk_bc_k20_h5.json",
+    "logged_points": 14,
+    "max_cube_displacement_m": 0.0,
+    "max_predicted_step_m": 0.023011399471315,
+    "mean_predicted_step_m": 0.011586440661887187,
+    "sample_stride": 5
+  },
+  {
+    "file": "trial_03_progress_bc.json",
+    "logged_points": 50,
+    "max_cube_displacement_m": 0.0,
+    "max_predicted_step_m": 0.014328423158132634,
+    "mean_predicted_step_m": 0.010546262357862324,
+    "sample_stride": 5
+  }
+]

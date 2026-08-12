@@ -17,6 +17,7 @@ dependencies = [
 
 [project.optional-dependencies]
 dev = ["pytest>=8,<10"]
+analysis = ["scipy>=1.10,<2"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
@@ -38,4 +39,5 @@ include = [
     "datasets*",
     "learning*",
     "demos*",
+    "analysis*",
 ]

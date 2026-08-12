@@ -80,10 +80,10 @@ backend and imitation-data contracts.
   `near` relations
 - bounded symbolic composition of registered Pick, Place, and Push effects
 - a dedicated `right_side` semantic push region, separate from Place targets
-- pluggable classical and one-step BC physical Push backends
+- pluggable classical, one-step, progress-conditioned, and chunk BC physical Push backends
 - 20 Hz state/action trajectory recording and a validated local NPZ format
 - action-chunk extraction with explicit padding masks
-- a dependency-free NumPy one-step BC training and checkpoint baseline
+- dependency-free NumPy one-step, progress, and deterministic chunk BC baselines
 - explicit capability-gap plans for valid but unsupported goals
 - an interactive semantic-step playground with observable world changes
 
@@ -286,7 +286,8 @@ approximations for the current tabletop scenario.
 
 ## Roadmap
 
-Near-term exploration may add chunk BC and compare prediction horizon against
-execution horizon before attempting ACT. The current one-step BC backend is a
-deliberately weak state-based baseline (0/20 matched physical rollouts), not a
-claim of learned manipulation reliability. No ACT or VLA backend exists.
+The completed temporal experiment compares K=10/20/40 Chunk BC and K=20 with
+H=1/5/20. Full-chunk H=20 reached only 2/20; Progress BC and shorter execution
+horizons remained 0/20. See `docs/chunk_bc_experiment.md`. These are diagnostic
+baselines, not a claim of learned manipulation reliability. No temporal
+ensemble, ACT, or VLA backend exists.

@@ -18,6 +18,7 @@ from skills.place_geometry import (
 from skills.push import PushConfig, PushSkill, evaluate_push_outcome
 from skills.classical_push_backend import ClassicalPushBackend, ClassicalPushConfig
 from skills.bc_push_backend import BCPushBackend, BCPushConfig
+from skills.temporal_bc_push_backend import ChunkBCPushBackend, ProgressBCPushBackend
 from skills.push_backend import (
     PushBackend,
     PushBackendResult,
@@ -57,6 +58,8 @@ __all__ = [
     "ClassicalPushConfig",
     "BCPushBackend",
     "BCPushConfig",
+    "ChunkBCPushBackend",
+    "ProgressBCPushBackend",
     "Skill",
     "SkillFailure",
     "SkillPhase",

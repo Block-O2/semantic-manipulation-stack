@@ -1,0 +1,2744 @@
+{
+  "dataset_indices": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    8,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    22,
+    23
+  ],
+  "matched_trials": 20,
+  "records": [
+    {
+      "attempts": 1,
+      "backend": "classical",
+      "control_steps": 569,
+      "dataset_index": 0,
+      "displacement": 0.19067928226024022,
+      "failure_reason": null,
+      "final_position": [
+        0.21350234098098078,
+        -0.13579314499798353,
+        0.8247844891595695
+      ],
+      "initial_position": [
+        0.022823335384665813,
+        -0.13546832492339933,
+        0.8247844899462122
+      ],
+      "seed": 124,
+      "success": true,
+      "target_satisfied": true,
+      "trial": 1
+    },
+    {
+      "attempts": 1,
+      "backend": "bc",
+      "control_steps": 685,
+      "dataset_index": 0,
+      "displacement": 0.003109715811543074,
+      "failure_reason": "POLICY_TIMEOUT",
+      "final_position": [
+        0.025363617774393596,
+        -0.1372620076737763,
+        0.8247844891595658
+      ],
+      "initial_position": [
+        0.022823335384665813,
+        -0.13546832492339933,
+        0.8247844899462122
+      ],
+      "seed": 124,
+      "success": false,
+      "target_satisfied": false,
+      "trial": 1
+    },
+    {
+      "attempts": 1,
+      "backend": "progress_bc",
+      "control_steps": 615,
+      "dataset_index": 0,
+      "displacement": 0.0,
+      "failure_reason": "POLICY_ACTION_UNSAFE",
+      "final_position": [
+        0.022823335384665813,
+        -0.13546832492339933,
+        0.8247844891595695
+      ],
+      "initial_position": [
+        0.022823335384665813,
+        -0.13546832492339933,
+        0.8247844899462122
+      ],
+      "seed": 124,
+      "success": false,
+      "target_satisfied": false,
+      "trial": 1
+    },
+    {
+      "attempts": 1,
+      "backend": "chunk_bc_k20_h1",
+      "control_steps": 127,
+      "dataset_index": 0,
+      "displacement": 0.0,
+      "failure_reason": "POLICY_ACTION_UNSAFE",
+      "final_position": [
+        0.022823335384665813,
+        -0.13546832492339933,
+        0.8247844891595695
+      ],
+      "initial_position": [
+        0.022823335384665813,
+        -0.13546832492339933,
+        0.8247844899462122
+      ],
+      "seed": 124,
+      "success": false,
+      "target_satisfied": false,
+      "trial": 1
+    },
+    {
+      "attempts": 1,
+      "backend": "chunk_bc_k20_h5",
+      "control_steps": 92,
+      "dataset_index": 0,
+      "displacement": 0.0,
+      "failure_reason": "POLICY_ACTION_UNSAFE",
+      "final_position": [
+        0.022823335384665813,
+        -0.13546832492339933,
+        0.8247844891595695
+      ],
+      "initial_position": [
+        0.022823335384665813,
+        -0.13546832492339933,
+        0.8247844899462122
+      ],
+      "seed": 124,
+      "success": false,
+      "target_satisfied": false,
+      "trial": 1
+    },
+    {
+      "attempts": 1,
+      "backend": "chunk_bc_k20_h20",
+      "control_steps": 140,
+      "dataset_index": 0,
+      "displacement": 0.0,
+      "failure_reason": "POLICY_ACTION_UNSAFE",
+      "final_position": [
+        0.022823335384665813,
+        -0.13546832492339933,
+        0.8247844891595695
+      ],
+      "initial_position": [
+        0.022823335384665813,
+        -0.13546832492339933,
+        0.8247844899462122
+      ],
+      "seed": 124,
+      "success": false,
+      "target_satisfied": false,
+      "trial": 1
+    },
+    {
+      "attempts": 1,
+      "backend": "classical",
+      "control_steps": 673,
+      "dataset_index": 1,
+      "displacement": 0.27383237588292214,
+      "failure_reason": null,
+      "final_position": [
+        0.2134971310856336,
+        -0.10011010374474613,
+        0.8247844891595695
+      ],
+      "initial_position": [
+        -0.060335222900929956,
+        -0.10021961111135917,
+        0.8247844899462122
+      ],
+      "seed": 125,
+      "success": true,
+      "target_satisfied": true,
+      "trial": 2
+    },
+    {
+      "attempts": 1,
+      "backend": "bc",
+      "control_steps": 263,
+      "dataset_index": 1,
+      "displacement": 0.0,
+      "failure_reason": "POLICY_ACTION_UNSAFE",
+      "final_position": [
+        -0.060335222900929956,
+        -0.10021961111135917,
+        0.8247844891595695
+      ],
+      "initial_position": [
+        -0.060335222900929956,
+        -0.10021961111135917,
+        0.8247844899462122
+      ],
+      "seed": 125,
+      "success": false,
+      "target_satisfied": false,
+      "trial": 2
+    },
+    {
+      "attempts": 1,
+      "backend": "progress_bc",
+      "control_steps": 330,
+      "dataset_index": 1,
+      "displacement": 0.03752497182752426,
+      "failure_reason": "POLICY_ACTION_UNSAFE",
+      "final_position": [
+        -0.022827920573981222,
+        -0.10137103753599745,
+        0.8221216113867243
+      ],
+      "initial_position": [
+        -0.060335222900929956,
+        -0.10021961111135917,
+        0.8247844899462122
+      ],
+      "seed": 125,
+      "success": false,
+      "target_satisfied": false,
+      "trial": 2
+    },
+    {
+      "attempts": 1,
+      "backend": "chunk_bc_k20_h1",
+      "control_steps": 685,
+      "dataset_index": 1,
+      "displacement": 0.0,
+      "failure_reason": "POLICY_TIMEOUT",
+      "final_position": [
+        -0.060335222900929956,
+        -0.10021961111135917,
+        0.8247844891595695
+      ],
+      "initial_position": [
+        -0.060335222900929956,
+        -0.10021961111135917,
+        0.8247844899462122
+      ],
+      "seed": 125,
+      "success": false,
+      "target_satisfied": false,
+      "trial": 2
+    },
+    {
+      "attempts": 1,
+      "backend": "chunk_bc_k20_h5",
+      "control_steps": 94,
+      "dataset_index": 1,
+      "displacement": 0.0,
+      "failure_reason": "POLICY_ACTION_UNSAFE",
+      "final_position": [
+        -0.060335222900929956,
+        -0.10021961111135917,
+        0.8247844891595695
+      ],
+      "initial_position": [
+        -0.060335222900929956,
+        -0.10021961111135917,
+        0.8247844899462122
+      ],
+      "seed": 125,
+      "success": false,
+      "target_satisfied": false,
+      "trial": 2
+    },
+    {
+      "attempts": 1,
+      "backend": "chunk_bc_k20_h20",
+      "control_steps": 685,
+      "dataset_index": 1,
+      "displacement": 0.03488565917382284,
+      "failure_reason": "POLICY_TIMEOUT",
+      "final_position": [
+        -0.02622307349020579,
+        -0.09291410095993512,
+        0.8243250284230159
+      ],
+      "initial_position": [
+        -0.060335222900929956,
+        -0.10021961111135917,
+        0.8247844899462122
+      ],
+      "seed": 125,
+      "success": false,
+      "target_satisfied": false,
+      "trial": 2
+    },
+    {
+      "attempts": 1,
+      "backend": "classical",
+      "control_steps": 726,
+      "dataset_index": 2,
+      "displacement": 0.28188593563593617,
+      "failure_reason": null,
+      "final_position": [
+        0.21354415337158333,
+        0.07091813490722691,
+        0.8247844891595695
+      ],
+      "initial_position": [
+        -0.06833693780469455,
+        0.06926551679705892,
+        0.8247844899462122
+      ],
+      "seed": 126,
+      "success": true,
+      "target_satisfied": true,
+      "trial": 3
+    },
+    {
+      "attempts": 1,
+      "backend": "bc",
+      "control_steps": 685,
+      "dataset_index": 2,
+      "displacement": 0.0,
+      "failure_reason": "POLICY_TIMEOUT",
+      "final_position": [
+        -0.06833693780469455,
+        0.06926551679705892,
+        0.8247844891595695
+      ],
+      "initial_position": [
+        -0.06833693780469455,
+        0.06926551679705892,
+        0.8247844899462122
+      ],
+      "seed": 126,
+      "success": false,
+      "target_satisfied": false,
+      "trial": 3
+    },
+    {
+      "attempts": 1,
+      "backend": "progress_bc",
+      "control_steps": 280,
+      "dataset_index": 2,
+      "displacement": 0.0,
+      "failure_reason": "POLICY_ACTION_UNSAFE",
+      "final_position": [
+        -0.06833693780469455,
+        0.06926551679705892,
+        0.8247844891595695
+      ],
+      "initial_position": [
+        -0.06833693780469455,
+        0.06926551679705892,
+        0.8247844899462122
+      ],
+      "seed": 126,
+      "success": false,
+      "target_satisfied": false,
+      "trial": 3
+    },
+    {
+      "attempts": 1,
+      "backend": "chunk_bc_k20_h1",
+      "control_steps": 81,
+      "dataset_index": 2,
+      "displacement": 0.0,
+      "failure_reason": "POLICY_ACTION_UNSAFE",
+      "final_position": [
+        -0.06833693780469455,
+        0.06926551679705892,
+        0.8247844891595695
+      ],
+      "initial_position": [
+        -0.06833693780469455,
+        0.06926551679705892,
+        0.8247844899462122
+      ],
+      "seed": 126,
+      "success": false,
+      "target_satisfied": false,
+      "trial": 3
+    },
+    {
+      "attempts": 1,
+      "backend": "chunk_bc_k20_h5",
+      "control_steps": 98,
+      "dataset_index": 2,
+      "displacement": 0.0,
+      "failure_reason": "POLICY_ACTION_UNSAFE",
+      "final_position": [
+        -0.06833693780469455,
+        0.06926551679705892,
+        0.8247844891595695
+      ],
+      "initial_position": [
+        -0.06833693780469455,
+        0.06926551679705892,
+        0.8247844899462122
+      ],
+      "seed": 126,
+      "success": false,
+      "target_satisfied": false,
+      "trial": 3
+    },
+    {
+      "attempts": 1,
+      "backend": "chunk_bc_k20_h20",
+      "control_steps": 685,
+      "dataset_index": 2,
+      "displacement": 0.05884471545100772,
+      "failure_reason": "POLICY_TIMEOUT",
+      "final_position": [
+        -0.0097039401870144,
+        0.06427832050302942,
+        0.8247844891595659
+      ],
+      "initial_position": [
+        -0.06833693780469455,
+        0.06926551679705892,
+        0.8247844899462122
+      ],
+      "seed": 126,
+      "success": false,
+      "target_satisfied": false,
+      "trial": 3
+    },
+    {
+      "attempts": 1,
+      "backend": "classical",
+      "control_steps": 544,
+      "dataset_index": 3,
+      "displacement": 0.14723368646147372,
+      "failure_reason": null,
+      "final_position": [
+        0.21343562721764042,
+        -0.07510860837881686,
+        0.8247844891595695
+      ],
+      "initial_position": [
+        0.06620209964487014,
+        -0.0753249125947803,
+        0.8247844899462122
+      ],
+      "seed": 127,
+      "success": true,
+      "target_satisfied": true,
+      "trial": 4
+    },
+    {
+      "attempts": 1,
+      "backend": "bc",
+      "control_steps": 685,
+      "dataset_index": 3,
+      "displacement": 0.07797150971145468,
+      "failure_reason": "POLICY_TIMEOUT",
+      "final_position": [
+        0.14264781393710466,
+        -0.05997534930999845,
+        0.8247186715030562
+      ],
+      "initial_position": [
+        0.06620209964487014,
+        -0.0753249125947803,
+        0.8247844899462122
+      ],
+      "seed": 127,
+      "success": false,
+      "target_satisfied": false,
+      "trial": 4
+    },
+    {
+      "attempts": 1,
+      "backend": "progress_bc",
+      "control_steps": 411,
+      "dataset_index": 3,
+      "displacement": 0.008932467043768955,
+      "failure_reason": "POLICY_ACTION_UNSAFE",
+      "final_position": [
+        0.07485727588028587,
+        -0.07753328118310819,
+        0.8310287911534158
+      ],
+      "initial_position": [
+        0.06620209964487014,
+        -0.0753249125947803,
+        0.8247844899462122
+      ],
+      "seed": 127,
+      "success": false,
+      "target_satisfied": false,
+      "trial": 4
+    },
+    {
+      "attempts": 1,
+      "backend": "chunk_bc_k20_h1",
+      "control_steps": 143,
+      "dataset_index": 3,
+      "displacement": 0.0,
+      "failure_reason": "POLICY_ACTION_UNSAFE",
+      "final_position": [
+        0.06620209964487014,
+        -0.0753249125947803,
+        0.8247844891595695
+      ],
+      "initial_position": [
+        0.06620209964487014,
+        -0.0753249125947803,
+        0.8247844899462122
+      ],
+      "seed": 127,
+      "success": false,
+      "target_satisfied": false,
+      "trial": 4
+    },
+    {
+      "attempts": 1,
+      "backend": "chunk_bc_k20_h5",
+      "control_steps": 101,
+      "dataset_index": 3,
+      "displacement": 0.0,
+      "failure_reason": "POLICY_ACTION_UNSAFE",
+      "final_position": [
+        0.06620209964487014,
+        -0.0753249125947803,
+        0.8247844891595695
+      ],
+      "initial_position": [
+        0.06620209964487014,
+        -0.0753249125947803,
+        0.8247844899462122
+      ],
+      "seed": 127,
+      "success": false,
+      "target_satisfied": false,
+      "trial": 4
+    },
+    {
+      "attempts": 1,
+      "backend": "chunk_bc_k20_h20",
+      "control_steps": 164,
+      "dataset_index": 3,
+      "displacement": 0.0,
+      "failure_reason": "POLICY_ACTION_UNSAFE",
+      "final_position": [
+        0.06620209964487014,
+        -0.0753249125947803,
+        0.8247844891595695
+      ],
+      "initial_position": [
+        0.06620209964487014,
+        -0.0753249125947803,
+        0.8247844899462122
+      ],
+      "seed": 127,
+      "success": false,
+      "target_satisfied": false,
+      "trial": 4
+    },
+    {
+      "attempts": 1,
+      "backend": "classical",
+      "control_steps": 608,
+      "dataset_index": 4,
+      "displacement": 0.16591472956915979,
+      "failure_reason": null,
+      "final_position": [
+        0.21346534845638773,
+        0.09158488253071517,
+        0.8247844891595695
+      ],
+      "initial_position": [
+        0.04755582108674036,
+        0.09027102714002122,
+        0.8247844899462122
+      ],
+      "seed": 128,
+      "success": true,
+      "target_satisfied": true,
+      "trial": 5
+    },
+    {
+      "attempts": 1,
+      "backend": "bc",
+      "control_steps": 685,
+      "dataset_index": 4,
+      "displacement": 0.0,
+      "failure_reason": "POLICY_TIMEOUT",
+      "final_position": [
+        0.04755582108674036,
+        0.09027102714002122,
+        0.8247844891595695
+      ],
+      "initial_position": [
+        0.04755582108674036,
+        0.09027102714002122,
+        0.8247844899462122
+      ],
+      "seed": 128,
+      "success": false,
+      "target_satisfied": false,
+      "trial": 5
+    },
+    {
+      "attempts": 1,
+      "backend": "progress_bc",
+      "control_steps": 586,
+      "dataset_index": 4,
+      "displacement": 0.10901560223570066,
+      "failure_reason": "POLICY_ACTION_UNSAFE",
+      "final_position": [
+        0.14697079218222142,
+        0.1350042927585424,
+        0.8247844891595659
+      ],
+      "initial_position": [
+        0.04755582108674036,
+        0.09027102714002122,
+        0.8247844899462122
+      ],
+      "seed": 128,
+      "success": false,
+      "target_satisfied": false,
+      "trial": 5
+    },
+    {
+      "attempts": 1,
+      "backend": "chunk_bc_k20_h1",
+      "control_steps": 96,
+      "dataset_index": 4,
+      "displacement": 0.0,
+      "failure_reason": "POLICY_ACTION_UNSAFE",
+      "final_position": [
+        0.04755582108674036,
+        0.09027102714002122,
+        0.8247844891595695
+      ],
+      "initial_position": [
+        0.04755582108674036,
+        0.09027102714002122,
+        0.8247844899462122
+      ],
+      "seed": 128,
+      "success": false,
+      "target_satisfied": false,
+      "trial": 5
+    },
+    {
+      "attempts": 1,
+      "backend": "chunk_bc_k20_h5",
+      "control_steps": 94,
+      "dataset_index": 4,
+      "displacement": 0.0,
+      "failure_reason": "POLICY_ACTION_UNSAFE",
+      "final_position": [
+        0.04755582108674036,
+        0.09027102714002122,
+        0.8247844891595695
+      ],
+      "initial_position": [
+        0.04755582108674036,
+        0.09027102714002122,
+        0.8247844899462122
+      ],
+      "seed": 128,
+      "success": false,
+      "target_satisfied": false,
+      "trial": 5
+    },
+    {
+      "attempts": 1,
+      "backend": "chunk_bc_k20_h20",
+      "control_steps": 551,
+      "dataset_index": 4,
+      "displacement": 0.13304717593357193,
+      "failure_reason": null,
+      "final_position": [
+        0.18049252520996606,
+        0.0956917024441501,
+        0.8245116309700641
+      ],
+      "initial_position": [
+        0.04755582108674036,
+        0.09027102714002122,
+        0.8247844899462122
+      ],
+      "seed": 128,
+      "success": true,
+      "target_satisfied": true,
+      "trial": 5
+    },
+    {
+      "attempts": 1,
+      "backend": "classical",
+      "control_steps": 616,
+      "dataset_index": 5,
+      "displacement": 0.2211255054655511,
+      "failure_reason": null,
+      "final_position": [
+        0.21346013425353852,
+        -0.08370623742461647,
+        0.8247844891595695
+      ],
+      "initial_position": [
+        -0.00766531805868427,
+        -0.08385955771142446,
+        0.8247844899462122
+      ],
+      "seed": 129,
+      "success": true,
+      "target_satisfied": true,
+      "trial": 6
+    },
+    {
+      "attempts": 1,
+      "backend": "bc",
+      "control_steps": 685,
+      "dataset_index": 5,
+      "displacement": 1.734723475976807e-18,
+      "failure_reason": "POLICY_TIMEOUT",
+      "final_position": [
+        -0.007665318058684268,
+        -0.08385955771142446,
+        0.8247844891595695
+      ],
+      "initial_position": [
+        -0.00766531805868427,
+        -0.08385955771142446,
+        0.8247844899462122
+      ],
+      "seed": 129,
+      "success": false,
+      "target_satisfied": false,
+      "trial": 6
+    },
+    {
+      "attempts": 1,
+      "backend": "progress_bc",
+      "control_steps": 317,
+      "dataset_index": 5,
+      "displacement": 0.0052268468068164195,
+      "failure_reason": "POLICY_ACTION_UNSAFE",
+      "final_position": [
+        -0.002511621583343812,
+        -0.0829881564364711,
+        0.8228145490942613
+      ],
+      "initial_position": [
+        -0.00766531805868427,
+        -0.08385955771142446,
+        0.8247844899462122
+      ],
+      "seed": 129,
+      "success": false,
+      "target_satisfied": false,
+      "trial": 6
+    },
+    {
+      "attempts": 1,
+      "backend": "chunk_bc_k20_h1",
+      "control_steps": 150,
+      "dataset_index": 5,
+      "displacement": 1.734723475976807e-18,
+      "failure_reason": "POLICY_ACTION_UNSAFE",
+      "final_position": [
+        -0.007665318058684268,
+        -0.08385955771142446,
+        0.8247844891595695
+      ],
+      "initial_position": [
+        -0.00766531805868427,
+        -0.08385955771142446,
+        0.8247844899462122
+      ],
+      "seed": 129,
+      "success": false,
+      "target_satisfied": false,
+      "trial": 6
+    },
+    {
+      "attempts": 1,
+      "backend": "chunk_bc_k20_h5",
+      "control_steps": 93,
+      "dataset_index": 5,
+      "displacement": 1.734723475976807e-18,
+      "failure_reason": "POLICY_ACTION_UNSAFE",
+      "final_position": [
+        -0.007665318058684268,
+        -0.08385955771142446,
+        0.8247844891595695
+      ],
+      "initial_position": [
+        -0.00766531805868427,
+        -0.08385955771142446,
+        0.8247844899462122
+      ],
+      "seed": 129,
+      "success": false,
+      "target_satisfied": false,
+      "trial": 6
+    },
+    {
+      "attempts": 1,
+      "backend": "chunk_bc_k20_h20",
+      "control_steps": 475,
+      "dataset_index": 5,
+      "displacement": 0.012927997463507701,
+      "failure_reason": "POLICY_ACTION_UNSAFE",
+      "final_position": [
+        0.004788156161055302,
+        -0.0873300185273311,
+        0.8211893852716178
+      ],
+      "initial_position": [
+        -0.00766531805868427,
+        -0.08385955771142446,
+        0.8247844899462122
+      ],
+      "seed": 129,
+      "success": false,
+      "target_satisfied": false,
+      "trial": 6
+    },
+    {
+      "attempts": 1,
+      "backend": "classical",
+      "control_steps": 559,
+      "dataset_index": 6,
+      "displacement": 0.16513082436709822,
+      "failure_reason": null,
+      "final_position": [
+        0.21349431136739425,
+        -0.09227409199726741,
+        0.8247844891595695
+      ],
+      "initial_position": [
+        0.048363487297534036,
+        -0.09228399988872321,
+        0.8247844899462122
+      ],
+      "seed": 130,
+      "success": true,
+      "target_satisfied": true,
+      "trial": 7
+    },
+    {
+      "attempts": 1,
+      "backend": "bc",
+      "control_steps": 685,
+      "dataset_index": 6,
+      "displacement": 0.0,
+      "failure_reason": "POLICY_TIMEOUT",
+      "final_position": [
+        0.048363487297534036,
+        -0.09228399988872321,
+        0.8247844891595695
+      ],
+      "initial_position": [
+        0.048363487297534036,
+        -0.09228399988872321,
+        0.8247844899462122
+      ],
+      "seed": 130,
+      "success": false,
+      "target_satisfied": false,
+      "trial": 7
+    },
+    {
+      "attempts": 1,
+      "backend": "progress_bc",
+      "control_steps": 563,
+      "dataset_index": 6,
+      "displacement": 0.0,
+      "failure_reason": "POLICY_ACTION_UNSAFE",
+      "final_position": [
+        0.048363487297534036,
+        -0.09228399988872321,
+        0.8247844891595695
+      ],
+      "initial_position": [
+        0.048363487297534036,
+        -0.09228399988872321,
+        0.8247844899462122
+      ],
+      "seed": 130,
+      "success": false,
+      "target_satisfied": false,
+      "trial": 7
+    },
+    {
+      "attempts": 1,
+      "backend": "chunk_bc_k20_h1",
+      "control_steps": 139,
+      "dataset_index": 6,
+      "displacement": 0.0,
+      "failure_reason": "POLICY_ACTION_UNSAFE",
+      "final_position": [
+        0.048363487297534036,
+        -0.09228399988872321,
+        0.8247844891595695
+      ],
+      "initial_position": [
+        0.048363487297534036,
+        -0.09228399988872321,
+        0.8247844899462122
+      ],
+      "seed": 130,
+      "success": false,
+      "target_satisfied": false,
+      "trial": 7
+    },
+    {
+      "attempts": 1,
+      "backend": "chunk_bc_k20_h5",
+      "control_steps": 99,
+      "dataset_index": 6,
+      "displacement": 0.0,
+      "failure_reason": "POLICY_ACTION_UNSAFE",
+      "final_position": [
+        0.048363487297534036,
+        -0.09228399988872321,
+        0.8247844891595695
+      ],
+      "initial_position": [
+        0.048363487297534036,
+        -0.09228399988872321,
+        0.8247844899462122
+      ],
+      "seed": 130,
+      "success": false,
+      "target_satisfied": false,
+      "trial": 7
+    },
+    {
+      "attempts": 1,
+      "backend": "chunk_bc_k20_h20",
+      "control_steps": 160,
+      "dataset_index": 6,
+      "displacement": 0.0,
+      "failure_reason": "POLICY_ACTION_UNSAFE",
+      "final_position": [
+        0.048363487297534036,
+        -0.09228399988872321,
+        0.8247844891595695
+      ],
+      "initial_position": [
+        0.048363487297534036,
+        -0.09228399988872321,
+        0.8247844899462122
+      ],
+      "seed": 130,
+      "success": false,
+      "target_satisfied": false,
+      "trial": 7
+    },
+    {
+      "attempts": 1,
+      "backend": "classical",
+      "control_steps": 667,
+      "dataset_index": 8,
+      "displacement": 0.27185127824380406,
+      "failure_reason": null,
+      "final_position": [
+        0.21353126313690315,
+        -0.10532836380663817,
+        0.8247844891595695
+      ],
+      "initial_position": [
+        -0.05831998753292786,
+        -0.10520592182499848,
+        0.8247844899462122
+      ],
+      "seed": 132,
+      "success": true,
+      "target_satisfied": true,
+      "trial": 8
+    },
+    {
+      "attempts": 1,
+      "backend": "bc",
+      "control_steps": 282,
+      "dataset_index": 8,
+      "displacement": 0.0,
+      "failure_reason": "POLICY_ACTION_UNSAFE",
+      "final_position": [
+        -0.05831998753292786,
+        -0.10520592182499848,
+        0.8247844891595695
+      ],
+      "initial_position": [
+        -0.05831998753292786,
+        -0.10520592182499848,
+        0.8247844899462122
+      ],
+      "seed": 132,
+      "success": false,
+      "target_satisfied": false,
+      "trial": 8
+    },
+    {
+      "attempts": 1,
+      "backend": "progress_bc",
+      "control_steps": 315,
+      "dataset_index": 8,
+      "displacement": 0.004595420960012676,
+      "failure_reason": "POLICY_ACTION_UNSAFE",
+      "final_position": [
+        -0.053794153758960975,
+        -0.10600261652822206,
+        0.8221898355483589
+      ],
+      "initial_position": [
+        -0.05831998753292786,
+        -0.10520592182499848,
+        0.8247844899462122
+      ],
+      "seed": 132,
+      "success": false,
+      "target_satisfied": false,
+      "trial": 8
+    },
+    {
+      "attempts": 1,
+      "backend": "chunk_bc_k20_h1",
+      "control_steps": 685,
+      "dataset_index": 8,
+      "displacement": 0.0,
+      "failure_reason": "POLICY_TIMEOUT",
+      "final_position": [
+        -0.05831998753292786,
+        -0.10520592182499848,
+        0.8247844891595695
+      ],
+      "initial_position": [
+        -0.05831998753292786,
+        -0.10520592182499848,
+        0.8247844899462122
+      ],
+      "seed": 132,
+      "success": false,
+      "target_satisfied": false,
+      "trial": 8
+    },
+    {
+      "attempts": 1,
+      "backend": "chunk_bc_k20_h5",
+      "control_steps": 93,
+      "dataset_index": 8,
+      "displacement": 0.0,
+      "failure_reason": "POLICY_ACTION_UNSAFE",
+      "final_position": [
+        -0.05831998753292786,
+        -0.10520592182499848,
+        0.8247844891595695
+      ],
+      "initial_position": [
+        -0.05831998753292786,
+        -0.10520592182499848,
+        0.8247844899462122
+      ],
+      "seed": 132,
+      "success": false,
+      "target_satisfied": false,
+      "trial": 8
+    },
+    {
+      "attempts": 1,
+      "backend": "chunk_bc_k20_h20",
+      "control_steps": 555,
+      "dataset_index": 8,
+      "displacement": 0.0017663097586321055,
+      "failure_reason": "POLICY_ACTION_UNSAFE",
+      "final_position": [
+        -0.05658400458698173,
+        -0.10553182575995969,
+        0.822293176911055
+      ],
+      "initial_position": [
+        -0.05831998753292786,
+        -0.10520592182499848,
+        0.8247844899462122
+      ],
+      "seed": 132,
+      "success": false,
+      "target_satisfied": false,
+      "trial": 8
+    },
+    {
+      "attempts": 1,
+      "backend": "classical",
+      "control_steps": 721,
+      "dataset_index": 10,
+      "displacement": 0.2742455659386839,
+      "failure_reason": null,
+      "final_position": [
+        0.2135229755549146,
+        0.08532602903438534,
+        0.8247844891595695
+      ],
+      "initial_position": [
+        -0.06071862487096978,
+        0.08385122976716401,
+        0.8247844899462122
+      ],
+      "seed": 134,
+      "success": true,
+      "target_satisfied": true,
+      "trial": 9
+    },
+    {
+      "attempts": 1,
+      "backend": "bc",
+      "control_steps": 685,
+      "dataset_index": 10,
+      "displacement": 0.0,
+      "failure_reason": "POLICY_TIMEOUT",
+      "final_position": [
+        -0.06071862487096978,
+        0.08385122976716401,
+        0.8247844891595695
+      ],
+      "initial_position": [
+        -0.06071862487096978,
+        0.08385122976716401,
+        0.8247844899462122
+      ],
+      "seed": 134,
+      "success": false,
+      "target_satisfied": false,
+      "trial": 9
+    },
+    {
+      "attempts": 1,
+      "backend": "progress_bc",
+      "control_steps": 251,
+      "dataset_index": 10,
+      "displacement": 0.0,
+      "failure_reason": "POLICY_ACTION_UNSAFE",
+      "final_position": [
+        -0.06071862487096978,
+        0.08385122976716401,
+        0.8247844891595695
+      ],
+      "initial_position": [
+        -0.06071862487096978,
+        0.08385122976716401,
+        0.8247844899462122
+      ],
+      "seed": 134,
+      "success": false,
+      "target_satisfied": false,
+      "trial": 9
+    },
+    {
+      "attempts": 1,
+      "backend": "chunk_bc_k20_h1",
+      "control_steps": 79,
+      "dataset_index": 10,
+      "displacement": 0.0,
+      "failure_reason": "POLICY_ACTION_UNSAFE",
+      "final_position": [
+        -0.06071862487096978,
+        0.08385122976716401,
+        0.8247844891595695
+      ],
+      "initial_position": [
+        -0.06071862487096978,
+        0.08385122976716401,
+        0.8247844899462122
+      ],
+      "seed": 134,
+      "success": false,
+      "target_satisfied": false,
+      "trial": 9
+    },
+    {
+      "attempts": 1,
+      "backend": "chunk_bc_k20_h5",
+      "control_steps": 96,
+      "dataset_index": 10,
+      "displacement": 0.0,
+      "failure_reason": "POLICY_ACTION_UNSAFE",
+      "final_position": [
+        -0.06071862487096978,
+        0.08385122976716401,
+        0.8247844891595695
+      ],
+      "initial_position": [
+        -0.06071862487096978,
+        0.08385122976716401,
+        0.8247844899462122
+      ],
+      "seed": 134,
+      "success": false,
+      "target_satisfied": false,
+      "trial": 9
+    },
+    {
+      "attempts": 1,
+      "backend": "chunk_bc_k20_h20",
+      "control_steps": 685,
+      "dataset_index": 10,
+      "displacement": 0.01838386190976188,
+      "failure_reason": "POLICY_TIMEOUT",
+      "final_position": [
+        -0.04233655382973276,
+        0.08410782858265034,
+        0.8247844891595695
+      ],
+      "initial_position": [
+        -0.06071862487096978,
+        0.08385122976716401,
+        0.8247844899462122
+      ],
+      "seed": 134,
+      "success": false,
+      "target_satisfied": false,
+      "trial": 9
+    },
+    {
+      "attempts": 1,
+      "backend": "classical",
+      "control_steps": 578,
+      "dataset_index": 11,
+      "displacement": 0.1819428375478678,
+      "failure_reason": null,
+      "final_position": [
+        0.21347797565550122,
+        -0.07469964835815032,
+        0.8247844891595695
+      ],
+      "initial_position": [
+        0.03153534854682569,
+        -0.07497637161928948,
+        0.8247844899462122
+      ],
+      "seed": 135,
+      "success": true,
+      "target_satisfied": true,
+      "trial": 10
+    },
+    {
+      "attempts": 1,
+      "backend": "bc",
+      "control_steps": 685,
+      "dataset_index": 11,
+      "displacement": 0.0,
+      "failure_reason": "POLICY_TIMEOUT",
+      "final_position": [
+        0.03153534854682569,
+        -0.07497637161928948,
+        0.8247844891595695
+      ],
+      "initial_position": [
+        0.03153534854682569,
+        -0.07497637161928948,
+        0.8247844899462122
+      ],
+      "seed": 135,
+      "success": false,
+      "target_satisfied": false,
+      "trial": 10
+    },
+    {
+      "attempts": 1,
+      "backend": "progress_bc",
+      "control_steps": 332,
+      "dataset_index": 11,
+      "displacement": 0.0029316917623420707,
+      "failure_reason": "POLICY_ACTION_UNSAFE",
+      "final_position": [
+        0.034421424526714914,
+        -0.07446121918777936,
+        0.8225192530599378
+      ],
+      "initial_position": [
+        0.03153534854682569,
+        -0.07497637161928948,
+        0.8247844899462122
+      ],
+      "seed": 135,
+      "success": false,
+      "target_satisfied": false,
+      "trial": 10
+    },
+    {
+      "attempts": 1,
+      "backend": "chunk_bc_k20_h1",
+      "control_steps": 153,
+      "dataset_index": 11,
+      "displacement": 0.0,
+      "failure_reason": "POLICY_ACTION_UNSAFE",
+      "final_position": [
+        0.03153534854682569,
+        -0.07497637161928948,
+        0.8247844891595695
+      ],
+      "initial_position": [
+        0.03153534854682569,
+        -0.07497637161928948,
+        0.8247844899462122
+      ],
+      "seed": 135,
+      "success": false,
+      "target_satisfied": false,
+      "trial": 10
+    },
+    {
+      "attempts": 1,
+      "backend": "chunk_bc_k20_h5",
+      "control_steps": 98,
+      "dataset_index": 11,
+      "displacement": 0.0,
+      "failure_reason": "POLICY_ACTION_UNSAFE",
+      "final_position": [
+        0.03153534854682569,
+        -0.07497637161928948,
+        0.8247844891595695
+      ],
+      "initial_position": [
+        0.03153534854682569,
+        -0.07497637161928948,
+        0.8247844899462122
+      ],
+      "seed": 135,
+      "success": false,
+      "target_satisfied": false,
+      "trial": 10
+    },
+    {
+      "attempts": 1,
+      "backend": "chunk_bc_k20_h20",
+      "control_steps": 204,
+      "dataset_index": 11,
+      "displacement": 0.0,
+      "failure_reason": "POLICY_ACTION_UNSAFE",
+      "final_position": [
+        0.03153534854682569,
+        -0.07497637161928948,
+        0.8247844891595695
+      ],
+      "initial_position": [
+        0.03153534854682569,
+        -0.07497637161928948,
+        0.8247844899462122
+      ],
+      "seed": 135,
+      "success": false,
+      "target_satisfied": false,
+      "trial": 10
+    },
+    {
+      "attempts": 1,
+      "backend": "classical",
+      "control_steps": 608,
+      "dataset_index": 12,
+      "displacement": 0.1701182149673627,
+      "failure_reason": null,
+      "final_position": [
+        0.21358143577721342,
+        0.08486343741957171,
+        0.8247844891595695
+      ],
+      "initial_position": [
+        0.04346783957302361,
+        0.08360986246780888,
+        0.8247844899462122
+      ],
+      "seed": 136,
+      "success": true,
+      "target_satisfied": true,
+      "trial": 11
+    },
+    {
+      "attempts": 1,
+      "backend": "bc",
+      "control_steps": 685,
+      "dataset_index": 12,
+      "displacement": 0.0,
+      "failure_reason": "POLICY_TIMEOUT",
+      "final_position": [
+        0.04346783957302361,
+        0.08360986246780888,
+        0.8247844891595695
+      ],
+      "initial_position": [
+        0.04346783957302361,
+        0.08360986246780888,
+        0.8247844899462122
+      ],
+      "seed": 136,
+      "success": false,
+      "target_satisfied": false,
+      "trial": 11
+    },
+    {
+      "attempts": 1,
+      "backend": "progress_bc",
+      "control_steps": 685,
+      "dataset_index": 12,
+      "displacement": 0.12105669346741517,
+      "failure_reason": "POLICY_TIMEOUT",
+      "final_position": [
+        0.16354497086703418,
+        0.09897884335349766,
+        0.8247844891595659
+      ],
+      "initial_position": [
+        0.04346783957302361,
+        0.08360986246780888,
+        0.8247844899462122
+      ],
+      "seed": 136,
+      "success": false,
+      "target_satisfied": false,
+      "trial": 11
+    },
+    {
+      "attempts": 1,
+      "backend": "chunk_bc_k20_h1",
+      "control_steps": 98,
+      "dataset_index": 12,
+      "displacement": 0.0,
+      "failure_reason": "POLICY_ACTION_UNSAFE",
+      "final_position": [
+        0.04346783957302361,
+        0.08360986246780888,
+        0.8247844891595695
+      ],
+      "initial_position": [
+        0.04346783957302361,
+        0.08360986246780888,
+        0.8247844899462122
+      ],
+      "seed": 136,
+      "success": false,
+      "target_satisfied": false,
+      "trial": 11
+    },
+    {
+      "attempts": 1,
+      "backend": "chunk_bc_k20_h5",
+      "control_steps": 96,
+      "dataset_index": 12,
+      "displacement": 0.0,
+      "failure_reason": "POLICY_ACTION_UNSAFE",
+      "final_position": [
+        0.04346783957302361,
+        0.08360986246780888,
+        0.8247844891595695
+      ],
+      "initial_position": [
+        0.04346783957302361,
+        0.08360986246780888,
+        0.8247844899462122
+      ],
+      "seed": 136,
+      "success": false,
+      "target_satisfied": false,
+      "trial": 11
+    },
+    {
+      "attempts": 1,
+      "backend": "chunk_bc_k20_h20",
+      "control_steps": 600,
+      "dataset_index": 12,
+      "displacement": 0.13741286858832719,
+      "failure_reason": null,
+      "final_position": [
+        0.1801196872654307,
+        0.06916794514620492,
+        0.824610948401884
+      ],
+      "initial_position": [
+        0.04346783957302361,
+        0.08360986246780888,
+        0.8247844899462122
+      ],
+      "seed": 136,
+      "success": true,
+      "target_satisfied": true,
+      "trial": 11
+    },
+    {
+      "attempts": 1,
+      "backend": "classical",
+      "control_steps": 713,
+      "dataset_index": 13,
+      "displacement": 0.2706784355091026,
+      "failure_reason": null,
+      "final_position": [
+        0.21349023567316072,
+        0.05799959632479675,
+        0.8247844891595695
+      ],
+      "initial_position": [
+        -0.05718426041975228,
+        0.056539248933574954,
+        0.8247844899462122
+      ],
+      "seed": 137,
+      "success": true,
+      "target_satisfied": true,
+      "trial": 12
+    },
+    {
+      "attempts": 1,
+      "backend": "bc",
+      "control_steps": 685,
+      "dataset_index": 13,
+      "displacement": 0.0,
+      "failure_reason": "POLICY_TIMEOUT",
+      "final_position": [
+        -0.05718426041975228,
+        0.056539248933574954,
+        0.8247844891595695
+      ],
+      "initial_position": [
+        -0.05718426041975228,
+        0.056539248933574954,
+        0.8247844899462122
+      ],
+      "seed": 137,
+      "success": false,
+      "target_satisfied": false,
+      "trial": 12
+    },
+    {
+      "attempts": 1,
+      "backend": "progress_bc",
+      "control_steps": 304,
+      "dataset_index": 13,
+      "displacement": 0.0,
+      "failure_reason": "POLICY_ACTION_UNSAFE",
+      "final_position": [
+        -0.05718426041975228,
+        0.056539248933574954,
+        0.8247844891595695
+      ],
+      "initial_position": [
+        -0.05718426041975228,
+        0.056539248933574954,
+        0.8247844899462122
+      ],
+      "seed": 137,
+      "success": false,
+      "target_satisfied": false,
+      "trial": 12
+    },
+    {
+      "attempts": 1,
+      "backend": "chunk_bc_k20_h1",
+      "control_steps": 82,
+      "dataset_index": 13,
+      "displacement": 0.0,
+      "failure_reason": "POLICY_ACTION_UNSAFE",
+      "final_position": [
+        -0.05718426041975228,
+        0.056539248933574954,
+        0.8247844891595695
+      ],
+      "initial_position": [
+        -0.05718426041975228,
+        0.056539248933574954,
+        0.8247844899462122
+      ],
+      "seed": 137,
+      "success": false,
+      "target_satisfied": false,
+      "trial": 12
+    },
+    {
+      "attempts": 1,
+      "backend": "chunk_bc_k20_h5",
+      "control_steps": 99,
+      "dataset_index": 13,
+      "displacement": 0.0,
+      "failure_reason": "POLICY_ACTION_UNSAFE",
+      "final_position": [
+        -0.05718426041975228,
+        0.056539248933574954,
+        0.8247844891595695
+      ],
+      "initial_position": [
+        -0.05718426041975228,
+        0.056539248933574954,
+        0.8247844899462122
+      ],
+      "seed": 137,
+      "success": false,
+      "target_satisfied": false,
+      "trial": 12
+    },
+    {
+      "attempts": 1,
+      "backend": "chunk_bc_k20_h20",
+      "control_steps": 685,
+      "dataset_index": 13,
+      "displacement": 0.0356187657452749,
+      "failure_reason": "POLICY_TIMEOUT",
+      "final_position": [
+        -0.021565653344467094,
+        0.05643293226878345,
+        0.8247844891595658
+      ],
+      "initial_position": [
+        -0.05718426041975228,
+        0.056539248933574954,
+        0.8247844899462122
+      ],
+      "seed": 137,
+      "success": false,
+      "target_satisfied": false,
+      "trial": 12
+    },
+    {
+      "attempts": 1,
+      "backend": "classical",
+      "control_steps": 699,
+      "dataset_index": 14,
+      "displacement": 0.2822642083294179,
+      "failure_reason": null,
+      "final_position": [
+        0.2135176400910375,
+        -0.06517445480275848,
+        0.8247844891595695
+      ],
+      "initial_position": [
+        -0.06874630548842756,
+        -0.06555959081229244,
+        0.8247844899462122
+      ],
+      "seed": 138,
+      "success": true,
+      "target_satisfied": true,
+      "trial": 13
+    },
+    {
+      "attempts": 1,
+      "backend": "bc",
+      "control_steps": 168,
+      "dataset_index": 14,
+      "displacement": 0.0,
+      "failure_reason": "POLICY_ACTION_UNSAFE",
+      "final_position": [
+        -0.06874630548842756,
+        -0.06555959081229244,
+        0.8247844891595695
+      ],
+      "initial_position": [
+        -0.06874630548842756,
+        -0.06555959081229244,
+        0.8247844899462122
+      ],
+      "seed": 138,
+      "success": false,
+      "target_satisfied": false,
+      "trial": 13
+    },
+    {
+      "attempts": 1,
+      "backend": "progress_bc",
+      "control_steps": 566,
+      "dataset_index": 14,
+      "displacement": 0.1881746524808883,
+      "failure_reason": "POLICY_ACTION_UNSAFE",
+      "final_position": [
+        0.11641430343280293,
+        -0.032014863354430705,
+        0.8247844891595659
+      ],
+      "initial_position": [
+        -0.06874630548842756,
+        -0.06555959081229244,
+        0.8247844899462122
+      ],
+      "seed": 138,
+      "success": false,
+      "target_satisfied": false,
+      "trial": 13
+    },
+    {
+      "attempts": 1,
+      "backend": "chunk_bc_k20_h1",
+      "control_steps": 450,
+      "dataset_index": 14,
+      "displacement": 0.00431063803281743,
+      "failure_reason": "POLICY_ACTION_UNSAFE",
+      "final_position": [
+        -0.06447334321443948,
+        -0.06612826792194852,
+        0.8229478584718031
+      ],
+      "initial_position": [
+        -0.06874630548842756,
+        -0.06555959081229244,
+        0.8247844899462122
+      ],
+      "seed": 138,
+      "success": false,
+      "target_satisfied": false,
+      "trial": 13
+    },
+    {
+      "attempts": 1,
+      "backend": "chunk_bc_k20_h5",
+      "control_steps": 93,
+      "dataset_index": 14,
+      "displacement": 0.0,
+      "failure_reason": "POLICY_ACTION_UNSAFE",
+      "final_position": [
+        -0.06874630548842756,
+        -0.06555959081229244,
+        0.8247844891595695
+      ],
+      "initial_position": [
+        -0.06874630548842756,
+        -0.06555959081229244,
+        0.8247844899462122
+      ],
+      "seed": 138,
+      "success": false,
+      "target_satisfied": false,
+      "trial": 13
+    },
+    {
+      "attempts": 1,
+      "backend": "chunk_bc_k20_h20",
+      "control_steps": 435,
+      "dataset_index": 14,
+      "displacement": 0.057633792622626856,
+      "failure_reason": "POLICY_ACTION_UNSAFE",
+      "final_position": [
+        -0.011199662967680149,
+        -0.06239131262733701,
+        0.8217521566123925
+      ],
+      "initial_position": [
+        -0.06874630548842756,
+        -0.06555959081229244,
+        0.8247844899462122
+      ],
+      "seed": 138,
+      "success": false,
+      "target_satisfied": false,
+      "trial": 13
+    },
+    {
+      "attempts": 1,
+      "backend": "classical",
+      "control_steps": 719,
+      "dataset_index": 15,
+      "displacement": 0.3108701170530829,
+      "failure_reason": null,
+      "final_position": [
+        0.21347533530795437,
+        -0.14155247512963717,
+        0.8247844891595695
+      ],
+      "initial_position": [
+        -0.09739459417778795,
+        -0.1412109811662203,
+        0.8247844899462122
+      ],
+      "seed": 139,
+      "success": true,
+      "target_satisfied": true,
+      "trial": 14
+    },
+    {
+      "attempts": 1,
+      "backend": "bc",
+      "control_steps": 685,
+      "dataset_index": 15,
+      "displacement": 0.0,
+      "failure_reason": "POLICY_TIMEOUT",
+      "final_position": [
+        -0.09739459417778795,
+        -0.1412109811662203,
+        0.8247844891595695
+      ],
+      "initial_position": [
+        -0.09739459417778795,
+        -0.1412109811662203,
+        0.8247844899462122
+      ],
+      "seed": 139,
+      "success": false,
+      "target_satisfied": false,
+      "trial": 14
+    },
+    {
+      "attempts": 1,
+      "backend": "progress_bc",
+      "control_steps": 292,
+      "dataset_index": 15,
+      "displacement": 0.019594683998502758,
+      "failure_reason": "POLICY_ACTION_UNSAFE",
+      "final_position": [
+        -0.07785454177690321,
+        -0.1426731689694311,
+        0.8214907601985776
+      ],
+      "initial_position": [
+        -0.09739459417778795,
+        -0.1412109811662203,
+        0.8247844899462122
+      ],
+      "seed": 139,
+      "success": false,
+      "target_satisfied": false,
+      "trial": 14
+    },
+    {
+      "attempts": 1,
+      "backend": "chunk_bc_k20_h1",
+      "control_steps": 685,
+      "dataset_index": 15,
+      "displacement": 0.0,
+      "failure_reason": "POLICY_TIMEOUT",
+      "final_position": [
+        -0.09739459417778795,
+        -0.1412109811662203,
+        0.8247844891595695
+      ],
+      "initial_position": [
+        -0.09739459417778795,
+        -0.1412109811662203,
+        0.8247844899462122
+      ],
+      "seed": 139,
+      "success": false,
+      "target_satisfied": false,
+      "trial": 14
+    },
+    {
+      "attempts": 1,
+      "backend": "chunk_bc_k20_h5",
+      "control_steps": 112,
+      "dataset_index": 15,
+      "displacement": 0.0,
+      "failure_reason": "POLICY_ACTION_UNSAFE",
+      "final_position": [
+        -0.09739459417778795,
+        -0.1412109811662203,
+        0.8247844891595695
+      ],
+      "initial_position": [
+        -0.09739459417778795,
+        -0.1412109811662203,
+        0.8247844899462122
+      ],
+      "seed": 139,
+      "success": false,
+      "target_satisfied": false,
+      "trial": 14
+    },
+    {
+      "attempts": 1,
+      "backend": "chunk_bc_k20_h20",
+      "control_steps": 655,
+      "dataset_index": 15,
+      "displacement": 0.03779766868069262,
+      "failure_reason": "POLICY_ACTION_UNSAFE",
+      "final_position": [
+        -0.05964761942860843,
+        -0.14316793159487598,
+        0.8227484948220245
+      ],
+      "initial_position": [
+        -0.09739459417778795,
+        -0.1412109811662203,
+        0.8247844899462122
+      ],
+      "seed": 139,
+      "success": false,
+      "target_satisfied": false,
+      "trial": 14
+    },
+    {
+      "attempts": 1,
+      "backend": "classical",
+      "control_steps": 709,
+      "dataset_index": 16,
+      "displacement": 0.2910721709842612,
+      "failure_reason": null,
+      "final_position": [
+        0.21351143673585915,
+        -0.08020052990912344,
+        0.8247844891595695
+      ],
+      "initial_position": [
+        -0.07756072939969653,
+        -0.08014740132527885,
+        0.8247844899462122
+      ],
+      "seed": 140,
+      "success": true,
+      "target_satisfied": true,
+      "trial": 15
+    },
+    {
+      "attempts": 1,
+      "backend": "bc",
+      "control_steps": 211,
+      "dataset_index": 16,
+      "displacement": 0.0,
+      "failure_reason": "POLICY_ACTION_UNSAFE",
+      "final_position": [
+        -0.07756072939969653,
+        -0.08014740132527885,
+        0.8247844891595695
+      ],
+      "initial_position": [
+        -0.07756072939969653,
+        -0.08014740132527885,
+        0.8247844899462122
+      ],
+      "seed": 140,
+      "success": false,
+      "target_satisfied": false,
+      "trial": 15
+    },
+    {
+      "attempts": 1,
+      "backend": "progress_bc",
+      "control_steps": 552,
+      "dataset_index": 16,
+      "displacement": 0.1903367796944675,
+      "failure_reason": "POLICY_ACTION_UNSAFE",
+      "final_position": [
+        0.10644784342976121,
+        -0.03147569671442311,
+        0.8247844891595659
+      ],
+      "initial_position": [
+        -0.07756072939969653,
+        -0.08014740132527885,
+        0.8247844899462122
+      ],
+      "seed": 140,
+      "success": false,
+      "target_satisfied": false,
+      "trial": 15
+    },
+    {
+      "attempts": 1,
+      "backend": "chunk_bc_k20_h1",
+      "control_steps": 685,
+      "dataset_index": 16,
+      "displacement": 0.2190261093217548,
+      "failure_reason": "POLICY_TIMEOUT",
+      "final_position": [
+        0.14139536998466204,
+        -0.07460997349169123,
+        0.8260762621045116
+      ],
+      "initial_position": [
+        -0.07756072939969653,
+        -0.08014740132527885,
+        0.8247844899462122
+      ],
+      "seed": 140,
+      "success": false,
+      "target_satisfied": false,
+      "trial": 15
+    },
+    {
+      "attempts": 1,
+      "backend": "chunk_bc_k20_h5",
+      "control_steps": 94,
+      "dataset_index": 16,
+      "displacement": 0.0,
+      "failure_reason": "POLICY_ACTION_UNSAFE",
+      "final_position": [
+        -0.07756072939969653,
+        -0.08014740132527885,
+        0.8247844891595695
+      ],
+      "initial_position": [
+        -0.07756072939969653,
+        -0.08014740132527885,
+        0.8247844899462122
+      ],
+      "seed": 140,
+      "success": false,
+      "target_satisfied": false,
+      "trial": 15
+    },
+    {
+      "attempts": 1,
+      "backend": "chunk_bc_k20_h20",
+      "control_steps": 685,
+      "dataset_index": 16,
+      "displacement": 0.046047856022654876,
+      "failure_reason": "POLICY_TIMEOUT",
+      "final_position": [
+        -0.03172045107680672,
+        -0.07578003054148329,
+        0.8247844891595659
+      ],
+      "initial_position": [
+        -0.07756072939969653,
+        -0.08014740132527885,
+        0.8247844899462122
+      ],
+      "seed": 140,
+      "success": false,
+      "target_satisfied": false,
+      "trial": 15
+    },
+    {
+      "attempts": 1,
+      "backend": "classical",
+      "control_steps": 733,
+      "dataset_index": 17,
+      "displacement": 0.3129377326824935,
+      "failure_reason": null,
+      "final_position": [
+        0.21351018610200842,
+        -0.046809158392932954,
+        0.8247844891595695
+      ],
+      "initial_position": [
+        -0.09942740032720392,
+        -0.04711170808972827,
+        0.8247844899462122
+      ],
+      "seed": 141,
+      "success": true,
+      "target_satisfied": true,
+      "trial": 16
+    },
+    {
+      "attempts": 1,
+      "backend": "bc",
+      "control_steps": 217,
+      "dataset_index": 17,
+      "displacement": 0.0,
+      "failure_reason": "POLICY_ACTION_UNSAFE",
+      "final_position": [
+        -0.09942740032720392,
+        -0.04711170808972827,
+        0.8247844891595695
+      ],
+      "initial_position": [
+        -0.09942740032720392,
+        -0.04711170808972827,
+        0.8247844899462122
+      ],
+      "seed": 141,
+      "success": false,
+      "target_satisfied": false,
+      "trial": 16
+    },
+    {
+      "attempts": 1,
+      "backend": "progress_bc",
+      "control_steps": 532,
+      "dataset_index": 17,
+      "displacement": 0.1857423422686406,
+      "failure_reason": "POLICY_ACTION_UNSAFE",
+      "final_position": [
+        0.08593650070325204,
+        -0.03526088929049964,
+        0.8247844891595659
+      ],
+      "initial_position": [
+        -0.09942740032720392,
+        -0.04711170808972827,
+        0.8247844899462122
+      ],
+      "seed": 141,
+      "success": false,
+      "target_satisfied": false,
+      "trial": 16
+    },
+    {
+      "attempts": 1,
+      "backend": "chunk_bc_k20_h1",
+      "control_steps": 685,
+      "dataset_index": 17,
+      "displacement": 0.0,
+      "failure_reason": "POLICY_TIMEOUT",
+      "final_position": [
+        -0.09942740032720392,
+        -0.04711170808972827,
+        0.8247844891595695
+      ],
+      "initial_position": [
+        -0.09942740032720392,
+        -0.04711170808972827,
+        0.8247844899462122
+      ],
+      "seed": 141,
+      "success": false,
+      "target_satisfied": false,
+      "trial": 16
+    },
+    {
+      "attempts": 1,
+      "backend": "chunk_bc_k20_h5",
+      "control_steps": 116,
+      "dataset_index": 17,
+      "displacement": 0.0,
+      "failure_reason": "POLICY_ACTION_UNSAFE",
+      "final_position": [
+        -0.09942740032720392,
+        -0.04711170808972827,
+        0.8247844891595695
+      ],
+      "initial_position": [
+        -0.09942740032720392,
+        -0.04711170808972827,
+        0.8247844899462122
+      ],
+      "seed": 141,
+      "success": false,
+      "target_satisfied": false,
+      "trial": 16
+    },
+    {
+      "attempts": 1,
+      "backend": "chunk_bc_k20_h20",
+      "control_steps": 685,
+      "dataset_index": 17,
+      "displacement": 0.020510787883836742,
+      "failure_reason": "POLICY_TIMEOUT",
+      "final_position": [
+        -0.07983572607276485,
+        -0.05318284632927556,
+        0.8247805194238927
+      ],
+      "initial_position": [
+        -0.09942740032720392,
+        -0.04711170808972827,
+        0.8247844899462122
+      ],
+      "seed": 141,
+      "success": false,
+      "target_satisfied": false,
+      "trial": 16
+    },
+    {
+      "attempts": 1,
+      "backend": "classical",
+      "control_steps": 705,
+      "dataset_index": 18,
+      "displacement": 0.2656546031636321,
+      "failure_reason": null,
+      "final_position": [
+        0.21354581126056707,
+        0.07042523782641015,
+        0.8247844891595695
+      ],
+      "initial_position": [
+        -0.05210484927900529,
+        0.06897791722760906,
+        0.8247844899462122
+      ],
+      "seed": 142,
+      "success": true,
+      "target_satisfied": true,
+      "trial": 17
+    },
+    {
+      "attempts": 1,
+      "backend": "bc",
+      "control_steps": 685,
+      "dataset_index": 18,
+      "displacement": 0.0,
+      "failure_reason": "POLICY_TIMEOUT",
+      "final_position": [
+        -0.05210484927900529,
+        0.06897791722760906,
+        0.8247844891595695
+      ],
+      "initial_position": [
+        -0.05210484927900529,
+        0.06897791722760906,
+        0.8247844899462122
+      ],
+      "seed": 142,
+      "success": false,
+      "target_satisfied": false,
+      "trial": 17
+    },
+    {
+      "attempts": 1,
+      "backend": "progress_bc",
+      "control_steps": 294,
+      "dataset_index": 18,
+      "displacement": 0.0,
+      "failure_reason": "POLICY_ACTION_UNSAFE",
+      "final_position": [
+        -0.05210484927900529,
+        0.06897791722760906,
+        0.8247844891595695
+      ],
+      "initial_position": [
+        -0.05210484927900529,
+        0.06897791722760906,
+        0.8247844899462122
+      ],
+      "seed": 142,
+      "success": false,
+      "target_satisfied": false,
+      "trial": 17
+    },
+    {
+      "attempts": 1,
+      "backend": "chunk_bc_k20_h1",
+      "control_steps": 78,
+      "dataset_index": 18,
+      "displacement": 0.0,
+      "failure_reason": "POLICY_ACTION_UNSAFE",
+      "final_position": [
+        -0.05210484927900529,
+        0.06897791722760906,
+        0.8247844891595695
+      ],
+      "initial_position": [
+        -0.05210484927900529,
+        0.06897791722760906,
+        0.8247844899462122
+      ],
+      "seed": 142,
+      "success": false,
+      "target_satisfied": false,
+      "trial": 17
+    },
+    {
+      "attempts": 1,
+      "backend": "chunk_bc_k20_h5",
+      "control_steps": 95,
+      "dataset_index": 18,
+      "displacement": 0.0,
+      "failure_reason": "POLICY_ACTION_UNSAFE",
+      "final_position": [
+        -0.05210484927900529,
+        0.06897791722760906,
+        0.8247844891595695
+      ],
+      "initial_position": [
+        -0.05210484927900529,
+        0.06897791722760906,
+        0.8247844899462122
+      ],
+      "seed": 142,
+      "success": false,
+      "target_satisfied": false,
+      "trial": 17
+    },
+    {
+      "attempts": 1,
+      "backend": "chunk_bc_k20_h20",
+      "control_steps": 615,
+      "dataset_index": 18,
+      "displacement": 0.14972777964053074,
+      "failure_reason": "POLICY_ACTION_UNSAFE",
+      "final_position": [
+        0.09711576694269358,
+        0.08129114956115126,
+        0.8343363007712694
+      ],
+      "initial_position": [
+        -0.05210484927900529,
+        0.06897791722760906,
+        0.8247844899462122
+      ],
+      "seed": 142,
+      "success": false,
+      "target_satisfied": false,
+      "trial": 17
+    },
+    {
+      "attempts": 1,
+      "backend": "classical",
+      "control_steps": 657,
+      "dataset_index": 19,
+      "displacement": 0.22358389075971982,
+      "failure_reason": null,
+      "final_position": [
+        0.21348594613576602,
+        0.05645551689191015,
+        0.8247844891595695
+      ],
+      "initial_position": [
+        -0.010092384945456903,
+        0.05487878667104431,
+        0.8247844899462122
+      ],
+      "seed": 143,
+      "success": true,
+      "target_satisfied": true,
+      "trial": 18
+    },
+    {
+      "attempts": 1,
+      "backend": "bc",
+      "control_steps": 685,
+      "dataset_index": 19,
+      "displacement": 0.0,
+      "failure_reason": "POLICY_TIMEOUT",
+      "final_position": [
+        -0.010092384945456903,
+        0.05487878667104431,
+        0.8247844891595695
+      ],
+      "initial_position": [
+        -0.010092384945456903,
+        0.05487878667104431,
+        0.8247844899462122
+      ],
+      "seed": 143,
+      "success": false,
+      "target_satisfied": false,
+      "trial": 18
+    },
+    {
+      "attempts": 1,
+      "backend": "progress_bc",
+      "control_steps": 339,
+      "dataset_index": 19,
+      "displacement": 0.0,
+      "failure_reason": "POLICY_ACTION_UNSAFE",
+      "final_position": [
+        -0.010092384945456903,
+        0.05487878667104431,
+        0.8247844891595695
+      ],
+      "initial_position": [
+        -0.010092384945456903,
+        0.05487878667104431,
+        0.8247844899462122
+      ],
+      "seed": 143,
+      "success": false,
+      "target_satisfied": false,
+      "trial": 18
+    },
+    {
+      "attempts": 1,
+      "backend": "chunk_bc_k20_h1",
+      "control_steps": 88,
+      "dataset_index": 19,
+      "displacement": 0.0,
+      "failure_reason": "POLICY_ACTION_UNSAFE",
+      "final_position": [
+        -0.010092384945456903,
+        0.05487878667104431,
+        0.8247844891595695
+      ],
+      "initial_position": [
+        -0.010092384945456903,
+        0.05487878667104431,
+        0.8247844899462122
+      ],
+      "seed": 143,
+      "success": false,
+      "target_satisfied": false,
+      "trial": 18
+    },
+    {
+      "attempts": 1,
+      "backend": "chunk_bc_k20_h5",
+      "control_steps": 91,
+      "dataset_index": 19,
+      "displacement": 0.0,
+      "failure_reason": "POLICY_ACTION_UNSAFE",
+      "final_position": [
+        -0.010092384945456903,
+        0.05487878667104431,
+        0.8247844891595695
+      ],
+      "initial_position": [
+        -0.010092384945456903,
+        0.05487878667104431,
+        0.8247844899462122
+      ],
+      "seed": 143,
+      "success": false,
+      "target_satisfied": false,
+      "trial": 18
+    },
+    {
+      "attempts": 1,
+      "backend": "chunk_bc_k20_h20",
+      "control_steps": 516,
+      "dataset_index": 19,
+      "displacement": 0.05485007393173546,
+      "failure_reason": "POLICY_ACTION_UNSAFE",
+      "final_position": [
+        0.04417558179806944,
+        0.046908943771691525,
+        0.8308454657331599
+      ],
+      "initial_position": [
+        -0.010092384945456903,
+        0.05487878667104431,
+        0.8247844899462122
+      ],
+      "seed": 143,
+      "success": false,
+      "target_satisfied": false,
+      "trial": 18
+    },
+    {
+      "attempts": 1,
+      "backend": "classical",
+      "control_steps": 736,
+      "dataset_index": 22,
+      "displacement": 0.30084693356281195,
+      "failure_reason": null,
+      "final_position": [
+        0.21350785871664657,
+        -0.01698687157869312,
+        0.8247844891595695
+      ],
+      "initial_position": [
+        -0.08733687881036944,
+        -0.018136365575129515,
+        0.8247844899462122
+      ],
+      "seed": 146,
+      "success": true,
+      "target_satisfied": true,
+      "trial": 19
+    },
+    {
+      "attempts": 1,
+      "backend": "bc",
+      "control_steps": 130,
+      "dataset_index": 22,
+      "displacement": 0.0,
+      "failure_reason": "POLICY_ACTION_UNSAFE",
+      "final_position": [
+        -0.08733687881036944,
+        -0.018136365575129515,
+        0.8247844891595695
+      ],
+      "initial_position": [
+        -0.08733687881036944,
+        -0.018136365575129515,
+        0.8247844899462122
+      ],
+      "seed": 146,
+      "success": false,
+      "target_satisfied": false,
+      "trial": 19
+    },
+    {
+      "attempts": 1,
+      "backend": "progress_bc",
+      "control_steps": 418,
+      "dataset_index": 22,
+      "displacement": 0.0,
+      "failure_reason": "POLICY_ACTION_UNSAFE",
+      "final_position": [
+        -0.08733687881036944,
+        -0.018136365575129515,
+        0.8247844891595695
+      ],
+      "initial_position": [
+        -0.08733687881036944,
+        -0.018136365575129515,
+        0.8247844899462122
+      ],
+      "seed": 146,
+      "success": false,
+      "target_satisfied": false,
+      "trial": 19
+    },
+    {
+      "attempts": 1,
+      "backend": "chunk_bc_k20_h1",
+      "control_steps": 114,
+      "dataset_index": 22,
+      "displacement": 0.0,
+      "failure_reason": "POLICY_ACTION_UNSAFE",
+      "final_position": [
+        -0.08733687881036944,
+        -0.018136365575129515,
+        0.8247844891595695
+      ],
+      "initial_position": [
+        -0.08733687881036944,
+        -0.018136365575129515,
+        0.8247844899462122
+      ],
+      "seed": 146,
+      "success": false,
+      "target_satisfied": false,
+      "trial": 19
+    },
+    {
+      "attempts": 1,
+      "backend": "chunk_bc_k20_h5",
+      "control_steps": 137,
+      "dataset_index": 22,
+      "displacement": 0.0,
+      "failure_reason": "POLICY_ACTION_UNSAFE",
+      "final_position": [
+        -0.08733687881036944,
+        -0.018136365575129515,
+        0.8247844891595695
+      ],
+      "initial_position": [
+        -0.08733687881036944,
+        -0.018136365575129515,
+        0.8247844899462122
+      ],
+      "seed": 146,
+      "success": false,
+      "target_satisfied": false,
+      "trial": 19
+    },
+    {
+      "attempts": 1,
+      "backend": "chunk_bc_k20_h20",
+      "control_steps": 375,
+      "dataset_index": 22,
+      "displacement": 0.02484714687657615,
+      "failure_reason": "POLICY_ACTION_UNSAFE",
+      "final_position": [
+        -0.06427397539642354,
+        -0.027382077771880522,
+        0.82256632512112
+      ],
+      "initial_position": [
+        -0.08733687881036944,
+        -0.018136365575129515,
+        0.8247844899462122
+      ],
+      "seed": 146,
+      "success": false,
+      "target_satisfied": false,
+      "trial": 19
+    },
+    {
+      "attempts": 1,
+      "backend": "classical",
+      "control_steps": 634,
+      "dataset_index": 23,
+      "displacement": 0.20362296503963298,
+      "failure_reason": null,
+      "final_position": [
+        0.2134438909012883,
+        0.05229460951231817,
+        0.8247844891595695
+      ],
+      "initial_position": [
+        0.009826069094311815,
+        0.05084735897630726,
+        0.8247844899462122
+      ],
+      "seed": 147,
+      "success": true,
+      "target_satisfied": true,
+      "trial": 20
+    },
+    {
+      "attempts": 1,
+      "backend": "bc",
+      "control_steps": 243,
+      "dataset_index": 23,
+      "displacement": 0.0,
+      "failure_reason": "POLICY_ACTION_UNSAFE",
+      "final_position": [
+        0.009826069094311815,
+        0.05084735897630726,
+        0.8247844891595695
+      ],
+      "initial_position": [
+        0.009826069094311815,
+        0.05084735897630726,
+        0.8247844899462122
+      ],
+      "seed": 147,
+      "success": false,
+      "target_satisfied": false,
+      "trial": 20
+    },
+    {
+      "attempts": 1,
+      "backend": "progress_bc",
+      "control_steps": 526,
+      "dataset_index": 23,
+      "displacement": 0.0009176241141799615,
+      "failure_reason": "POLICY_ACTION_UNSAFE",
+      "final_position": [
+        0.010675335323995816,
+        0.051194894422043204,
+        0.8247870483035257
+      ],
+      "initial_position": [
+        0.009826069094311815,
+        0.05084735897630726,
+        0.8247844899462122
+      ],
+      "seed": 147,
+      "success": false,
+      "target_satisfied": false,
+      "trial": 20
+    },
+    {
+      "attempts": 1,
+      "backend": "chunk_bc_k20_h1",
+      "control_steps": 104,
+      "dataset_index": 23,
+      "displacement": 0.0,
+      "failure_reason": "POLICY_ACTION_UNSAFE",
+      "final_position": [
+        0.009826069094311815,
+        0.05084735897630726,
+        0.8247844891595695
+      ],
+      "initial_position": [
+        0.009826069094311815,
+        0.05084735897630726,
+        0.8247844899462122
+      ],
+      "seed": 147,
+      "success": false,
+      "target_satisfied": false,
+      "trial": 20
+    },
+    {
+      "attempts": 1,
+      "backend": "chunk_bc_k20_h5",
+      "control_steps": 94,
+      "dataset_index": 23,
+      "displacement": 0.0,
+      "failure_reason": "POLICY_ACTION_UNSAFE",
+      "final_position": [
+        0.009826069094311815,
+        0.05084735897630726,
+        0.8247844891595695
+      ],
+      "initial_position": [
+        0.009826069094311815,
+        0.05084735897630726,
+        0.8247844899462122
+      ],
+      "seed": 147,
+      "success": false,
+      "target_satisfied": false,
+      "trial": 20
+    },
+    {
+      "attempts": 1,
+      "backend": "chunk_bc_k20_h20",
+      "control_steps": 435,
+      "dataset_index": 23,
+      "displacement": 0.013601876635165969,
+      "failure_reason": "POLICY_ACTION_UNSAFE",
+      "final_position": [
+        0.02276899248098907,
+        0.046665041173356736,
+        0.8223604409732315
+      ],
+      "initial_position": [
+        0.009826069094311815,
+        0.05084735897630726,
+        0.8247844899462122
+      ],
+      "seed": 147,
+      "success": false,
+      "target_satisfied": false,
+      "trial": 20
+    }
+  ],
+  "skipped_initial_states": 4,
+  "summary": {
+    "bc": {
+      "failure_reasons": {
+        "POLICY_ACTION_UNSAFE": 7,
+        "POLICY_TIMEOUT": 13
+      },
+      "mean_control_steps": 520.95,
+      "mean_cube_displacement_m": 0.004054061276149887,
+      "successes": 0,
+      "target_satisfied": 0,
+      "timeout_count": 13,
+      "trials": 20,
+      "unsafe_action_count": 7
+    },
+    "chunk_bc_k20_h1": {
+      "failure_reasons": {
+        "POLICY_ACTION_UNSAFE": 15,
+        "POLICY_TIMEOUT": 5
+      },
+      "mean_control_steps": 270.35,
+      "mean_cube_displacement_m": 0.011166837367728612,
+      "successes": 0,
+      "target_satisfied": 0,
+      "timeout_count": 5,
+      "trials": 20,
+      "unsafe_action_count": 15
+    },
+    "chunk_bc_k20_h20": {
+      "failure_reasons": {
+        "POLICY_ACTION_UNSAFE": 12,
+        "POLICY_TIMEOUT": 6
+      },
+      "mean_control_steps": 499.5,
+      "mean_cube_displacement_m": 0.04189521681588629,
+      "successes": 2,
+      "target_satisfied": 2,
+      "timeout_count": 6,
+      "trials": 20,
+      "unsafe_action_count": 12
+    },
+    "chunk_bc_k20_h5": {
+      "failure_reasons": {
+        "POLICY_ACTION_UNSAFE": 20
+      },
+      "mean_control_steps": 99.25,
+      "mean_cube_displacement_m": 8.673617379884036e-20,
+      "successes": 0,
+      "target_satisfied": 0,
+      "timeout_count": 0,
+      "trials": 20,
+      "unsafe_action_count": 20
+    },
+    "classical": {
+      "failure_reasons": {},
+      "mean_control_steps": 658.7,
+      "mean_cube_displacement_m": 0.24027456467121278,
+      "successes": 20,
+      "target_satisfied": 20,
+      "timeout_count": 0,
+      "trials": 20,
+      "unsafe_action_count": 0
+    },
+    "progress_bc": {
+      "failure_reasons": {
+        "POLICY_ACTION_UNSAFE": 19,
+        "POLICY_TIMEOUT": 1
+      },
+      "mean_control_steps": 425.4,
+      "mean_cube_displacement_m": 0.04370248883301296,
+      "successes": 0,
+      "target_satisfied": 0,
+      "timeout_count": 1,
+      "trials": 20,
+      "unsafe_action_count": 19
+    }
+  }
+}

@@ -1,4 +1,4 @@
-"""Run the full semantic Agent path for one classical Cartesian push."""
+"""Run the full semantic Agent path with a selected Push backend."""
 
 from __future__ import annotations
 
@@ -26,10 +26,11 @@ def main() -> None:
     parser.add_argument("--cube-y", type=float)
     parser.add_argument(
         "--push-backend",
-        choices=("classical", "bc"),
+        choices=("classical", "bc", "progress_bc", "chunk_bc"),
         default="classical",
     )
     parser.add_argument("--checkpoint")
+    parser.add_argument("--execution-horizon", type=int)
     args = parser.parse_args()
 
     env = make_environment(render=not args.no_render, seed=113)
@@ -66,6 +67,7 @@ def main() -> None:
         push_backend = create_push_backend(
             args.push_backend,
             checkpoint=args.checkpoint,
+            execution_horizon=args.execution_horizon,
         )
         initial = world.pose("red_cube").position.copy()
         goal = Goal.push_to_region(

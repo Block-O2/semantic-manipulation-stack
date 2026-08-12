@@ -1,0 +1,468 @@
+{
+  "action_delta_m": {
+    "max": 0.032990917247142,
+    "mean": 0.0013352769025411933,
+    "median": 0.0,
+    "min": 0.0,
+    "p90": 0.007304799933789798,
+    "p95": 0.007997781710193549,
+    "p99": 0.029904966973347137
+  },
+  "dataset": {
+    "episodes": 50,
+    "timesteps": 32652
+  },
+  "motion_counts": {
+    "episode_hold_ratio": {
+      "max": 0.9004092769440655,
+      "mean": 0.8976525363374488,
+      "min": 0.8944881889763779
+    },
+    "hold_ratio": 0.897770427538895,
+    "hold_timesteps": 29314,
+    "moving_ratio": 0.10222957246110499,
+    "moving_timesteps": 3338
+  },
+  "motion_definition": {
+    "delta": "||a_t - a_(t-1)||; t=0 is defined as 0",
+    "motion_epsilon_m": 0.003,
+    "threshold_reason": "fixed in the empirical gap between sub-millimetre hold jitter and roughly 7 mm moving commands"
+  },
+  "one_step_validation": {
+    "episode_indices": [
+      13,
+      14,
+      20,
+      22,
+      25,
+      26,
+      28,
+      40,
+      42,
+      48
+    ],
+    "hold_only": {
+      "l1": 0.0025876931446833554,
+      "l1_per_axis": [
+        0.0030005890271533604,
+        0.0023034039280184614,
+        0.002459086478878238
+      ],
+      "mse": 1.328154048155316e-05,
+      "samples": 6088
+    },
+    "moving_only": {
+      "l1": 0.0039983716805749355,
+      "l1_per_axis": [
+        0.004208858549198481,
+        0.0038631165235154027,
+        0.003923139969010925
+      ],
+      "mse": 3.491396927998217e-05,
+      "samples": 688
+    },
+    "overall": {
+      "l1": 0.002730926148327601,
+      "l1_per_axis": [
+        0.003123270466227596,
+        0.0024617690793912335,
+        0.0026077388993639723
+      ],
+      "mse": 1.5477985436293294e-05,
+      "samples": 6776
+    },
+    "transition_only": {
+      "l1": 0.0031947323819137533,
+      "l1_per_axis": [
+        0.0031693024849387976,
+        0.0031276346997416915,
+        0.003287259961060766
+      ],
+      "mse": 2.1771659552218093e-05,
+      "samples": 715
+    }
+  },
+  "state_aliasing": {
+    "close_pair_threshold": 0.05,
+    "cross_episode_examples": [
+      {
+        "action_distance_m": 0.0133472721969962,
+        "first": {
+          "episode": 38,
+          "motion": "moving",
+          "timestep": 660
+        },
+        "normalized_observation_distance": 0.0039282753799100446,
+        "same_episode": false,
+        "second": {
+          "episode": 31,
+          "motion": "hold",
+          "timestep": 571
+        }
+      },
+      {
+        "action_distance_m": 0.013362712735694683,
+        "first": {
+          "episode": 31,
+          "motion": "moving",
+          "timestep": 572
+        },
+        "normalized_observation_distance": 0.003964901220156666,
+        "same_episode": false,
+        "second": {
+          "episode": 38,
+          "motion": "hold",
+          "timestep": 659
+        }
+      },
+      {
+        "action_distance_m": 0.013272001871650478,
+        "first": {
+          "episode": 31,
+          "motion": "hold",
+          "timestep": 508
+        },
+        "normalized_observation_distance": 0.004018238608140144,
+        "same_episode": false,
+        "second": {
+          "episode": 38,
+          "motion": "moving",
+          "timestep": 602
+        }
+      },
+      {
+        "action_distance_m": 0.013356653337079319,
+        "first": {
+          "episode": 31,
+          "motion": "moving",
+          "timestep": 580
+        },
+        "normalized_observation_distance": 0.004478478931585803,
+        "same_episode": false,
+        "second": {
+          "episode": 38,
+          "motion": "hold",
+          "timestep": 667
+        }
+      },
+      {
+        "action_distance_m": 0.013323246745513167,
+        "first": {
+          "episode": 38,
+          "motion": "moving",
+          "timestep": 627
+        },
+        "normalized_observation_distance": 0.004495004985370001,
+        "same_episode": false,
+        "second": {
+          "episode": 31,
+          "motion": "hold",
+          "timestep": 538
+        }
+      },
+      {
+        "action_distance_m": 0.01337483224074745,
+        "first": {
+          "episode": 31,
+          "motion": "moving",
+          "timestep": 555
+        },
+        "normalized_observation_distance": 0.0046383427154212346,
+        "same_episode": false,
+        "second": {
+          "episode": 38,
+          "motion": "hold",
+          "timestep": 642
+        }
+      }
+    ],
+    "cross_episode_material_pairs": 185,
+    "examples": [
+      {
+        "action_distance_m": 0.014825816724760115,
+        "first": {
+          "episode": 32,
+          "motion": "hold",
+          "timestep": 634
+        },
+        "normalized_observation_distance": 5.696133394738838e-07,
+        "same_episode": true,
+        "second": {
+          "episode": 32,
+          "motion": "moving",
+          "timestep": 635
+        }
+      },
+      {
+        "action_distance_m": 0.014825813140054728,
+        "first": {
+          "episode": 32,
+          "motion": "hold",
+          "timestep": 633
+        },
+        "normalized_observation_distance": 1.1396133741150289e-06,
+        "same_episode": true,
+        "second": {
+          "episode": 32,
+          "motion": "moving",
+          "timestep": 635
+        }
+      },
+      {
+        "action_distance_m": 0.01482580955313748,
+        "first": {
+          "episode": 32,
+          "motion": "hold",
+          "timestep": 632
+        },
+        "normalized_observation_distance": 1.7100006998954642e-06,
+        "same_episode": true,
+        "second": {
+          "episode": 32,
+          "motion": "moving",
+          "timestep": 635
+        }
+      },
+      {
+        "action_distance_m": 0.01482580596400761,
+        "first": {
+          "episode": 32,
+          "motion": "hold",
+          "timestep": 631
+        },
+        "normalized_observation_distance": 2.280776698882984e-06,
+        "same_episode": true,
+        "second": {
+          "episode": 32,
+          "motion": "moving",
+          "timestep": 635
+        }
+      },
+      {
+        "action_distance_m": 0.01482580237266336,
+        "first": {
+          "episode": 32,
+          "motion": "hold",
+          "timestep": 630
+        },
+        "normalized_observation_distance": 2.8519455588679903e-06,
+        "same_episode": true,
+        "second": {
+          "episode": 32,
+          "motion": "moving",
+          "timestep": 635
+        }
+      },
+      {
+        "action_distance_m": 0.014825798779246346,
+        "first": {
+          "episode": 32,
+          "motion": "hold",
+          "timestep": 629
+        },
+        "normalized_observation_distance": 3.4235215270993444e-06,
+        "same_episode": true,
+        "second": {
+          "episode": 32,
+          "motion": "moving",
+          "timestep": 635
+        }
+      },
+      {
+        "action_distance_m": 0.0133472721969962,
+        "first": {
+          "episode": 38,
+          "motion": "moving",
+          "timestep": 660
+        },
+        "normalized_observation_distance": 0.0039282753799100446,
+        "same_episode": false,
+        "second": {
+          "episode": 31,
+          "motion": "hold",
+          "timestep": 571
+        }
+      },
+      {
+        "action_distance_m": 0.013362712735694683,
+        "first": {
+          "episode": 31,
+          "motion": "moving",
+          "timestep": 572
+        },
+        "normalized_observation_distance": 0.003964901220156666,
+        "same_episode": false,
+        "second": {
+          "episode": 38,
+          "motion": "hold",
+          "timestep": 659
+        }
+      },
+      {
+        "action_distance_m": 0.013272001871650478,
+        "first": {
+          "episode": 31,
+          "motion": "hold",
+          "timestep": 508
+        },
+        "normalized_observation_distance": 0.004018238608140144,
+        "same_episode": false,
+        "second": {
+          "episode": 38,
+          "motion": "moving",
+          "timestep": 602
+        }
+      },
+      {
+        "action_distance_m": 0.013356653337079319,
+        "first": {
+          "episode": 31,
+          "motion": "moving",
+          "timestep": 580
+        },
+        "normalized_observation_distance": 0.004478478931585803,
+        "same_episode": false,
+        "second": {
+          "episode": 38,
+          "motion": "hold",
+          "timestep": 667
+        }
+      },
+      {
+        "action_distance_m": 0.013323246745513167,
+        "first": {
+          "episode": 38,
+          "motion": "moving",
+          "timestep": 627
+        },
+        "normalized_observation_distance": 0.004495004985370001,
+        "same_episode": false,
+        "second": {
+          "episode": 31,
+          "motion": "hold",
+          "timestep": 538
+        }
+      },
+      {
+        "action_distance_m": 0.01337483224074745,
+        "first": {
+          "episode": 31,
+          "motion": "moving",
+          "timestep": 555
+        },
+        "normalized_observation_distance": 0.0046383427154212346,
+        "same_episode": false,
+        "second": {
+          "episode": 38,
+          "motion": "hold",
+          "timestep": 642
+        }
+      }
+    ],
+    "hold_move_pairs_within_threshold": 12093,
+    "material_action_difference_m": 0.01,
+    "materially_ambiguous_pairs": 7265,
+    "normalization": "per-feature dataset mean/std; Euclidean distance",
+    "same_episode_examples": [
+      {
+        "action_distance_m": 0.014825816724760115,
+        "first": {
+          "episode": 32,
+          "motion": "hold",
+          "timestep": 634
+        },
+        "normalized_observation_distance": 5.696133394738838e-07,
+        "same_episode": true,
+        "second": {
+          "episode": 32,
+          "motion": "moving",
+          "timestep": 635
+        }
+      },
+      {
+        "action_distance_m": 0.014825813140054728,
+        "first": {
+          "episode": 32,
+          "motion": "hold",
+          "timestep": 633
+        },
+        "normalized_observation_distance": 1.1396133741150289e-06,
+        "same_episode": true,
+        "second": {
+          "episode": 32,
+          "motion": "moving",
+          "timestep": 635
+        }
+      },
+      {
+        "action_distance_m": 0.01482580955313748,
+        "first": {
+          "episode": 32,
+          "motion": "hold",
+          "timestep": 632
+        },
+        "normalized_observation_distance": 1.7100006998954642e-06,
+        "same_episode": true,
+        "second": {
+          "episode": 32,
+          "motion": "moving",
+          "timestep": 635
+        }
+      },
+      {
+        "action_distance_m": 0.01482580596400761,
+        "first": {
+          "episode": 32,
+          "motion": "hold",
+          "timestep": 631
+        },
+        "normalized_observation_distance": 2.280776698882984e-06,
+        "same_episode": true,
+        "second": {
+          "episode": 32,
+          "motion": "moving",
+          "timestep": 635
+        }
+      },
+      {
+        "action_distance_m": 0.01482580237266336,
+        "first": {
+          "episode": 32,
+          "motion": "hold",
+          "timestep": 630
+        },
+        "normalized_observation_distance": 2.8519455588679903e-06,
+        "same_episode": true,
+        "second": {
+          "episode": 32,
+          "motion": "moving",
+          "timestep": 635
+        }
+      },
+      {
+        "action_distance_m": 0.014825798779246346,
+        "first": {
+          "episode": 32,
+          "motion": "hold",
+          "timestep": 629
+        },
+        "normalized_observation_distance": 3.4235215270993444e-06,
+        "same_episode": true,
+        "second": {
+          "episode": 32,
+          "motion": "moving",
+          "timestep": 635
+        }
+      }
+    ],
+    "same_episode_material_pairs": 7080
+  },
+  "transition_definition": {
+    "debounce": "raw moving pulses separated by <=12 steps are one moving segment",
+    "events": "STATIC/MOVING boundary or >=60 degree direction change while moving",
+    "radius_steps": 5,
+    "ratio": 0.10697660173955653,
+    "seconds_each_side_at_20hz": 0.25,
+    "timesteps": 3493
+  }
+}

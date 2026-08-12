@@ -48,6 +48,7 @@ class BCPushBackend:
     ) -> None:
         self.policy = policy
         self.config = config
+        self.last_rollout_log: list[dict[str, object]] = []
 
     @classmethod
     def from_checkpoint(
@@ -58,6 +59,15 @@ class BCPushBackend:
     ) -> "BCPushBackend":
         policy, _ = OneStepBCPolicy.load(checkpoint)
         return cls(policy, config=config)
+
+    def _predict_actions(
+        self,
+        observation: np.ndarray,
+        rollout_step: int,
+    ) -> np.ndarray:
+        del rollout_step
+        prediction = np.asarray(self.policy.predict(observation), dtype=np.float64)
+        return np.atleast_2d(prediction)
 
     @staticmethod
     def _failure(
@@ -83,6 +93,7 @@ class BCPushBackend:
         context: PushExecutionContext,
     ) -> PushBackendResult:
         trace = ["BC_POLICY_ROLLOUT", SkillPhase.OPEN_GRIPPER.value]
+        self.last_rollout_log = []
         try:
             initial = context.world.pose(request.object_name).position.copy()
         except (KeyError, ValueError):
@@ -105,76 +116,97 @@ class BCPushBackend:
         orientation = context.primitives.current_pose.quaternion
         trace.append(SkillPhase.PUSH_LINEAR.value)
         clipped_predictions = 0
-        for _ in range(self.config.maximum_control_steps):
+        rollout_step = 0
+        while rollout_step < self.config.maximum_control_steps:
             observation = encode_push_state(
                 context.primitives.current_pose,
                 context.world,
                 request.object_name,
                 request.target_name,
             )
-            predicted = np.asarray(self.policy.predict(observation), dtype=np.float64)
-            if predicted.shape != (3,) or not np.all(np.isfinite(predicted)):
+            predictions = self._predict_actions(observation, rollout_step)
+            if (
+                predictions.ndim != 2
+                or predictions.shape[1] != 3
+                or not np.all(np.isfinite(predictions))
+            ):
                 return self._failure(
                     SkillFailure.POLICY_ACTION_NONFINITE,
                     initial,
                     control_steps,
                     trace,
                 )
-            current = context.primitives.current_pose.position
-            delta = predicted - current
-            distance = float(np.linalg.norm(delta))
-            if distance > self.config.hard_rejection_step:
-                return self._failure(
-                    SkillFailure.POLICY_ACTION_UNSAFE,
-                    initial,
-                    control_steps,
-                    trace,
+            for chunk_offset, raw_prediction in enumerate(predictions):
+                if rollout_step >= self.config.maximum_control_steps:
+                    break
+                current = context.primitives.current_pose.position
+                predicted = raw_prediction.copy()
+                delta = predicted - current
+                distance = float(np.linalg.norm(delta))
+                if distance > self.config.hard_rejection_step:
+                    return self._failure(
+                        SkillFailure.POLICY_ACTION_UNSAFE,
+                        initial,
+                        control_steps,
+                        trace,
+                    )
+                if distance > self.config.maximum_cartesian_step:
+                    predicted = current + delta * (
+                        self.config.maximum_cartesian_step / distance
+                    )
+                    clipped_predictions += 1
+                if not context.primitives.workspace.contains(predicted):
+                    return self._failure(
+                        SkillFailure.POLICY_ACTION_UNSAFE,
+                        initial,
+                        control_steps,
+                        trace,
+                    )
+                result = context.primitives.command_cartesian_once(
+                    Pose(predicted, orientation),
+                    max_cartesian_step=self.config.maximum_cartesian_step + 1e-9,
                 )
-            if distance > self.config.maximum_cartesian_step:
-                predicted = current + delta * (
-                    self.config.maximum_cartesian_step / distance
+                control_steps += result.steps
+                if not result.success:
+                    return self._failure(
+                        SkillFailure.POLICY_ACTION_UNSAFE,
+                        initial,
+                        control_steps,
+                        trace,
+                        result,
+                    )
+                final = context.world.pose(request.object_name).position
+                displacement = float(np.linalg.norm(final[:2] - initial[:2]))
+                self.last_rollout_log.append(
+                    {
+                        "rollout_step": rollout_step,
+                        "chunk_offset": chunk_offset,
+                        "ee_xyz": context.primitives.current_pose.position.tolist(),
+                        "predicted_xyz": raw_prediction.tolist(),
+                        "executed_xyz": predicted.tolist(),
+                        "predicted_step_m": distance,
+                        "cube_displacement_m": displacement,
+                    }
                 )
-                clipped_predictions += 1
-            if not context.primitives.workspace.contains(predicted):
-                return self._failure(
-                    SkillFailure.POLICY_ACTION_UNSAFE,
-                    initial,
-                    control_steps,
-                    trace,
-                )
-            result = context.primitives.command_cartesian_once(
-                Pose(predicted, orientation),
-                max_cartesian_step=self.config.maximum_cartesian_step + 1e-9,
-            )
-            control_steps += result.steps
-            if not result.success:
-                return self._failure(
-                    SkillFailure.POLICY_ACTION_UNSAFE,
-                    initial,
-                    control_steps,
-                    trace,
-                    result,
-                )
-            final = context.world.pose(request.object_name).position
-            displacement = float(np.linalg.norm(final[:2] - initial[:2]))
-            if (
-                displacement >= self.config.minimum_displacement
-                and context.world.is_inside_push_region(
-                    request.object_name,
-                    request.target_name,
-                )
-                and context.world.is_on_table(request.object_name)
-            ):
-                trace.append(f"BC_CLIPPED_PREDICTIONS: {clipped_predictions}")
-                return PushBackendResult(
-                    True,
-                    SkillPhase.PUSH_LINEAR,
-                    None,
-                    result,
-                    initial,
-                    control_steps,
-                    tuple(trace),
-                )
+                rollout_step += 1
+                if (
+                    displacement >= self.config.minimum_displacement
+                    and context.world.is_inside_push_region(
+                        request.object_name,
+                        request.target_name,
+                    )
+                    and context.world.is_on_table(request.object_name)
+                ):
+                    trace.append(f"BC_CLIPPED_PREDICTIONS: {clipped_predictions}")
+                    return PushBackendResult(
+                        True,
+                        SkillPhase.PUSH_LINEAR,
+                        None,
+                        result,
+                        initial,
+                        control_steps,
+                        tuple(trace),
+                    )
         trace.append(f"BC_CLIPPED_PREDICTIONS: {clipped_predictions}")
         return self._failure(
             SkillFailure.POLICY_TIMEOUT,
