@@ -89,4 +89,16 @@ single requested evaluation completed the stopping rule; no sweep or further
 ablation followed. See [act_push_backend.md](act_push_backend.md) and the
 compact [experiments index](experiments.md).
 
+### M7.6 — State-Based Diffusion Policy
+
+The unchanged 50-episode, 32,652-step state/action dataset trained one
+conditional 1D U-Net Diffusion Policy with `To=2`, `Tp=16`, `Ta=8`, and 100
+DDPM denoising steps. It reached 20/20 on the same frozen states with 20/20
+proximity, no timeout, and no unsafe rejection. Mean cube displacement was
+0.207 m, mean EE path was 0.724 m, and CPU sampling latency was 244 ms per
+policy call. This is a fixed-distribution result, not a general manipulation
+claim. The stopping rule was met after one training, one offline validation,
+and one physical evaluation; no sweep or further learned-policy reproduction
+followed. See [diffusion_push_backend.md](diffusion_push_backend.md).
+
 M8 has not been started.

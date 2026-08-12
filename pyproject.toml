@@ -24,6 +24,10 @@ act = [
     "torchvision==0.25.0",
     "einops==0.8.2",
 ]
+diffusion = [
+    "torch==2.10.0",
+    "diffusers==0.35.2",
+]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

@@ -14,6 +14,7 @@ baselines. All learned Push experiments preserve the same semantic
 | Chunk BC K=20/H=20 | Action-chunk diagnostic | 2/20 | [chunk_bc_experiment.md](chunk_bc_experiment.md) |
 | LeRobot ACT queue K=32/H=8 | Mature ACT queue reproduction | 0/20 | [act_push_backend.md](act_push_backend.md) |
 | ACT native Temporal Ensemble K=32/H=1 | Current learned Push mode | 20/20 | [act_push_backend.md](act_push_backend.md) |
+| State Diffusion Policy To=2/Tp=16/Ta=8 | Current learned Push mode | 20/20 | [diffusion_push_backend.md](diffusion_push_backend.md) |
 
 The ACT queue and Temporal Ensemble rows use the same checkpoint weights. Only
 the inference mechanism changes. These are fixed-workspace, replay-stable
@@ -27,6 +28,7 @@ Committed, lightweight evidence is stored under:
 artifacts/chunk_bc/
 artifacts/act_push/
 artifacts/act_temporal_ensemble/
+artifacts/diffusion_push/
 ```
 
 These directories contain JSON metrics, physical comparison records, and
@@ -52,6 +54,9 @@ python -m datasets.collect_push_demos \
 
 # ACT training, queue evaluation, and Temporal Ensemble evaluation
 # See docs/act_push_backend.md
+
+# Diffusion Policy training and single frozen evaluation
+# See docs/diffusion_push_backend.md
 ```
 
 The diagnostic modes remain available for reproducibility, but they are not

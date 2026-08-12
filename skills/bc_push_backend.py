@@ -75,6 +75,15 @@ class BCPushBackend:
     def _action_log_metadata(self) -> dict[str, object]:
         return {}
 
+    def _after_action(
+        self,
+        request: PushRequest,
+        context: PushExecutionContext,
+    ) -> None:
+        """Allow temporal policies to record each realized control observation."""
+
+        del request, context
+
     @staticmethod
     def _failure(
         reason: SkillFailure,
@@ -186,6 +195,7 @@ class BCPushBackend:
                     )
                 final = context.world.pose(request.object_name).position
                 updated_ee = context.primitives.current_pose.position.copy()
+                self._after_action(request, context)
                 ee_path_length += float(np.linalg.norm(updated_ee - previous_ee))
                 previous_ee = updated_ee
                 displacement = float(np.linalg.norm(final[:2] - initial[:2]))

@@ -7,6 +7,7 @@ from skills import (
     BCPushBackend,
     ChunkBCPushBackend,
     ClassicalPushBackend,
+    DiffusionPushBackend,
     ProgressBCPushBackend,
     PushBackend,
 )
@@ -54,5 +55,16 @@ def create_push_backend(
             device=device,
             execution_mode=act_execution_mode,
             temporal_ensemble_coeff=temporal_ensemble_coeff,
+        )
+    if normalized == "diffusion":
+        if checkpoint is None:
+            raise ValueError("Diffusion Push backend requires a checkpoint")
+        if execution_horizon is not None:
+            raise ValueError(
+                "Diffusion uses checkpoint execution horizon, not a runtime horizon"
+            )
+        return DiffusionPushBackend.from_checkpoint(
+            checkpoint,
+            device=device,
         )
     raise ValueError(f"unknown Push backend {name!r}")

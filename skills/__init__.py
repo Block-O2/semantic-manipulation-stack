@@ -19,6 +19,7 @@ from skills.push import PushConfig, PushSkill, evaluate_push_outcome
 # Current meaningful physical Push implementations.
 from skills.classical_push_backend import ClassicalPushBackend, ClassicalPushConfig
 from skills.act_push_backend import ACTPushBackend
+from skills.diffusion_push_backend import DiffusionPushBackend
 # Retained diagnostic baselines for the M7 experiment history.
 from skills.bc_push_backend import BCPushBackend, BCPushConfig
 from skills.temporal_bc_push_backend import ChunkBCPushBackend, ProgressBCPushBackend
@@ -64,6 +65,7 @@ __all__ = [
     "ChunkBCPushBackend",
     "ProgressBCPushBackend",
     "ACTPushBackend",
+    "DiffusionPushBackend",
     "Skill",
     "SkillFailure",
     "SkillPhase",

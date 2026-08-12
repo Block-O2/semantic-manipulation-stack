@@ -18,8 +18,10 @@ flowchart TD
     S --> PR["ManipulationPrimitives"]
     PB --> CL["ClassicalPushBackend"]
     PB --> ACT["ACTPushBackend + Temporal Ensemble"]
+    PB --> DP["DiffusionPushBackend + Receding Horizon"]
     CL --> PR
     ACT --> PR
+    DP --> PR
     PR --> R["PandaRobot"]
     R --> C["CartesianController"]
     C --> SIM["robosuite / MuJoCo"]
@@ -174,11 +176,13 @@ validated without embedding rearrangement or push policy in `AgentRuntime`.
 Push physical execution is now selected behind a narrow `PushBackend`
 protocol. `PushSkill` owns semantic verification and retry policy;
 `ClassicalPushBackend` owns deterministic geometry and motion, while
-`ACTPushBackend` uses a state-only LeRobot ACT policy. Native Temporal Ensemble
-is the meaningful learned execution mode: every observation predicts a chunk,
-and overlapping historical predictions contribute to the current absolute EE
-target. Backend injection occurs in `SemanticSkillFactory`, so AgentRuntime,
-SkillExecutor, planner, and registry remain backend-independent.
+`ACTPushBackend` uses a state-only LeRobot ACT policy and
+`DiffusionPushBackend` uses a state-conditioned 1D U-Net DDPM. ACT Temporal
+Ensemble combines overlapping historical chunks every control step; Diffusion
+Policy conditions on two observations, denoises a 16-step trajectory, and
+executes eight absolute EE targets before resampling. Backend injection occurs
+in `SemanticSkillFactory`, so AgentRuntime, SkillExecutor, planner, and registry
+remain backend-independent.
 
 One-step `BCPushBackend`, progress-conditioned BC, simple Chunk BC, and ACT
 queue execution are retained as diagnostic baselines. They explain temporal

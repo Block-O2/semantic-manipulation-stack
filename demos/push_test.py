@@ -26,10 +26,12 @@ def main() -> None:
     parser.add_argument("--cube-y", type=float)
     parser.add_argument(
         "--push-backend",
-        choices=("classical", "bc", "progress_bc", "chunk_bc", "act"),
+        choices=(
+            "classical", "bc", "progress_bc", "chunk_bc", "act", "diffusion"
+        ),
         default="classical",
         help=(
-            "physical backend; classical and act are current paths, while "
+            "physical backend; classical, act, and diffusion are current paths; "
             "bc/progress_bc/chunk_bc are retained diagnostics"
         ),
     )

@@ -36,8 +36,10 @@ flowchart TD
     PS --> PB["PushBackend"]
     PB --> CL["ClassicalPushBackend"]
     PB --> ACT["ACTPushBackend + native Temporal Ensemble"]
+    PB --> DP["DiffusionPushBackend + receding horizon"]
     CL --> PR
     ACT --> PR
+    DP --> PR
 
     PR --> C["Trusted Cartesian controller"]
     C --> M["MuJoCo / robosuite"]
@@ -60,10 +62,12 @@ hierarchy are in [docs/architecture.md](docs/architecture.md).
 - classical Cartesian Push to the `right_side` semantic region;
 - a pluggable `PushBackend` boundary shared by classical and learned execution;
 - LeRobot 0.4.4 ACT Push with native Temporal Ensemble;
+- state-based Diffusion Policy Push with receding-horizon execution;
 - a 20 Hz state/action demonstration pipeline and frozen diagnostic baselines.
 
-The meaningful runtime Push paths are `ClassicalPushBackend` and
-`ACTPushBackend` with native Temporal Ensemble. One-step BC,
+The meaningful runtime Push paths are `ClassicalPushBackend`,
+`ACTPushBackend` with native Temporal Ensemble, and `DiffusionPushBackend`.
+One-step BC,
 progress-conditioned BC, simple Chunk BC, and ACT queue execution remain in the
 repository as experimental baselines for understanding temporal aliasing,
 execution horizon, and temporal ensembling—not as recommended robot runtimes.
@@ -80,6 +84,7 @@ the full nominal Agent path. On the same 20 replay-stable Push states:
 | Simple Chunk BC K=20/H=20 | 2/20 |
 | ACT queue K=32/H=8 | 0/20 |
 | ACT + native Temporal Ensemble K=32/H=1 | **20/20** |
+| State Diffusion Policy To=2/Tp=16/Ta=8 | **20/20** |
 
 The ACT queue and Temporal Ensemble evaluations reuse the same trained neural
 weights; only inference changed. This is a fixed-workspace diagnostic result,
@@ -91,9 +96,15 @@ observations with different desired actions. Naive one-step and queued sequence
 execution failed on the frozen states. Native ACT Temporal Ensemble lets
 overlapping action predictions made from past observations contribute to the
 current action, restoring successful Push behavior in this specific setting.
-See [docs/experiments.md](docs/experiments.md),
+The Diffusion result shows that a second mature sequence-policy formulation
+can use the same Push abstraction: it samples a 16-step trajectory from a
+two-observation history and executes eight targets before replanning. This does
+not isolate history from trajectory prediction as a causal factor. See
+[docs/experiments.md](docs/experiments.md),
 [docs/chunk_bc_experiment.md](docs/chunk_bc_experiment.md), and
-[docs/act_push_backend.md](docs/act_push_backend.md) for evidence and limits.
+[docs/act_push_backend.md](docs/act_push_backend.md), and
+[docs/diffusion_push_backend.md](docs/diffusion_push_backend.md) for evidence
+and limits.
 
 ## Quick start
 
@@ -125,9 +136,9 @@ python -m demos.dynamic_playground --no-render --inspect-seconds 0
 python -m demos.push_test --no-render --inspect-seconds 0
 ```
 
-Rendered macOS runs use `mjpython` and omit `--no-render`. ACT additionally
-requires the optional dependencies and a locally available, Git-ignored
-checkpoint:
+Rendered macOS runs use `mjpython` and omit `--no-render`. Learned backends
+additionally require their optional dependencies and locally available,
+Git-ignored checkpoints:
 
 ```bash
 python -m pip install -e '.[dev,act]'
@@ -135,6 +146,11 @@ python -m demos.push_test --no-render --inspect-seconds 0 \
   --push-backend act \
   --act-execution-mode temporal_ensemble \
   --checkpoint checkpoints/push_act_seed17.pt
+
+python -m pip install -e '.[dev,diffusion]'
+python -m demos.push_test --no-render --inspect-seconds 0 \
+  --push-backend diffusion \
+  --checkpoint checkpoints/push_diffusion_seed17.pt
 ```
 
 Checkpoint training and frozen evaluation commands live in the experiment
@@ -183,7 +199,7 @@ architecture. Its code and checkpoints are not imported by the main runtime.
 - the world is a fixed tabletop scene with no real perception or real robot;
 - public Push supports only the explicit `right_side` region;
 - there is no open-world task learning or general manipulation policy;
-- ACT Temporal Ensemble's 20/20 result covers only the frozen matched
+- ACT Temporal Ensemble and Diffusion Policy each reached 20/20 only on the frozen matched
   distribution and does not establish task or scene generalization;
 - motion planning is not obstacle-aware or force-controlled;
 - the system has no production or formally verified safety guarantee.
@@ -191,9 +207,8 @@ architecture. Its code and checkpoints are not imported by the main runtime.
 ## Roadmap
 
 The stable checkpoint is the semantic Agent with trusted classical skills and
-classical/ACT Push implementations. Possible next explorations include
-execution monitoring with event-triggered intervention, learned-policy safety
-filtering, or another mature motor-policy baseline such as Diffusion Policy.
-These are exploratory directions, not commitments; M8 has not been started.
+classical, ACT Temporal Ensemble, and state-based Diffusion Push
+implementations. M7.6 completes the requested learned-policy reproductions;
+M8 and execution monitoring have not been started.
 
 See [docs/milestones.md](docs/milestones.md) for the completed M0–M7 sequence.

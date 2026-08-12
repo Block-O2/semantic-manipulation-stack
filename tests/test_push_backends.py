@@ -13,6 +13,7 @@ from skills import (
     BCPushBackend,
     ChunkBCPushBackend,
     ClassicalPushBackend,
+    DiffusionPushBackend,
     PushBackend,
     PushExecutionContext,
     PushRequest,
@@ -86,6 +87,12 @@ def test_push_backend_protocol_and_factory_selection(tmp_path) -> None:
         create_push_backend(
             "bc", checkpoint=str(checkpoint), execution_horizon=2
         )
+    with np.testing.assert_raises(ValueError):
+        create_push_backend("diffusion")
+    with np.testing.assert_raises(ValueError):
+        create_push_backend(
+            "diffusion", checkpoint="unused.pt", execution_horizon=8
+        )
 
 
 def test_semantic_skill_factory_defaults_to_classical_backend() -> None:
@@ -131,6 +138,7 @@ def test_agent_runtime_remains_push_backend_independent() -> None:
     assert "ClassicalPushBackend" not in source
     assert "BCPushBackend" not in source
     assert "ACTPushBackend" not in source
+    assert "DiffusionPushBackend" not in source
     assert "temporal_ensemble" not in source
     assert "checkpoint" not in source
 
