@@ -9,7 +9,9 @@ AgentRuntime
 → PushSkill
 → PushBackend
    ├── ClassicalPushBackend
-   └── BCPushBackend
+   ├── BCPushBackend
+   ├── ChunkBCPushBackend
+   └── ACTPushBackend
 → ManipulationPrimitives
 → PandaRobot
 → CartesianController
@@ -21,7 +23,7 @@ final displacement/region/tabletop verification, and `SkillResult` creation.
 A backend owns one bounded physical attempt and its physical recovery motion.
 Planner, validator, AgentRuntime, and SkillExecutor do not know which backend is
 selected. `SemanticSkillFactory` accepts a `PushBackend`; the small runtime
-factory maps `classical` or `bc` configuration to an implementation.
+factory maps explicit backend configuration to an implementation.
 
 ## Trusted control boundary
 
@@ -187,5 +189,19 @@ measured zero EE velocity. The validation moving subset has materially higher
 one-step error than the dominant static-target subset.
 
 The measured experiment is in [chunk_bc_experiment.md](chunk_bc_experiment.md).
-No Transformer, recurrent model, temporal ensemble, CVAE, ACT, image
-observation, or controller redesign was added.
+
+## Standard LeRobot ACT reproduction
+
+A subsequent milestone added `ACTPushBackend` using the maintained Hugging Face
+LeRobot 0.4.4 `ACTPolicy`, rather than a project-local Transformer or CVAE. It
+keeps the exact 10D observation and 3D absolute action contract, predicts K=32,
+and consumes LeRobot's standard eight-action queue before the next inference.
+Every selected target is still handled by the same finite, workspace,
+step-limit, primitive, and controller path as the NumPy learned backends.
+
+On the frozen 20 replay-stable initial states it reached 0/20, with 20 timeouts,
+zero unsafe actions, and effectively zero cube displacement. This is an honest
+negative result: standard ACT made motion smooth but did not recover the hidden
+expert phase from the aliased state/absolute-waypoint interface. See
+[act_push_backend.md](act_push_backend.md) for the fixed config, training,
+physical records, and stopping decision.

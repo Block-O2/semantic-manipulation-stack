@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from skills import (
+    ACTPushBackend,
     BCPushBackend,
     ChunkBCPushBackend,
     ClassicalPushBackend,
@@ -16,6 +17,7 @@ def create_push_backend(
     *,
     checkpoint: str | None = None,
     execution_horizon: int | None = None,
+    device: str = "auto",
 ) -> PushBackend:
     normalized = name.strip().lower()
     if normalized == "classical":
@@ -40,4 +42,10 @@ def create_push_backend(
         return ChunkBCPushBackend.from_checkpoint(
             checkpoint, execution_horizon=execution_horizon
         )
+    if normalized == "act":
+        if checkpoint is None:
+            raise ValueError("ACT Push backend requires a checkpoint")
+        if execution_horizon is not None:
+            raise ValueError("ACT uses checkpoint n_action_steps, not a runtime horizon")
+        return ACTPushBackend.from_checkpoint(checkpoint, device=device)
     raise ValueError(f"unknown Push backend {name!r}")

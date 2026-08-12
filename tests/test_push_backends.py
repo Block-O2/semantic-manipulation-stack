@@ -9,6 +9,7 @@ from primitives import PrimitiveResult, WorkspaceBounds
 from robot import Pose
 from runtime import AgentRuntime, SemanticSkillFactory, create_push_backend
 from skills import (
+    ACTPushBackend,
     BCPushBackend,
     ChunkBCPushBackend,
     ClassicalPushBackend,
@@ -129,6 +130,7 @@ def test_agent_runtime_remains_push_backend_independent() -> None:
     source = inspect.getsource(AgentRuntime)
     assert "ClassicalPushBackend" not in source
     assert "BCPushBackend" not in source
+    assert "ACTPushBackend" not in source
     assert "checkpoint" not in source
 
 
@@ -145,3 +147,24 @@ def test_chunk_backend_reuses_unsafe_action_rejection() -> None:
         PushExecutionContext(FakeWorld(), FakePrimitives()),
     )
     assert result.reason is SkillFailure.POLICY_ACTION_UNSAFE
+
+
+def test_act_backend_reuses_unsafe_action_rejection_and_resets_queue() -> None:
+    class UnsafeACTPolicy:
+        def __init__(self) -> None:
+            self.resets = 0
+
+        def reset(self) -> None:
+            self.resets += 1
+
+        def select_action(self, observation):
+            return np.array([0.35, 0.35, 1.2])
+
+    policy = UnsafeACTPolicy()
+    backend = ACTPushBackend(policy)
+    result = backend.execute(
+        PushRequest("red_cube", "right_side"),
+        PushExecutionContext(FakeWorld(), FakePrimitives()),
+    )
+    assert result.reason is SkillFailure.POLICY_ACTION_UNSAFE
+    assert policy.resets == 1

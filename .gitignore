@@ -18,6 +18,7 @@ dist/
 data/*.npz
 checkpoints/*.npz
 checkpoints/*.json
+checkpoints/*.pt
 
 # macOS and editor metadata
 .DS_Store

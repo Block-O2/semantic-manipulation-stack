@@ -19,6 +19,7 @@ from skills.push import PushConfig, PushSkill, evaluate_push_outcome
 from skills.classical_push_backend import ClassicalPushBackend, ClassicalPushConfig
 from skills.bc_push_backend import BCPushBackend, BCPushConfig
 from skills.temporal_bc_push_backend import ChunkBCPushBackend, ProgressBCPushBackend
+from skills.act_push_backend import ACTPushBackend
 from skills.push_backend import (
     PushBackend,
     PushBackendResult,
@@ -60,6 +61,7 @@ __all__ = [
     "BCPushConfig",
     "ChunkBCPushBackend",
     "ProgressBCPushBackend",
+    "ACTPushBackend",
     "Skill",
     "SkillFailure",
     "SkillPhase",

@@ -69,6 +69,9 @@ class BCPushBackend:
         prediction = np.asarray(self.policy.predict(observation), dtype=np.float64)
         return np.atleast_2d(prediction)
 
+    def _reset_policy(self) -> None:
+        """Reset optional stateful policy queues at the start of each rollout."""
+
     @staticmethod
     def _failure(
         reason: SkillFailure,
@@ -94,6 +97,7 @@ class BCPushBackend:
     ) -> PushBackendResult:
         trace = ["BC_POLICY_ROLLOUT", SkillPhase.OPEN_GRIPPER.value]
         self.last_rollout_log = []
+        self._reset_policy()
         try:
             initial = context.world.pose(request.object_name).position.copy()
         except (KeyError, ValueError):
@@ -114,6 +118,8 @@ class BCPushBackend:
                 result,
             )
         orientation = context.primitives.current_pose.quaternion
+        previous_ee = context.primitives.current_pose.position.copy()
+        ee_path_length = 0.0
         trace.append(SkillPhase.PUSH_LINEAR.value)
         clipped_predictions = 0
         rollout_step = 0
@@ -176,16 +182,21 @@ class BCPushBackend:
                         result,
                     )
                 final = context.world.pose(request.object_name).position
+                updated_ee = context.primitives.current_pose.position.copy()
+                ee_path_length += float(np.linalg.norm(updated_ee - previous_ee))
+                previous_ee = updated_ee
                 displacement = float(np.linalg.norm(final[:2] - initial[:2]))
                 self.last_rollout_log.append(
                     {
                         "rollout_step": rollout_step,
                         "chunk_offset": chunk_offset,
-                        "ee_xyz": context.primitives.current_pose.position.tolist(),
+                        "ee_xyz": updated_ee.tolist(),
+                        "cube_xyz": final.tolist(),
                         "predicted_xyz": raw_prediction.tolist(),
                         "executed_xyz": predicted.tolist(),
                         "predicted_step_m": distance,
                         "cube_displacement_m": displacement,
+                        "ee_path_length_m": ee_path_length,
                     }
                 )
                 rollout_step += 1

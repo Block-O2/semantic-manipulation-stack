@@ -26,11 +26,12 @@ def main() -> None:
     parser.add_argument("--cube-y", type=float)
     parser.add_argument(
         "--push-backend",
-        choices=("classical", "bc", "progress_bc", "chunk_bc"),
+        choices=("classical", "bc", "progress_bc", "chunk_bc", "act"),
         default="classical",
     )
     parser.add_argument("--checkpoint")
     parser.add_argument("--execution-horizon", type=int)
+    parser.add_argument("--device", choices=("auto", "cpu", "mps"), default="auto")
     args = parser.parse_args()
 
     env = make_environment(render=not args.no_render, seed=113)
@@ -68,6 +69,7 @@ def main() -> None:
             args.push_backend,
             checkpoint=args.checkpoint,
             execution_horizon=args.execution_horizon,
+            device=args.device,
         )
         initial = world.pose("red_cube").position.copy()
         goal = Goal.push_to_region(

@@ -57,8 +57,9 @@ boundary.
 ## M7 — Hybrid Learned Skill
 
 Experiment with learned physical implementations behind the same trusted Skill
-interface and validation boundaries. One-step, progress-conditioned, and
-deterministic action-chunk BC baselines now exist; ACT remains future work.
+interface and validation boundaries. One-step, progress-conditioned,
+deterministic action-chunk BC, and a standard LeRobot ACT reproduction now
+exist.
 
 ### Pluggable backend and imitation-data preparation ✅
 
@@ -77,6 +78,15 @@ matched K=20 execution-horizon comparison are recorded in
 remained 0/20; the result supports temporal ambiguity and commitment as real
 factors but does not establish a robust learned Push backend. Temporal
 ensembling and ACT were deliberately not implemented.
+
+### Standard LeRobot ACT PushBackend ✅
+
+Hugging Face LeRobot 0.4.4 ACTPolicy was trained once on the unchanged 10D
+state / 3D absolute-waypoint dataset and injected as `ACTPushBackend`. Its
+K=32, eight-action queue produced smooth, safe EE motion but finished 0/20 on
+the frozen matched states: all runs timed out before cube contact. The negative
+result, exact training config, and no-expert/no-fallback runtime boundary are
+recorded in `docs/act_push_backend.md`. No follow-up ablation was started.
 
 ## M8 — Skill Composition / Code-as-Skill
 
