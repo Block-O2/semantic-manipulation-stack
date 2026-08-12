@@ -1,4 +1,4 @@
-"""Closed-loop one-step behavior-cloning Push backend baseline."""
+"""Diagnostic one-step BC Push backend behind the trusted control boundary."""
 
 from __future__ import annotations
 

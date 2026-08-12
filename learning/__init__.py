@@ -1,4 +1,4 @@
-"""Small offline learning baselines for trusted manipulation backends."""
+"""Learned-policy support; NumPy BC exports are diagnostic baseline APIs."""
 
 from learning.push_bc import (
     BCTrainingResult,

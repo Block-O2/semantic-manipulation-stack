@@ -1,4 +1,4 @@
-"""Compare classical and one-step BC Push on identical valid initial states."""
+"""Frozen diagnostic comparison between classical and one-step BC Push."""
 
 from __future__ import annotations
 

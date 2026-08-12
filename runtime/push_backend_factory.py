@@ -1,4 +1,4 @@
-"""Small configuration boundary for selecting a physical Push backend."""
+"""Select current or explicitly requested diagnostic physical Push backends."""
 
 from __future__ import annotations
 

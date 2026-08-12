@@ -182,7 +182,7 @@ class PushACTDataset(Dataset[dict[str, torch.Tensor]]):
 
 
 class ACTMotorPolicy:
-    """Local LeRobot checkpoint with its standard action-queue semantics."""
+    """Local LeRobot checkpoint with queue or native ensemble inference."""
 
     def __init__(
         self,

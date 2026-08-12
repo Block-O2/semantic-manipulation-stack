@@ -16,7 +16,10 @@ flowchart TD
     E --> S["Skill"]
     S --> PB["PushBackend (for PushSkill)"]
     S --> PR["ManipulationPrimitives"]
-    PB --> PR
+    PB --> CL["ClassicalPushBackend"]
+    PB --> ACT["ACTPushBackend + Temporal Ensemble"]
+    CL --> PR
+    ACT --> PR
     PR --> R["PandaRobot"]
     R --> C["CartesianController"]
     C --> SIM["robosuite / MuJoCo"]
@@ -168,18 +171,19 @@ from prior occupancy, placing adds it to a Place target, and pushing moves it
 into the requested push region. This allows multi-step plans to remain strictly
 validated without embedding rearrangement or push policy in `AgentRuntime`.
 
-The classical implementation is the reliable backend for the semantic Push
-contract. An experimental one-step BC backend demonstrates that a learned
-implementation can be selected while retaining the registry, validator, Agent,
-result, and controller boundaries. It is a weak baseline, not ACT or a
-production-capable learned policy.
-
 Push physical execution is now selected behind a narrow `PushBackend`
 protocol. `PushSkill` owns semantic verification and retry policy;
-`ClassicalPushBackend` owns scripted geometry and motion, while the experimental
-`BCPushBackend` predicts one absolute EE xyz at a time. Backend injection occurs
-in `SemanticSkillFactory`, so AgentRuntime, SkillExecutor, planner, and registry
-remain backend-independent.
+`ClassicalPushBackend` owns deterministic geometry and motion, while
+`ACTPushBackend` uses a state-only LeRobot ACT policy. Native Temporal Ensemble
+is the meaningful learned execution mode: every observation predicts a chunk,
+and overlapping historical predictions contribute to the current absolute EE
+target. Backend injection occurs in `SemanticSkillFactory`, so AgentRuntime,
+SkillExecutor, planner, and registry remain backend-independent.
+
+One-step `BCPushBackend`, progress-conditioned BC, simple Chunk BC, and ACT
+queue execution are retained as diagnostic baselines. They explain temporal
+aliasing and execution-horizon behavior but are not presented as recommended
+runtime paths. Their results are indexed in [experiments.md](experiments.md).
 
 For imitation data, `CartesianController` publishes a read-only command event
 immediately before each simulator control step. A recorder combines that event

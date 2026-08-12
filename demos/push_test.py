@@ -28,6 +28,10 @@ def main() -> None:
         "--push-backend",
         choices=("classical", "bc", "progress_bc", "chunk_bc", "act"),
         default="classical",
+        help=(
+            "physical backend; classical and act are current paths, while "
+            "bc/progress_bc/chunk_bc are retained diagnostics"
+        ),
     )
     parser.add_argument("--checkpoint")
     parser.add_argument("--execution-horizon", type=int)
@@ -36,6 +40,10 @@ def main() -> None:
         "--act-execution-mode",
         choices=("queue", "temporal_ensemble"),
         default="queue",
+        help=(
+            "ACT inference mode; queue is retained for historical comparison, "
+            "while temporal_ensemble is the validated learned mode"
+        ),
     )
     args = parser.parse_args()
 

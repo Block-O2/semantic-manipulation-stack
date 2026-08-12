@@ -1,4 +1,4 @@
-"""Matched-state physical comparison of one-step, progress, and Chunk BC."""
+"""Frozen diagnostic comparison for progress and simple Chunk BC variants."""
 
 from __future__ import annotations
 

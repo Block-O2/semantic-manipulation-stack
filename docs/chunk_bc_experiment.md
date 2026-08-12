@@ -1,9 +1,11 @@
 # Push Temporal Aliasing Diagnosis and Chunk BC
 
-This is an exploratory engineering comparison on the existing 50-episode,
+This historical milestone is an exploratory engineering comparison on the
+existing 50-episode,
 32,652-timestep, 20 Hz classical Push dataset. It keeps the semantic interface,
 controller, episode split, normalization rule, optimizer family, and safety
-limits fixed. It does not implement temporal ensembling or ACT.
+limits fixed. Temporal ensembling and ACT were outside this milestone; both
+were evaluated later in [act_push_backend.md](act_push_backend.md).
 
 Exact machine-readable outputs are under `artifacts/chunk_bc/`:
 
@@ -228,11 +230,11 @@ The milestone supports a mixed diagnosis:
    short re-planning repeatedly resets to the predicted chunk's first-action
    regime without preserving enough temporal order.
 
-Temporal ensembling is not justified as the automatic next implementation:
-the selected chunk policy is still only 2/20 and averaging overlapping biased
-predictions may smooth commands without resolving missing intent or
-out-of-distribution states. ACT is also not yet justified merely by these
-results; a larger model does not remove the observation ambiguity. A future
-milestone should first decide whether to add a minimal history/phase-like state
-or recollect targets with a less aliased command representation, then compare
-against this frozen result. This milestone stops here as required.
+At the time, these results alone did not justify automatically adding temporal
+ensembling or ACT: the selected chunk policy was only 2/20, and a larger model
+would not by itself remove observation ambiguity. The later controlled ACT
+milestones preserved this frozen comparison. Queue ACT reached 0/20, while
+native ACT Temporal Ensemble reached 20/20 with the same ACT weights. That
+later result refines—but does not erase—the aliasing diagnosis; see
+[act_push_backend.md](act_push_backend.md). This Chunk BC milestone remains
+closed and was not retroactively tuned.

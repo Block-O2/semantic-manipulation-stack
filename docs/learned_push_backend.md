@@ -1,4 +1,10 @@
-# Learned Push Backend Preparation
+# Learned Push Backends and Diagnostic Baselines
+
+The current meaningful physical Push paths are `ClassicalPushBackend` and
+`ACTPushBackend` with LeRobot's native Temporal Ensemble. The NumPy one-step,
+progress-conditioned, and simple Chunk BC implementations—and ACT queue
+execution—are retained to make the research diagnosis reproducible. They are
+not parallel recommendations for robot runtime use.
 
 This exploration keeps the external capability `Push(object, target)` stable
 while making its physical realization replaceable:
@@ -108,11 +114,11 @@ last expert action and receive `mask=False`. Therefore:
 
 ```text
 K = 1  → one-step BC
-K > 1  → chunk BC or future ACT targets
+K > 1  → chunk BC or sequence-policy targets
 ```
 
-Future chunk execution must distinguish prediction horizon `K` from execution
-horizon `H`:
+Chunk execution distinguishes prediction horizon `K` from execution horizon
+`H`:
 
 ```text
 observe o_t
@@ -199,14 +205,15 @@ and consumes LeRobot's standard eight-action queue before the next inference.
 Every selected target is still handled by the same finite, workspace,
 step-limit, primitive, and controller path as the NumPy learned backends.
 
-On the frozen 20 replay-stable initial states it reached 0/20, with 20 timeouts,
+With queue execution, the frozen 20 replay-stable initial states reached 0/20,
+with 20 timeouts,
 zero unsafe actions, and effectively zero cube displacement. This is an honest
 negative result: standard ACT made motion smooth but did not recover the hidden
 expert phase from the aliased state/absolute-waypoint interface. See
 [act_push_backend.md](act_push_backend.md) for the fixed config, training,
 physical records, and stopping decision.
 
-### Native ACT Temporal Ensemble
+## Native ACT Temporal Ensemble
 
 A final inference-only reproduction reused the exact ACT checkpoint and model
 weights, set LeRobot's native `temporal_ensemble_coeff=0.01`, and used

@@ -1,4 +1,4 @@
-"""Evaluate LeRobot ACT on the frozen replay-stable Push initial states."""
+"""Evaluate diagnostic queue-based LeRobot ACT Push on frozen states."""
 
 from __future__ import annotations
 

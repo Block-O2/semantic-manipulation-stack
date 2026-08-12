@@ -1,9 +1,10 @@
-# Classical PushSkill
+# PushSkill and Classical Execution
 
 `Push(object, target)` is a semantic, nonprehensile manipulation capability.
-The v1 implementation supports the dedicated `right_side` tabletop region. It
-is classical Cartesian control; it does not use ACT, VLA, reinforcement
-learning, force control, or a learned contact model.
+The public v1 capability supports the dedicated `right_side` tabletop region.
+`PushSkill` is backend-independent; this document focuses on its deterministic
+classical implementation. The learned ACT path is documented separately in
+[act_push_backend.md](act_push_backend.md).
 
 ## Execution path
 
@@ -83,7 +84,8 @@ without narrowing the sampling bounds.
 - contact uses proximity rather than raw MuJoCo contact pairs;
 - goals are single predicates, so a Push-then-Pick/Place conjunction is not yet
   represented cleanly;
-- the experimental one-step BC backend is not reliable enough for task use.
+- learned ACT validation is limited to the frozen matched state distribution;
+- diagnostic BC and ACT queue modes are not recommended runtime paths.
 
 Additional backends can implement the same `PushBackend` contract and be
 selected by the skill factory without changing planner validation or

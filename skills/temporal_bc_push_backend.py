@@ -1,4 +1,4 @@
-"""Progress and action-chunk BC Push backends using the trusted BC boundary."""
+"""Diagnostic Push backends for progress conditioning and simple action chunks."""
 
 from __future__ import annotations
 
