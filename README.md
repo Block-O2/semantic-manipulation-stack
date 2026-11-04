@@ -23,7 +23,7 @@ event, not an observed natural failure. No learned weights or LLM are used.
 [Capture command and provenance](docs/reproducing.md#record-the-demo) ·
 [Full result traces](docs/media/semantic-stack.json)
 
-## Architecture and contribution
+## Architecture
 
 ```mermaid
 flowchart LR
@@ -38,18 +38,12 @@ flowchart LR
     W -->|semantic deviation| A
 ```
 
-The project contribution is the integration and its contracts: structured
-Goal/Plan validation, hierarchical skills with bounded local recovery, explicit
-world interventions, semantic effect verification, event-triggered replanning,
-and interchangeable Push execution behind one `PushBackend` boundary. The
-20 Hz demonstration pipeline and matched comparisons preserve negative results
-alongside successful sequence-policy experiments.
-
-MuJoCo and robosuite supply simulation, robot assets, and OSC control. ACT uses
-Hugging Face **LeRobot 0.4.4**, including its native Temporal Ensemble; Diffusion
-adapts the **Stanford Diffusion Policy** conditional U-Net and uses Hugging Face
-`diffusers`. These algorithms/frameworks are upstream work, not new algorithms
-claimed by this project. [Source and licensing boundaries](docs/third_party_notices.md)
+The system implements structured Goal/Plan validation, hierarchical skills with
+bounded local recovery, explicit world interventions, semantic effect
+verification, and event-triggered replanning. Push execution backends share one
+`PushBackend` contract. The 20 Hz demonstration pipeline and matched
+comparisons retain negative results alongside successful sequence-policy
+experiments.
 
 ## What is implemented
 
@@ -169,5 +163,12 @@ for sample selection, controls, failure distributions, and interpretation.
 The earlier README mentioned a local `side_projects/agent_act_reproduction/`
 project; it is not tracked in this public repository and is not a reproducible
 component of the main stack. Historical implementation reports remain in
-`docs/`. There is no repository-wide LICENSE; upstream notices do not license
-the author's original code. [Third-party notices](docs/third_party_notices.md)
+`docs/`.
+
+## Third-party sources and licensing
+
+MuJoCo and robosuite supply simulation, robot assets, and OSC control; ACT uses
+Hugging Face **LeRobot 0.4.4** and its native Temporal Ensemble; the Diffusion
+backend adapts the **Stanford Diffusion Policy** conditional U-Net with Hugging
+Face `diffusers`. See [third-party notices and source attribution](docs/third_party_notices.md);
+there is no repository-wide LICENSE for the author's original code.
