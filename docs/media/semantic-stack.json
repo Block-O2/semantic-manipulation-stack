@@ -1,12 +1,16 @@
 {
   "source_algorithm_commit": "1002984923a14ae8c1b466b6845827d3a53a59cd",
   "capture_module": "demos.record_portfolio",
-  "capture_module_sha256": "056619e975f0a4af62186e1a56fdebaf0720b7999b3654ace80d323435d227db",
+  "capture_module_sha256": "b8260075b5d86c0ccd2dcea12350eb47a1efa888bb0942b7ffe5647250434c5d",
   "simulation_speed": "4x",
   "control_hz": 20,
   "commands_per_frame": 8,
   "display_fps": 10,
   "frames_before_gif_coalescing": 339,
+  "output_dimensions": [
+    560,
+    388
+  ],
   "versions": {
     "mujoco": "3.3.7",
     "robosuite": "1.5.2",
@@ -15,7 +19,7 @@
   },
   "python": "3.11.14",
   "platform": "macOS-26.6.2-arm64-arm-64bit",
-  "gif_sha256": "7a0735c0bdfae2af29451db4e9012996ed966cd9456431f66b6a91ac0c39cea0",
+  "gif_sha256": "b1a3c006bd5f2c1791c500e02407bb4e5a8210bb244c6d800d7bb954302e105e",
   "records": [
     {
       "scenario": "pick_place",

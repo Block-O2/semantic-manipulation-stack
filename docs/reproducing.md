@@ -217,7 +217,7 @@ commit `1002984923a14ae8c1b466b6845827d3a53a59cd`, using seed 67 per clip.
 The JSON records package versions, capture-script hash, media hash, complete
 AgentResult, semantic residuals, and final state. The recorder is an observer;
 it adds captions and samples every eighth 20 Hz control command for 4× playback
-at 10 fps, plus title/outcome holds. It does not change control algorithms.
+at 10 fps, plus title/outcome holds. Frames are scaled to 560×388 for README delivery. It does not change control algorithms.
 The object-loss clip calls the existing `ObjectLostAfterPick` hook: it explicitly
 moves the cube to the table and the Agent replans once. This shows semantic
 recovery, not a skill-local grasp retry, learned recovery, or natural fault rate.

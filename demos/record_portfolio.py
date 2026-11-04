@@ -52,7 +52,7 @@ def record(output: Path) -> None:
                 draw.text((12, 25), "REAL MUJOCO RUN | 4x simulation speed | state-only", fill="#83cfdd")
                 draw.text((12, 412), status[:99], fill="white")
                 draw.text((12, 428), f"Control commands: {commands} | no learned checkpoint", fill="#b7c8da")
-                frames.append(canvas)
+                frames.append(canvas.resize((560, 388), Image.Resampling.LANCZOS))
 
             def observe(event) -> None:
                 nonlocal commands
@@ -120,13 +120,18 @@ def record(output: Path) -> None:
                 renderer.close()
             env.close()
     output.parent.mkdir(parents=True, exist_ok=True)
-    frames[0].save(output, save_all=True, append_images=frames[1:], duration=100, loop=0)
+    # Keep one palette so the unchanged background remains identical between
+    # frames; per-frame adaptive palettes make the GIF much larger.
+    palette = frames[0].quantize(colors=256)
+    encoded = [frame.quantize(palette=palette, dither=Image.Dither.NONE) for frame in frames]
+    encoded[0].save(output, save_all=True, append_images=encoded[1:], duration=100, loop=0)
     report = {
         "source_algorithm_commit": "1002984923a14ae8c1b466b6845827d3a53a59cd",
         "capture_module": "demos.record_portfolio",
         "capture_module_sha256": hashlib.sha256(Path(__file__).read_bytes()).hexdigest(), "simulation_speed": "4x",
         "control_hz": 20, "commands_per_frame": 8, "display_fps": 10,
         "frames_before_gif_coalescing": len(frames),
+        "output_dimensions": [560, 388],
         "versions": {p: importlib.metadata.version(p) for p in ("mujoco", "robosuite", "numpy", "Pillow")},
         "python": platform.python_version(), "platform": platform.platform(),
         "gif_sha256": hashlib.sha256(output.read_bytes()).hexdigest(),
