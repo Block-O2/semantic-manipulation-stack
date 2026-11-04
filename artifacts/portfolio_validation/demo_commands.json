@@ -1,0 +1,27 @@
+[
+  {
+    "command": "python -m demos.semantic_agent --no-render --inspect-seconds 0",
+    "exit_code": 0,
+    "stdin": null
+  },
+  {
+    "command": "python -m demos.push_test --no-render --inspect-seconds 0",
+    "exit_code": 0,
+    "stdin": null
+  },
+  {
+    "command": "python -m demos.semantic_agent --no-render --inspect-seconds 0 --disturbance object-lost",
+    "exit_code": 0,
+    "stdin": null
+  },
+  {
+    "command": "python -m demos.dynamic_scenarios --scenario all",
+    "exit_code": 0,
+    "stdin": null
+  },
+  {
+    "command": "python -m demos.dynamic_playground --no-render --inspect-seconds 0",
+    "exit_code": 0,
+    "stdin": "continue twice"
+  }
+]

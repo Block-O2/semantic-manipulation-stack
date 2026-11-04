@@ -3,9 +3,12 @@
 from __future__ import annotations
 
 import numpy as np
+from typing import TYPE_CHECKING
 
-from learning.act_push import ACTExecutionMode, ACTMotorPolicy
 from skills.bc_push_backend import BCPushBackend, BCPushConfig
+
+if TYPE_CHECKING:
+    from learning.act_push import ACTExecutionMode, ACTMotorPolicy
 
 
 class ACTPushBackend(BCPushBackend):
@@ -18,10 +21,10 @@ class ACTPushBackend(BCPushBackend):
         config: BCPushConfig = BCPushConfig(),
     ) -> None:
         super().__init__(policy, config=config)
-        execution_mode = getattr(policy, "execution_mode", ACTExecutionMode.QUEUE)
+        execution_mode = getattr(policy, "execution_mode", "queue")
         self.name = (
             "act_temporal_ensemble"
-            if execution_mode is ACTExecutionMode.TEMPORAL_ENSEMBLE
+            if execution_mode == "temporal_ensemble"
             else "act"
         )
 
@@ -31,10 +34,12 @@ class ACTPushBackend(BCPushBackend):
         checkpoint: str,
         *,
         device: str = "auto",
-        execution_mode: ACTExecutionMode | str = ACTExecutionMode.QUEUE,
+        execution_mode: ACTExecutionMode | str = "queue",
         temporal_ensemble_coeff: float = 0.01,
         config: BCPushConfig = BCPushConfig(),
     ) -> "ACTPushBackend":
+        from learning.act_push import ACTMotorPolicy
+
         return cls(
             ACTMotorPolicy(
                 checkpoint,

@@ -4,7 +4,10 @@ from dataclasses import asdict
 import inspect
 
 import numpy as np
-import torch
+import pytest
+
+torch = pytest.importorskip("torch", reason="install the diffusion extra for Diffusion tests")
+pytest.importorskip("diffusers", reason="install the diffusion extra for Diffusion tests")
 
 from datasets import PushDataset, PushEpisode
 from learning.diffusion_push import (

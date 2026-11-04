@@ -3,11 +3,14 @@
 from __future__ import annotations
 
 import numpy as np
+from typing import TYPE_CHECKING
 
 from datasets.specs import encode_push_state
-from learning.diffusion_push import DiffusionMotorPolicy
 from skills.bc_push_backend import BCPushBackend, BCPushConfig
 from skills.push_backend import PushExecutionContext, PushRequest
+
+if TYPE_CHECKING:
+    from learning.diffusion_push import DiffusionMotorPolicy
 
 
 class DiffusionPushBackend(BCPushBackend):
@@ -31,6 +34,8 @@ class DiffusionPushBackend(BCPushBackend):
         device: str = "auto",
         config: BCPushConfig = BCPushConfig(),
     ) -> "DiffusionPushBackend":
+        from learning.diffusion_push import DiffusionMotorPolicy
+
         return cls(
             DiffusionMotorPolicy(checkpoint, device=device),
             config=config,

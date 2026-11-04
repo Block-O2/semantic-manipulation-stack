@@ -1,0 +1,13 @@
+{"source": "artifacts/chunk_bc/physical_comparison.json", "backend": "classical", "successes": 20, "trials": 20, "failures": {}}
+{"source": "artifacts/chunk_bc/physical_comparison.json", "backend": "bc", "successes": 0, "trials": 20, "failures": {"POLICY_TIMEOUT": 13, "POLICY_ACTION_UNSAFE": 7}}
+{"source": "artifacts/chunk_bc/physical_comparison.json", "backend": "progress_bc", "successes": 0, "trials": 20, "failures": {"POLICY_ACTION_UNSAFE": 19, "POLICY_TIMEOUT": 1}}
+{"source": "artifacts/chunk_bc/physical_comparison.json", "backend": "chunk_bc_k20_h1", "successes": 0, "trials": 20, "failures": {"POLICY_ACTION_UNSAFE": 15, "POLICY_TIMEOUT": 5}}
+{"source": "artifacts/chunk_bc/physical_comparison.json", "backend": "chunk_bc_k20_h5", "successes": 0, "trials": 20, "failures": {"POLICY_ACTION_UNSAFE": 20}}
+{"source": "artifacts/chunk_bc/physical_comparison.json", "backend": "chunk_bc_k20_h20", "successes": 2, "trials": 20, "failures": {"POLICY_ACTION_UNSAFE": 12, "POLICY_TIMEOUT": 6}}
+{"source": "artifacts/act_push/physical_comparison.json", "backend": "act", "successes": 0, "trials": 20, "failures": {"POLICY_TIMEOUT": 20}}
+{"source": "artifacts/act_temporal_ensemble/physical_comparison.json", "backend": "act_temporal_ensemble", "successes": 20, "trials": 20, "failures": {}}
+{"source": "artifacts/diffusion_push/physical_comparison.json", "backend": "diffusion", "successes": 20, "trials": 20, "failures": {}}
+{"matched_states_from_train": 17, "matched_states_from_validation": 3}
+{"matched_states_from_train": 17, "matched_states_from_validation": 3}
+PASS: saved counts, trial identity, exact initial positions/seeds, and split metadata agree.
+This audits saved evidence; it does not rerun learned policies or verify absent weights.

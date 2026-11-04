@@ -1,5 +1,11 @@
 # Standard LeRobot ACT Push Backend
 
+> Reproduction note (2026-11-05): datasets and trained checkpoints are not
+> published. The matched 20-state diagnostic includes 17 training and 3 validation
+> episode states. See [the reproduction guide](reproducing.md) for prerequisites,
+> new output paths, and the distinction between saved evidence and rerunning.
+
+
 This milestone freezes the existing state/action/data interface and asks one
 narrow question: does a maintained ACT implementation solve Push where the
 one-step and simple MLP chunk baselines did not?

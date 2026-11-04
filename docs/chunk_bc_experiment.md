@@ -1,5 +1,11 @@
 # Push Temporal Aliasing Diagnosis and Chunk BC
 
+> Reproduction note (2026-11-05): datasets and trained checkpoints are not
+> published. The matched 20-state diagnostic includes 17 training and 3 validation
+> episode states. See [the reproduction guide](reproducing.md) for prerequisites,
+> new output paths, and the distinction between saved evidence and rerunning.
+
+
 This historical milestone is an exploratory engineering comparison on the
 existing 50-episode,
 32,652-timestep, 20 Hz classical Push dataset. It keeps the semantic interface,

@@ -4,6 +4,15 @@ This index separates current meaningful runtime paths from retained diagnostic
 baselines. All learned Push experiments preserve the same semantic
 `Push(object, target)` interface and trusted Cartesian controller boundary.
 
+## Audited sample scope (2026-11-05)
+
+The matched records use identical dataset indices, recorded seeds, and initial
+positions. Four candidates were skipped as replay-unstable; 17 of the 20 accepted
+states come from training episodes and only 3 from validation episodes. This is
+not a held-out benchmark. The 20/20 nominal checks below use separate protocols.
+Run `python evaluation/audit_saved_results.py` to recount the saved JSON without
+weights. [Evidence audit](evidence_audit.md) · [Reproduction prerequisites](reproducing.md)
+
 ## Results
 
 | Experiment | Role | Main matched result | Detailed report |

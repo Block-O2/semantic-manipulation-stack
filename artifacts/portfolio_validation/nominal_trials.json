@@ -1,0 +1,1459 @@
+{
+  "pick_place_trials": {
+    "command": "python -m evaluation.pick_place_trials --trials 20 --seed 47",
+    "exit_code": 0,
+    "records": [
+      {
+        "completed_steps": 2,
+        "cube_final_height": 0.82478,
+        "cube_final_position": [
+          0.11935,
+          0.13989,
+          0.82478
+        ],
+        "cube_final_speed": 0.0,
+        "cube_initial_position": [
+          0.15912,
+          0.0326,
+          0.825
+        ],
+        "failed_skill": null,
+        "failed_step": null,
+        "failure_reason": null,
+        "first_attempt_success": true,
+        "object_grasped": false,
+        "object_inside_target": true,
+        "pick_success": true,
+        "place_success": true,
+        "skill_attempts": [
+          1,
+          1
+        ],
+        "skill_phases": [
+          "SUCCESS",
+          "SUCCESS"
+        ],
+        "target_position": [
+          0.12,
+          0.14,
+          0.803
+        ],
+        "task_success": true,
+        "trial": 1
+      },
+      {
+        "completed_steps": 2,
+        "cube_final_height": 0.82478,
+        "cube_final_position": [
+          0.11983,
+          0.14002,
+          0.82478
+        ],
+        "cube_final_speed": 0.0,
+        "cube_initial_position": [
+          0.0221,
+          -0.06016,
+          0.825
+        ],
+        "failed_skill": null,
+        "failed_step": null,
+        "failure_reason": null,
+        "first_attempt_success": true,
+        "object_grasped": false,
+        "object_inside_target": true,
+        "pick_success": true,
+        "place_success": true,
+        "skill_attempts": [
+          1,
+          1
+        ],
+        "skill_phases": [
+          "SUCCESS",
+          "SUCCESS"
+        ],
+        "target_position": [
+          0.12,
+          0.14,
+          0.803
+        ],
+        "task_success": true,
+        "trial": 2
+      },
+      {
+        "completed_steps": 2,
+        "cube_final_height": 0.82478,
+        "cube_final_position": [
+          0.12002,
+          0.13968,
+          0.82478
+        ],
+        "cube_final_speed": 0.0,
+        "cube_initial_position": [
+          -0.06858,
+          -0.06882,
+          0.825
+        ],
+        "failed_skill": null,
+        "failed_step": null,
+        "failure_reason": null,
+        "first_attempt_success": true,
+        "object_grasped": false,
+        "object_inside_target": true,
+        "pick_success": true,
+        "place_success": true,
+        "skill_attempts": [
+          1,
+          1
+        ],
+        "skill_phases": [
+          "SUCCESS",
+          "SUCCESS"
+        ],
+        "target_position": [
+          0.12,
+          0.14,
+          0.803
+        ],
+        "task_success": true,
+        "trial": 3
+      },
+      {
+        "completed_steps": 2,
+        "cube_final_height": 0.82478,
+        "cube_final_position": [
+          0.11995,
+          0.13963,
+          0.82478
+        ],
+        "cube_final_speed": 0.0,
+        "cube_initial_position": [
+          -0.02006,
+          0.02015,
+          0.825
+        ],
+        "failed_skill": null,
+        "failed_step": null,
+        "failure_reason": null,
+        "first_attempt_success": true,
+        "object_grasped": false,
+        "object_inside_target": true,
+        "pick_success": true,
+        "place_success": true,
+        "skill_attempts": [
+          1,
+          1
+        ],
+        "skill_phases": [
+          "SUCCESS",
+          "SUCCESS"
+        ],
+        "target_position": [
+          0.12,
+          0.14,
+          0.803
+        ],
+        "task_success": true,
+        "trial": 4
+      },
+      {
+        "completed_steps": 2,
+        "cube_final_height": 0.82478,
+        "cube_final_position": [
+          0.11997,
+          0.14002,
+          0.82478
+        ],
+        "cube_final_speed": 0.0,
+        "cube_initial_position": [
+          -0.03525,
+          -0.09294,
+          0.825
+        ],
+        "failed_skill": null,
+        "failed_step": null,
+        "failure_reason": null,
+        "first_attempt_success": true,
+        "object_grasped": false,
+        "object_inside_target": true,
+        "pick_success": true,
+        "place_success": true,
+        "skill_attempts": [
+          1,
+          1
+        ],
+        "skill_phases": [
+          "SUCCESS",
+          "SUCCESS"
+        ],
+        "target_position": [
+          0.12,
+          0.14,
+          0.803
+        ],
+        "task_success": true,
+        "trial": 5
+      },
+      {
+        "completed_steps": 2,
+        "cube_final_height": 0.82478,
+        "cube_final_position": [
+          0.11984,
+          0.13952,
+          0.82478
+        ],
+        "cube_final_speed": 0.0,
+        "cube_initial_position": [
+          -0.0082,
+          -0.00476,
+          0.825
+        ],
+        "failed_skill": null,
+        "failed_step": null,
+        "failure_reason": null,
+        "first_attempt_success": true,
+        "object_grasped": false,
+        "object_inside_target": true,
+        "pick_success": true,
+        "place_success": true,
+        "skill_attempts": [
+          1,
+          1
+        ],
+        "skill_phases": [
+          "SUCCESS",
+          "SUCCESS"
+        ],
+        "target_position": [
+          0.12,
+          0.14,
+          0.803
+        ],
+        "task_success": true,
+        "trial": 6
+      },
+      {
+        "completed_steps": 2,
+        "cube_final_height": 0.82478,
+        "cube_final_position": [
+          0.11983,
+          0.13974,
+          0.82478
+        ],
+        "cube_final_speed": 0.0,
+        "cube_initial_position": [
+          0.00818,
+          -0.00944,
+          0.825
+        ],
+        "failed_skill": null,
+        "failed_step": null,
+        "failure_reason": null,
+        "first_attempt_success": true,
+        "object_grasped": false,
+        "object_inside_target": true,
+        "pick_success": true,
+        "place_success": true,
+        "skill_attempts": [
+          1,
+          1
+        ],
+        "skill_phases": [
+          "SUCCESS",
+          "SUCCESS"
+        ],
+        "target_position": [
+          0.12,
+          0.14,
+          0.803
+        ],
+        "task_success": true,
+        "trial": 7
+      },
+      {
+        "completed_steps": 2,
+        "cube_final_height": 0.82478,
+        "cube_final_position": [
+          0.11963,
+          0.13976,
+          0.82478
+        ],
+        "cube_final_speed": 0.0,
+        "cube_initial_position": [
+          0.12764,
+          -0.08918,
+          0.825
+        ],
+        "failed_skill": null,
+        "failed_step": null,
+        "failure_reason": null,
+        "first_attempt_success": true,
+        "object_grasped": false,
+        "object_inside_target": true,
+        "pick_success": true,
+        "place_success": true,
+        "skill_attempts": [
+          1,
+          1
+        ],
+        "skill_phases": [
+          "SUCCESS",
+          "SUCCESS"
+        ],
+        "target_position": [
+          0.12,
+          0.14,
+          0.803
+        ],
+        "task_success": true,
+        "trial": 8
+      },
+      {
+        "completed_steps": 2,
+        "cube_final_height": 0.82478,
+        "cube_final_position": [
+          0.11999,
+          0.13982,
+          0.82478
+        ],
+        "cube_final_speed": 0.0,
+        "cube_initial_position": [
+          -0.03948,
+          -0.06524,
+          0.825
+        ],
+        "failed_skill": null,
+        "failed_step": null,
+        "failure_reason": null,
+        "first_attempt_success": true,
+        "object_grasped": false,
+        "object_inside_target": true,
+        "pick_success": true,
+        "place_success": true,
+        "skill_attempts": [
+          1,
+          1
+        ],
+        "skill_phases": [
+          "SUCCESS",
+          "SUCCESS"
+        ],
+        "target_position": [
+          0.12,
+          0.14,
+          0.803
+        ],
+        "task_success": true,
+        "trial": 9
+      },
+      {
+        "completed_steps": 2,
+        "cube_final_height": 0.82478,
+        "cube_final_position": [
+          0.11999,
+          0.14004,
+          0.82478
+        ],
+        "cube_final_speed": 0.0,
+        "cube_initial_position": [
+          -0.02007,
+          -0.14618,
+          0.825
+        ],
+        "failed_skill": null,
+        "failed_step": null,
+        "failure_reason": null,
+        "first_attempt_success": true,
+        "object_grasped": false,
+        "object_inside_target": true,
+        "pick_success": true,
+        "place_success": true,
+        "skill_attempts": [
+          1,
+          1
+        ],
+        "skill_phases": [
+          "SUCCESS",
+          "SUCCESS"
+        ],
+        "target_position": [
+          0.12,
+          0.14,
+          0.803
+        ],
+        "task_success": true,
+        "trial": 10
+      },
+      {
+        "completed_steps": 2,
+        "cube_final_height": 0.82478,
+        "cube_final_position": [
+          0.11969,
+          0.1398,
+          0.82478
+        ],
+        "cube_final_speed": 0.0,
+        "cube_initial_position": [
+          0.10996,
+          -0.15429,
+          0.825
+        ],
+        "failed_skill": null,
+        "failed_step": null,
+        "failure_reason": null,
+        "first_attempt_success": true,
+        "object_grasped": false,
+        "object_inside_target": true,
+        "pick_success": true,
+        "place_success": true,
+        "skill_attempts": [
+          1,
+          1
+        ],
+        "skill_phases": [
+          "SUCCESS",
+          "SUCCESS"
+        ],
+        "target_position": [
+          0.12,
+          0.14,
+          0.803
+        ],
+        "task_success": true,
+        "trial": 11
+      },
+      {
+        "completed_steps": 2,
+        "cube_final_height": 0.82478,
+        "cube_final_position": [
+          0.12083,
+          0.13946,
+          0.82478
+        ],
+        "cube_final_speed": 0.0,
+        "cube_initial_position": [
+          -0.17909,
+          -0.07867,
+          0.825
+        ],
+        "failed_skill": null,
+        "failed_step": null,
+        "failure_reason": null,
+        "first_attempt_success": true,
+        "object_grasped": false,
+        "object_inside_target": true,
+        "pick_success": true,
+        "place_success": true,
+        "skill_attempts": [
+          1,
+          1
+        ],
+        "skill_phases": [
+          "SUCCESS",
+          "SUCCESS"
+        ],
+        "target_position": [
+          0.12,
+          0.14,
+          0.803
+        ],
+        "task_success": true,
+        "trial": 12
+      },
+      {
+        "completed_steps": 2,
+        "cube_final_height": 0.82478,
+        "cube_final_position": [
+          0.11964,
+          0.13976,
+          0.82478
+        ],
+        "cube_final_speed": 0.0,
+        "cube_initial_position": [
+          0.06003,
+          -0.00197,
+          0.825
+        ],
+        "failed_skill": null,
+        "failed_step": null,
+        "failure_reason": null,
+        "first_attempt_success": true,
+        "object_grasped": false,
+        "object_inside_target": true,
+        "pick_success": true,
+        "place_success": true,
+        "skill_attempts": [
+          1,
+          1
+        ],
+        "skill_phases": [
+          "SUCCESS",
+          "SUCCESS"
+        ],
+        "target_position": [
+          0.12,
+          0.14,
+          0.803
+        ],
+        "task_success": true,
+        "trial": 13
+      },
+      {
+        "completed_steps": 2,
+        "cube_final_height": 0.82478,
+        "cube_final_position": [
+          0.12002,
+          0.13961,
+          0.82478
+        ],
+        "cube_final_speed": 0.0,
+        "cube_initial_position": [
+          -0.05449,
+          -0.0068,
+          0.825
+        ],
+        "failed_skill": null,
+        "failed_step": null,
+        "failure_reason": null,
+        "first_attempt_success": true,
+        "object_grasped": false,
+        "object_inside_target": true,
+        "pick_success": true,
+        "place_success": true,
+        "skill_attempts": [
+          1,
+          1
+        ],
+        "skill_phases": [
+          "SUCCESS",
+          "SUCCESS"
+        ],
+        "target_position": [
+          0.12,
+          0.14,
+          0.803
+        ],
+        "task_success": true,
+        "trial": 14
+      },
+      {
+        "completed_steps": 2,
+        "cube_final_height": 0.82478,
+        "cube_final_position": [
+          0.12084,
+          0.13997,
+          0.82478
+        ],
+        "cube_final_speed": 0.0,
+        "cube_initial_position": [
+          -0.17086,
+          0.01594,
+          0.825
+        ],
+        "failed_skill": null,
+        "failed_step": null,
+        "failure_reason": null,
+        "first_attempt_success": true,
+        "object_grasped": false,
+        "object_inside_target": true,
+        "pick_success": true,
+        "place_success": true,
+        "skill_attempts": [
+          1,
+          1
+        ],
+        "skill_phases": [
+          "SUCCESS",
+          "SUCCESS"
+        ],
+        "target_position": [
+          0.12,
+          0.14,
+          0.803
+        ],
+        "task_success": true,
+        "trial": 15
+      },
+      {
+        "completed_steps": 2,
+        "cube_final_height": 0.82478,
+        "cube_final_position": [
+          0.11998,
+          0.14019,
+          0.82478
+        ],
+        "cube_final_speed": 0.0,
+        "cube_initial_position": [
+          -0.03223,
+          -0.16426,
+          0.825
+        ],
+        "failed_skill": null,
+        "failed_step": null,
+        "failure_reason": null,
+        "first_attempt_success": true,
+        "object_grasped": false,
+        "object_inside_target": true,
+        "pick_success": true,
+        "place_success": true,
+        "skill_attempts": [
+          1,
+          1
+        ],
+        "skill_phases": [
+          "SUCCESS",
+          "SUCCESS"
+        ],
+        "target_position": [
+          0.12,
+          0.14,
+          0.803
+        ],
+        "task_success": true,
+        "trial": 16
+      },
+      {
+        "completed_steps": 2,
+        "cube_final_height": 0.82478,
+        "cube_final_position": [
+          0.11995,
+          0.13986,
+          0.82478
+        ],
+        "cube_final_speed": 0.0,
+        "cube_initial_position": [
+          -0.02371,
+          -0.04409,
+          0.825
+        ],
+        "failed_skill": null,
+        "failed_step": null,
+        "failure_reason": null,
+        "first_attempt_success": true,
+        "object_grasped": false,
+        "object_inside_target": true,
+        "pick_success": true,
+        "place_success": true,
+        "skill_attempts": [
+          1,
+          1
+        ],
+        "skill_phases": [
+          "SUCCESS",
+          "SUCCESS"
+        ],
+        "target_position": [
+          0.12,
+          0.14,
+          0.803
+        ],
+        "task_success": true,
+        "trial": 17
+      },
+      {
+        "completed_steps": 2,
+        "cube_final_height": 0.82478,
+        "cube_final_position": [
+          0.11647,
+          0.13889,
+          0.82478
+        ],
+        "cube_final_speed": 0.0,
+        "cube_initial_position": [
+          -0.02696,
+          -0.07998,
+          0.825
+        ],
+        "failed_skill": null,
+        "failed_step": null,
+        "failure_reason": null,
+        "first_attempt_success": true,
+        "object_grasped": false,
+        "object_inside_target": true,
+        "pick_success": true,
+        "place_success": true,
+        "skill_attempts": [
+          1,
+          1
+        ],
+        "skill_phases": [
+          "SUCCESS",
+          "SUCCESS"
+        ],
+        "target_position": [
+          0.12,
+          0.14,
+          0.803
+        ],
+        "task_success": true,
+        "trial": 18
+      },
+      {
+        "completed_steps": 2,
+        "cube_final_height": 0.82478,
+        "cube_final_position": [
+          0.11996,
+          0.13982,
+          0.82478
+        ],
+        "cube_final_speed": 0.0,
+        "cube_initial_position": [
+          -0.04372,
+          -0.07257,
+          0.825
+        ],
+        "failed_skill": null,
+        "failed_step": null,
+        "failure_reason": null,
+        "first_attempt_success": true,
+        "object_grasped": false,
+        "object_inside_target": true,
+        "pick_success": true,
+        "place_success": true,
+        "skill_attempts": [
+          1,
+          1
+        ],
+        "skill_phases": [
+          "SUCCESS",
+          "SUCCESS"
+        ],
+        "target_position": [
+          0.12,
+          0.14,
+          0.803
+        ],
+        "task_success": true,
+        "trial": 19
+      },
+      {
+        "completed_steps": 2,
+        "cube_final_height": 0.82478,
+        "cube_final_position": [
+          0.11998,
+          0.13968,
+          0.82478
+        ],
+        "cube_final_speed": 0.0,
+        "cube_initial_position": [
+          -0.04298,
+          0.01887,
+          0.825
+        ],
+        "failed_skill": null,
+        "failed_step": null,
+        "failure_reason": null,
+        "first_attempt_success": true,
+        "object_grasped": false,
+        "object_inside_target": true,
+        "pick_success": true,
+        "place_success": true,
+        "skill_attempts": [
+          1,
+          1
+        ],
+        "skill_phases": [
+          "SUCCESS",
+          "SUCCESS"
+        ],
+        "target_position": [
+          0.12,
+          0.14,
+          0.803
+        ],
+        "task_success": true,
+        "trial": 20
+      }
+    ],
+    "summary": {
+      "average_completed_steps_per_task": 2.0,
+      "average_skill_attempts_per_task": 2.0,
+      "failure_reasons": {},
+      "first_attempt_success_rate": 1.0,
+      "first_attempt_successes": 20,
+      "full_success_rate": 1.0,
+      "full_successes": 20,
+      "pick_success_rate": 1.0,
+      "pick_successes": 20,
+      "place_success_rate": 1.0,
+      "place_successes": 20,
+      "required_successes": 18,
+      "successful_recoveries": 0,
+      "target_met": true,
+      "total_recovery_attempts": 0,
+      "trials": 20
+    }
+  },
+  "agent_trials": {
+    "command": "python -m evaluation.agent_trials --trials 20 --seed 59",
+    "exit_code": 0,
+    "records": [
+      {
+        "cube_initial_position": [
+          0.047453470392762376,
+          -0.09002243295096617,
+          0.8250000000000001
+        ],
+        "executed_steps": 2,
+        "failure_reason": null,
+        "goal_satisfied": true,
+        "planner_calls": 1,
+        "replans": 0,
+        "success": true,
+        "trial": 1
+      },
+      {
+        "cube_initial_position": [
+          0.009766558377892476,
+          -0.015806595053072164,
+          0.8250000000000001
+        ],
+        "executed_steps": 2,
+        "failure_reason": null,
+        "goal_satisfied": true,
+        "planner_calls": 1,
+        "replans": 0,
+        "success": true,
+        "trial": 2
+      },
+      {
+        "cube_initial_position": [
+          0.09519989685355046,
+          -0.02293992311696999,
+          0.8250000000000001
+        ],
+        "executed_steps": 2,
+        "failure_reason": null,
+        "goal_satisfied": true,
+        "planner_calls": 1,
+        "replans": 0,
+        "success": true,
+        "trial": 3
+      },
+      {
+        "cube_initial_position": [
+          -0.15340840319019375,
+          -0.15575138328958615,
+          0.8250000000000001
+        ],
+        "executed_steps": 2,
+        "failure_reason": null,
+        "goal_satisfied": true,
+        "planner_calls": 1,
+        "replans": 0,
+        "success": true,
+        "trial": 4
+      },
+      {
+        "cube_initial_position": [
+          0.006464562819631925,
+          -0.06326139594158008,
+          0.8250000000000001
+        ],
+        "executed_steps": 2,
+        "failure_reason": null,
+        "goal_satisfied": true,
+        "planner_calls": 1,
+        "replans": 0,
+        "success": true,
+        "trial": 5
+      },
+      {
+        "cube_initial_position": [
+          0.0499423241766333,
+          -0.16961361326069438,
+          0.8250000000000001
+        ],
+        "executed_steps": 2,
+        "failure_reason": null,
+        "goal_satisfied": true,
+        "planner_calls": 1,
+        "replans": 0,
+        "success": true,
+        "trial": 6
+      },
+      {
+        "cube_initial_position": [
+          -0.09332058614737257,
+          -0.13872049995561467,
+          0.8250000000000001
+        ],
+        "executed_steps": 2,
+        "failure_reason": null,
+        "goal_satisfied": true,
+        "planner_calls": 1,
+        "replans": 0,
+        "success": true,
+        "trial": 7
+      },
+      {
+        "cube_initial_position": [
+          0.013150890400957516,
+          0.03926527105602978,
+          0.8250000000000001
+        ],
+        "executed_steps": 2,
+        "failure_reason": null,
+        "goal_satisfied": true,
+        "planner_calls": 1,
+        "replans": 0,
+        "success": true,
+        "trial": 8
+      },
+      {
+        "cube_initial_position": [
+          0.021431815395143022,
+          -0.17532232550811644,
+          0.8250000000000001
+        ],
+        "executed_steps": 2,
+        "failure_reason": null,
+        "goal_satisfied": true,
+        "planner_calls": 1,
+        "replans": 0,
+        "success": true,
+        "trial": 9
+      },
+      {
+        "cube_initial_position": [
+          0.02352802390228184,
+          -0.05466978030074854,
+          0.8250000000000001
+        ],
+        "executed_steps": 2,
+        "failure_reason": null,
+        "goal_satisfied": true,
+        "planner_calls": 1,
+        "replans": 0,
+        "success": true,
+        "trial": 10
+      },
+      {
+        "cube_initial_position": [
+          -0.10846182178869329,
+          0.02033599314169951,
+          0.8250000000000001
+        ],
+        "executed_steps": 2,
+        "failure_reason": null,
+        "goal_satisfied": true,
+        "planner_calls": 1,
+        "replans": 0,
+        "success": true,
+        "trial": 11
+      },
+      {
+        "cube_initial_position": [
+          -0.08640306324424685,
+          -0.012566884815309737,
+          0.8250000000000001
+        ],
+        "executed_steps": 2,
+        "failure_reason": null,
+        "goal_satisfied": true,
+        "planner_calls": 1,
+        "replans": 0,
+        "success": true,
+        "trial": 12
+      },
+      {
+        "cube_initial_position": [
+          -0.05463697234071957,
+          -0.12392909119908305,
+          0.8250000000000001
+        ],
+        "executed_steps": 2,
+        "failure_reason": null,
+        "goal_satisfied": true,
+        "planner_calls": 1,
+        "replans": 0,
+        "success": true,
+        "trial": 13
+      },
+      {
+        "cube_initial_position": [
+          0.1796389597347835,
+          -0.1372902053285282,
+          0.8250000000000001
+        ],
+        "executed_steps": 2,
+        "failure_reason": null,
+        "goal_satisfied": true,
+        "planner_calls": 1,
+        "replans": 0,
+        "success": true,
+        "trial": 14
+      },
+      {
+        "cube_initial_position": [
+          -0.10146445707681503,
+          -0.11600218138615084,
+          0.8250000000000001
+        ],
+        "executed_steps": 2,
+        "failure_reason": null,
+        "goal_satisfied": true,
+        "planner_calls": 1,
+        "replans": 0,
+        "success": true,
+        "trial": 15
+      },
+      {
+        "cube_initial_position": [
+          0.1049903502075124,
+          -0.13037163916528932,
+          0.8250000000000001
+        ],
+        "executed_steps": 2,
+        "failure_reason": null,
+        "goal_satisfied": true,
+        "planner_calls": 1,
+        "replans": 0,
+        "success": true,
+        "trial": 16
+      },
+      {
+        "cube_initial_position": [
+          -0.15007080971380876,
+          -0.1552010949886295,
+          0.8250000000000001
+        ],
+        "executed_steps": 2,
+        "failure_reason": null,
+        "goal_satisfied": true,
+        "planner_calls": 1,
+        "replans": 0,
+        "success": true,
+        "trial": 17
+      },
+      {
+        "cube_initial_position": [
+          -0.008468107331403851,
+          -0.11217743220291303,
+          0.8250000000000001
+        ],
+        "executed_steps": 2,
+        "failure_reason": null,
+        "goal_satisfied": true,
+        "planner_calls": 1,
+        "replans": 0,
+        "success": true,
+        "trial": 18
+      },
+      {
+        "cube_initial_position": [
+          0.1684922913278813,
+          -0.14825119757566393,
+          0.8250000000000001
+        ],
+        "executed_steps": 2,
+        "failure_reason": null,
+        "goal_satisfied": true,
+        "planner_calls": 1,
+        "replans": 0,
+        "success": true,
+        "trial": 19
+      },
+      {
+        "cube_initial_position": [
+          -0.02925504432083026,
+          0.027779216071177587,
+          0.8250000000000001
+        ],
+        "executed_steps": 2,
+        "failure_reason": null,
+        "goal_satisfied": true,
+        "planner_calls": 1,
+        "replans": 0,
+        "success": true,
+        "trial": 20
+      }
+    ],
+    "summary": {
+      "average_planner_calls": 1.0,
+      "average_replans": 0.0,
+      "failure_reasons": {},
+      "required_successes": 18,
+      "success_rate": 1.0,
+      "successes": 20,
+      "target_met": true,
+      "total_replans": 0,
+      "trials": 20
+    }
+  },
+  "push_trials": {
+    "command": "python -m evaluation.push_trials --trials 20 --seed 127",
+    "exit_code": 0,
+    "records": [
+      {
+        "attempts": 1,
+        "displacement": 0.302270458119715,
+        "failure_reason": null,
+        "final_position": [
+          0.21351427026385722,
+          -0.09371977241259567,
+          0.8247844891595695
+        ],
+        "initial_position": [
+          -0.08875601780799283,
+          -0.09339914667574063,
+          0.8247844899462122
+        ],
+        "region_satisfied": true,
+        "success": true,
+        "trial": 1
+      },
+      {
+        "attempts": 1,
+        "displacement": 0.2596592918025173,
+        "failure_reason": null,
+        "final_position": [
+          0.21353310054220087,
+          0.0974861074689418,
+          0.8247844891595695
+        ],
+        "initial_position": [
+          -0.04612015359197233,
+          0.09571539097008619,
+          0.8247844899462122
+        ],
+        "region_satisfied": true,
+        "success": true,
+        "trial": 2
+      },
+      {
+        "attempts": 1,
+        "displacement": 0.263755018438662,
+        "failure_reason": null,
+        "final_position": [
+          0.21351969938828344,
+          -0.1369606296298121,
+          0.8247844891595695
+        ],
+        "initial_position": [
+          -0.050235227078394375,
+          -0.1371808934178609,
+          0.8247829442025655
+        ],
+        "region_satisfied": true,
+        "success": true,
+        "trial": 3
+      },
+      {
+        "attempts": 1,
+        "displacement": 0.1483468623134671,
+        "failure_reason": null,
+        "final_position": [
+          0.2134749676330604,
+          -0.10162844079581954,
+          0.8247844891595695
+        ],
+        "initial_position": [
+          0.06512810635255767,
+          -0.10161093439559028,
+          0.8247844899462122
+        ],
+        "region_satisfied": true,
+        "success": true,
+        "trial": 4
+      },
+      {
+        "attempts": 1,
+        "displacement": 0.1607450383048627,
+        "failure_reason": null,
+        "final_position": [
+          0.20296989514131267,
+          -0.039161399412288966,
+          0.8247844891595695
+        ],
+        "initial_position": [
+          0.04430222996234318,
+          -0.06492065728758895,
+          0.8247839127330635
+        ],
+        "region_satisfied": true,
+        "success": true,
+        "trial": 5
+      },
+      {
+        "attempts": 1,
+        "displacement": 0.24675721730406336,
+        "failure_reason": null,
+        "final_position": [
+          0.21355519651465327,
+          0.08625135340766289,
+          0.8247844891595695
+        ],
+        "initial_position": [
+          -0.03319982624623869,
+          0.08729204256223078,
+          0.8247836451542434
+        ],
+        "region_satisfied": true,
+        "success": true,
+        "trial": 6
+      },
+      {
+        "attempts": 1,
+        "displacement": 0.29740377276022845,
+        "failure_reason": null,
+        "final_position": [
+          0.21346368174679187,
+          0.014010050607713891,
+          0.8247844891595695
+        ],
+        "initial_position": [
+          -0.08393689007250596,
+          0.012630219613607158,
+          0.8247844899462122
+        ],
+        "region_satisfied": true,
+        "success": true,
+        "trial": 7
+      },
+      {
+        "attempts": 1,
+        "displacement": 0.16702517558412616,
+        "failure_reason": null,
+        "final_position": [
+          0.21349112857013652,
+          -0.10648183503678359,
+          0.8247844891595695
+        ],
+        "initial_position": [
+          0.04646595647052898,
+          -0.10644771752430161,
+          0.8247844899462122
+        ],
+        "region_satisfied": true,
+        "success": true,
+        "trial": 8
+      },
+      {
+        "attempts": 1,
+        "displacement": 0.21774056382355614,
+        "failure_reason": null,
+        "final_position": [
+          0.21353175252703793,
+          -0.004151341627992099,
+          0.8247844891595695
+        ],
+        "initial_position": [
+          -0.00417292642814618,
+          -0.0001983813169924342,
+          0.8247846444112709
+        ],
+        "region_satisfied": true,
+        "success": true,
+        "trial": 9
+      },
+      {
+        "attempts": 1,
+        "displacement": 0.26285373082267766,
+        "failure_reason": null,
+        "final_position": [
+          0.21349278298183288,
+          -0.11405504058313891,
+          0.8247844891595695
+        ],
+        "initial_position": [
+          -0.049360943917874135,
+          -0.1141004535208521,
+          0.8247844899462122
+        ],
+        "region_satisfied": true,
+        "success": true,
+        "trial": 10
+      },
+      {
+        "attempts": 1,
+        "displacement": 0.21385885179586506,
+        "failure_reason": null,
+        "final_position": [
+          0.21343438014961194,
+          0.06114805439511435,
+          0.8247844891595695
+        ],
+        "initial_position": [
+          -0.0004184424997352977,
+          0.059542209959120795,
+          0.8247844899462122
+        ],
+        "region_satisfied": true,
+        "success": true,
+        "trial": 11
+      },
+      {
+        "attempts": 1,
+        "displacement": 0.16513775692778254,
+        "failure_reason": null,
+        "final_position": [
+          0.21347882878435823,
+          -0.08835321194142448,
+          0.8247844891595695
+        ],
+        "initial_position": [
+          0.04834124680326796,
+          -0.08859358785136445,
+          0.8247844899462122
+        ],
+        "region_satisfied": true,
+        "success": true,
+        "trial": 12
+      },
+      {
+        "attempts": 1,
+        "displacement": 0.14035715368200266,
+        "failure_reason": null,
+        "final_position": [
+          0.21351148550111507,
+          -0.03127618035048486,
+          0.8247844891595695
+        ],
+        "initial_position": [
+          0.07316046658769956,
+          -0.029963900014809378,
+          0.8247837442390787
+        ],
+        "region_satisfied": true,
+        "success": true,
+        "trial": 13
+      },
+      {
+        "attempts": 1,
+        "displacement": 0.16027914193321952,
+        "failure_reason": null,
+        "final_position": [
+          0.21344901667334093,
+          -0.04359840701731586,
+          0.8247844891595695
+        ],
+        "initial_position": [
+          0.05319073792388717,
+          -0.04618441380607532,
+          0.8247846446246577
+        ],
+        "region_satisfied": true,
+        "success": true,
+        "trial": 14
+      },
+      {
+        "attempts": 1,
+        "displacement": 0.20460572340411845,
+        "failure_reason": null,
+        "final_position": [
+          0.2134713146483009,
+          -0.08174734646401076,
+          0.8247844891595695
+        ],
+        "initial_position": [
+          0.008865739132406375,
+          -0.08199334957823072,
+          0.8247844899462122
+        ],
+        "region_satisfied": true,
+        "success": true,
+        "trial": 15
+      },
+      {
+        "attempts": 1,
+        "displacement": 0.27678361680561686,
+        "failure_reason": null,
+        "final_position": [
+          0.18413330745887205,
+          -0.012217295821943433,
+          0.8247844891595695
+        ],
+        "initial_position": [
+          -0.09113311518316898,
+          -0.0411580473300123,
+          0.824784644410367
+        ],
+        "region_satisfied": true,
+        "success": true,
+        "trial": 16
+      },
+      {
+        "attempts": 2,
+        "displacement": 0.2772913615358883,
+        "failure_reason": null,
+        "final_position": [
+          0.21335547679240152,
+          0.07773704108725696,
+          0.8247844891595695
+        ],
+        "initial_position": [
+          -0.06249146604921948,
+          0.04947110209068003,
+          0.8247846444088117
+        ],
+        "region_satisfied": true,
+        "success": true,
+        "trial": 17
+      },
+      {
+        "attempts": 1,
+        "displacement": 0.15239169952323028,
+        "failure_reason": null,
+        "final_position": [
+          0.21349172944947203,
+          0.06527028752688167,
+          0.8247844891595695
+        ],
+        "initial_position": [
+          0.0615685314166851,
+          0.07721063857151649,
+          0.8247843989968147
+        ],
+        "region_satisfied": true,
+        "success": true,
+        "trial": 18
+      },
+      {
+        "attempts": 1,
+        "displacement": 0.3127793630239635,
+        "failure_reason": null,
+        "final_position": [
+          0.21361004173115258,
+          -0.12796930385147764,
+          0.8247844891595695
+        ],
+        "initial_position": [
+          -0.09916932086531384,
+          -0.12795295073239266,
+          0.8247844899462122
+        ],
+        "region_satisfied": true,
+        "success": true,
+        "trial": 19
+      },
+      {
+        "attempts": 1,
+        "displacement": 0.1972289953143016,
+        "failure_reason": null,
+        "final_position": [
+          0.21349489262603097,
+          -0.09528587374801852,
+          0.8247844891595695
+        ],
+        "initial_position": [
+          0.01626590641660962,
+          -0.0953458028117758,
+          0.8247844899462122
+        ],
+        "region_satisfied": true,
+        "success": true,
+        "trial": 20
+      }
+    ],
+    "summary": {
+      "average_attempts": 1.05,
+      "failure_reasons": {},
+      "placement_rejections": 14,
+      "required_successes": 18,
+      "success_rate": 1.0,
+      "successes": 20,
+      "target_met": true,
+      "trials": 20
+    }
+  }
+}

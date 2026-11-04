@@ -4,7 +4,10 @@ from dataclasses import asdict
 import inspect
 
 import numpy as np
-import torch
+import pytest
+
+torch = pytest.importorskip("torch", reason="install the act extra for ACT tests")
+pytest.importorskip("lerobot", reason="install the act extra for ACT tests")
 
 from datasets import PushDataset, PushEpisode, split_episode_indices
 from learning.act_push import (

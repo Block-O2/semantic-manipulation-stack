@@ -1,5 +1,11 @@
 # Learned Push Backends and Diagnostic Baselines
 
+> Reproduction note (2026-11-05): datasets and trained checkpoints are not
+> published. The matched 20-state diagnostic includes 17 training and 3 validation
+> episode states. See [the reproduction guide](reproducing.md) for prerequisites,
+> new output paths, and the distinction between saved evidence and rerunning.
+
+
 The current meaningful physical Push paths are `ClassicalPushBackend` and
 `ACTPushBackend` with LeRobot's native Temporal Ensemble. The NumPy one-step,
 progress-conditioned, and simple Chunk BC implementations—and ACT queue

@@ -1,114 +1,76 @@
 # Semantic Manipulation Stack
 
-A modular MuJoCo manipulation playground for exploring how semantic agents,
-trusted skills, classical controllers, learned policies, and world-state
-feedback can work together.
+**How can task-level reasoning, bounded robot skills, and learned motor policies
+share one execution loop without confusing motion completion with task success?**
 
-The repository connects validated task-level plans to Pick, Place, and Push
-execution on a Franka Panda, then checks physical outcomes against fresh
-simulator state. It is an engineering and research playground—not a
-general-purpose robot framework or a claim of general manipulation
-intelligence.
+An ongoing engineering/research project in a fixed MuJoCo / robosuite tabletop
+scene with a Franka Panda. It connects validated plans to Pick, Place, and Push,
+then verifies semantic outcomes from fresh simulator ground truth. This is not
+a completed general-purpose robot Agent or a real-arm deployment.
 
-## Why this project exists
+**Implemented:** Pick/Place/Push, bounded skills, semantic verification and replanning.
+**Evidence:** nominal 20/20 each; learned Push is a fixed-state diagnostic.
 
-The central question is how to connect high-level semantic reasoning, robot
-skills, learned motor policies, classical control, and execution feedback
-without allowing one layer to silently take over another layer's job.
+[Quick start](#quick-start) · [Results and evidence](#results-and-evidence) ·
+[Reproduction guide](docs/reproducing.md) · [Architecture](docs/architecture.md)
 
-Goals become structured plans; plans are validated against registered skills;
-skills own bounded local recovery; physical backends execute behind a trusted
-Cartesian safety boundary; and the Agent replans only when fresh world state
-shows a meaningful semantic deviation.
+![Real MuJoCo runs: Pick and Place, injected object-loss recovery, and classical Push](docs/media/semantic-stack.gif)
 
-## Architecture
+**Real simulation, 4× playback (~34 s):** Pick→Place; an explicitly injected cube
+movement after Pick, followed by one Agent replan; Classical Push to `right_side`.
+Each clip ends with a semantic outcome check. The recovery is a controlled test
+event, not an observed natural failure. No learned weights or LLM are used.
+[Capture command and provenance](docs/reproducing.md#record-the-demo) ·
+[Full result traces](docs/media/semantic-stack.json)
+
+## Architecture and contribution
 
 ```mermaid
-flowchart TD
-    G["Natural-language Goal"] --> P["Planner / Agent"]
-    P --> V["Plan Validator"]
-    V --> A["AgentRuntime"]
-    A --> E["SkillExecutor"]
-    E --> S["Pick / Place / Push"]
-
-    S --> PR["ManipulationPrimitives"]
-    S --> PS["PushSkill"]
-    PS --> PB["PushBackend"]
-    PB --> CL["ClassicalPushBackend"]
-    PB --> ACT["ACTPushBackend + native Temporal Ensemble"]
-    PB --> DP["DiffusionPushBackend + receding horizon"]
-    CL --> PR
-    ACT --> PR
-    DP --> PR
-
-    PR --> C["Trusted Cartesian controller"]
-    C --> M["MuJoCo / robosuite"]
-    M --> W["WorldState"]
-    W --> X["Semantic effect verification"]
-    X -->|"event-triggered replan"| A
+flowchart LR
+    G[Goal] --> P[Planner]
+    P --> V[Plan validator]
+    V --> A[AgentRuntime]
+    A --> S[Pick / Place / Push]
+    S --> B[Classical or learned backend]
+    B --> C[Bounded Cartesian primitives / controller]
+    C --> M[robosuite / MuJoCo]
+    M --> W[WorldState / effect verification]
+    W -->|semantic deviation| A
 ```
 
-Semantic layers never construct raw simulator actions. Learned targets pass
-through the same finite, workspace, step-limit, primitive, and Cartesian
-controller path as classical execution. The detailed contracts and result
-hierarchy are in [docs/architecture.md](docs/architecture.md).
+The project contribution is the integration and its contracts: structured
+Goal/Plan validation, hierarchical skills with bounded local recovery, explicit
+world interventions, semantic effect verification, event-triggered replanning,
+and interchangeable Push execution behind one `PushBackend` boundary. The
+20 Hz demonstration pipeline and matched comparisons preserve negative results
+alongside successful sequence-policy experiments.
 
-## What currently works
+MuJoCo and robosuite supply simulation, robot assets, and OSC control. ACT uses
+Hugging Face **LeRobot 0.4.4**, including its native Temporal Ensemble; Diffusion
+adapts the **Stanford Diffusion Policy** conditional U-Net and uses Hugging Face
+`diffusers`. These algorithms/frameworks are upstream work, not new algorithms
+claimed by this project. [Source and licensing boundaries](docs/third_party_notices.md)
 
-- validated Pick and Place skills with bounded local recovery;
-- structured planning, deterministic validation, and semantic effect checks;
-- event-triggered replanning after explicit dynamic-world disturbances;
-- bounded composition of registered skills for occupied destinations;
-- classical Cartesian Push to the `right_side` semantic region;
-- a pluggable `PushBackend` boundary shared by classical and learned execution;
-- LeRobot 0.4.4 ACT Push with native Temporal Ensemble;
-- state-based Diffusion Policy Push with receding-horizon execution;
-- a 20 Hz state/action demonstration pipeline and frozen diagnostic baselines.
+## What is implemented
 
-The meaningful runtime Push paths are `ClassicalPushBackend`,
-`ACTPushBackend` with native Temporal Ensemble, and `DiffusionPushBackend`.
-One-step BC,
-progress-conditioned BC, simple Chunk BC, and ACT queue execution remain in the
-repository as experimental baselines for understanding temporal aliasing,
-execution horizon, and temporal ensembling—not as recommended robot runtimes.
+- **Pick / Place:** finite-state skills, bounded grasp/release retries, and
+  physical outcome verification through `SkillExecutor`.
+- **Semantic Agent:** deterministic planner, strict validation, fresh-state
+  effect checks, bounded replanning, and occupied-target skill composition.
+  An optional LLM planner adapter exists; the results below use no LLM.
+- **Classical Push:** Cartesian finite-state execution for the single public
+  `right_side` region, with displacement, region, and on-table checks.
+- **Experimental learned Push:** ACT queue / native Temporal Ensemble and
+  state-based Diffusion Policy behind the same primitive/controller limits.
+  One-step BC, Progress BC, and Chunk BC remain diagnostic baselines.
 
-## Key validated results
-
-Deterministic nominal checks reached 20/20 for Pick→Place, classical Push, and
-the full nominal Agent path. On the same 20 replay-stable Push states:
-
-| Physical Push implementation | Matched success |
-|---|---:|
-| Classical FSM | 20/20 |
-| One-step BC | 0/20 |
-| Simple Chunk BC K=20/H=20 | 2/20 |
-| ACT queue K=32/H=8 | 0/20 |
-| ACT + native Temporal Ensemble K=32/H=1 | **20/20** |
-| State Diffusion Policy To=2/Tp=16/Ta=8 | **20/20** |
-
-The ACT queue and Temporal Ensemble evaluations reuse the same trained neural
-weights; only inference changed. This is a fixed-workspace diagnostic result,
-not evidence of open-scene or general-purpose manipulation.
-
-The classical expert contains hidden execution intent in its finite-state
-sequence, while the state-only imitation dataset presents near-identical
-observations with different desired actions. Naive one-step and queued sequence
-execution failed on the frozen states. Native ACT Temporal Ensemble lets
-overlapping action predictions made from past observations contribute to the
-current action, restoring successful Push behavior in this specific setting.
-The Diffusion result shows that a second mature sequence-policy formulation
-can use the same Push abstraction: it samples a 16-step trajectory from a
-two-observation history and executes eight targets before replanning. This does
-not isolate history from trajectory prediction as a causal factor. See
-[docs/experiments.md](docs/experiments.md),
-[docs/chunk_bc_experiment.md](docs/chunk_bc_experiment.md), and
-[docs/act_push_backend.md](docs/act_push_backend.md), and
-[docs/diffusion_push_backend.md](docs/diffusion_push_backend.md) for evidence
-and limits.
+[Detailed contracts](docs/architecture.md) · [Dynamic-world scenarios](docs/dynamic_playground.md) ·
+[Milestone history](docs/milestones.md)
 
 ## Quick start
 
-Python 3.11 is recommended on macOS; supported versions are `>=3.10,<3.13`.
+Python 3.11 recommended; package metadata allows `>=3.10,<3.13`. The current
+validation host is macOS ARM64; other platforms are not validated here.
 
 ```bash
 git clone https://github.com/Block-O2/semantic-manipulation-stack.git
@@ -116,99 +78,96 @@ cd semantic-manipulation-stack
 python3.11 -m venv .venv
 source .venv/bin/activate
 python -m pip install -e '.[dev]'
-pytest -q
-```
+python -m pytest -q
 
-Validated core dependency constraints are `robosuite==1.5.2`,
-`mujoco>=3.3,<3.4`, and `numpy>=1.24,<2`. Interactive macOS viewers must run
-through `mjpython`; headless commands use the virtual-environment Python.
-
-## Running the main demos
-
-```bash
-# Closed-loop semantic Agent
+# Fully local, no checkpoint / API key / display required
 python -m demos.semantic_agent --no-render --inspect-seconds 0
-
-# Inspectable dynamic-world playground
-python -m demos.dynamic_playground --no-render --inspect-seconds 0
-
-# Classical Push through the complete Agent path
 python -m demos.push_test --no-render --inspect-seconds 0
+python -m demos.semantic_agent --no-render --inspect-seconds 0 --disturbance object-lost
 ```
 
-Rendered macOS runs use `mjpython` and omit `--no-render`. Learned backends
-additionally require their optional dependencies and locally available,
-Git-ignored checkpoints:
+Core constraints: `robosuite==1.5.2`, `mujoco>=3.3,<3.4`, `numpy>=1.24,<2`.
+Base tests skip the two optional ACT/Diffusion test modules when their packages
+are absent. The existing learned environment passes the full suite, but a fresh
+ACT extra install currently has a NumPy dependency conflict; see the
+[installation limits](docs/reproducing.md#optional-learning-dependency-status).
 
-```bash
-python -m pip install -e '.[dev,act]'
-python -m demos.push_test --no-render --inspect-seconds 0 \
-  --push-backend act \
-  --act-execution-mode temporal_ensemble \
-  --checkpoint checkpoints/push_act_seed17.pt
+On macOS, use `mjpython -m demos.semantic_agent --inspect-seconds 2` for the
+interactive viewer. `demos.dynamic_playground` pauses for terminal input even
+with `--no-render`; use `python -m demos.dynamic_scenarios --scenario all` for
+an unattended run. [Installation, GUI/headless checks, and limitations](docs/reproducing.md)
 
-python -m pip install -e '.[dev,diffusion]'
-python -m demos.push_test --no-render --inspect-seconds 0 \
-  --push-backend diffusion \
-  --checkpoint checkpoints/push_diffusion_seed17.pt
-```
+## Results and evidence
 
-Checkpoint training and frozen evaluation commands live in the experiment
-docs; the repository commits compact result records, not datasets or model
-weights.
+**Nominal checks rerun on 2026-11-05:** Pick→Place 20/20 (seed 47), full
+rule-based Agent 20/20 (seed 59), Classical Push 20/20 (seed 127). These are
+separate seeded protocols, not a common 60-state benchmark. Pick/Place and Agent
+randomize cube positions in one fixed scene; Push rejects unstable initial
+placements (14 rejections in this rerun). [Commands and saved trial records](docs/reproducing.md#nominal-evaluations)
 
-## Project map
+**Historical matched Push diagnostic**, recounted from committed per-trial JSON:
 
-```text
-sim/           MuJoCo / robosuite environment and tabletop scene
-robot/         Panda abstraction and the sole raw simulator-action controller
-world/         Ground-truth WorldModel and serializable semantic WorldState
-primitives/    Workspace-bounded Cartesian and gripper execution
-skills/        Semantic skills plus classical and learned Push backends
-planner/       Goal/Plan schemas, registry, effects, validation, and planners
-runtime/       AgentRuntime, SkillExecutor, results, and backend wiring
-datasets/      Imitation-data schema, recording, NPZ I/O, and action windows
-learning/      Learned-policy implementations and training support
-evaluation/    Frozen comparisons, diagnostics, and nominal trials
-artifacts/     Lightweight committed metrics and representative traces
-demos/         Headless and interactive entry points
-playground/    Explicit external world-change tools
-tests/         Deterministic unit and headless simulation tests
-docs/          Architecture, milestones, and experiment reports
-side_projects/ Separate non-mainline reproductions
-```
+| Physical Push implementation | Success | Evidence |
+|---|---:|---|
+| Classical FSM | 20/20 | [records](artifacts/chunk_bc/physical_comparison.json) |
+| One-step BC | 0/20 | [records](artifacts/chunk_bc/physical_comparison.json) |
+| Simple Chunk BC K=20/H=20 | 2/20 | [records](artifacts/chunk_bc/physical_comparison.json) |
+| ACT queue K=32/H=8 | 0/20 | [records](artifacts/act_push/physical_comparison.json) |
+| ACT native Temporal Ensemble K=32/H=1 | 20/20 | [records](artifacts/act_temporal_ensemble/physical_comparison.json) |
+| State Diffusion To=2/Tp=16/Ta=8 | 20/20 | [records](artifacts/diffusion_push/physical_comparison.json) |
 
-`side_projects/agent_act_reproduction/` is a separate three-demo ACT
-reproduction project maintained outside the main semantic-manipulation
-architecture. Its code and checkpoints are not imported by the main runtime.
+All rows share the same 20 dataset indices, recorded seeds, and initial cube
+positions, with the same semantic success test. Four earlier candidates were
+excluded as replay-unstable. **17 evaluated states originate from training
+episodes and 3 from validation episodes: this is not a held-out generalization
+benchmark.** The source dataset contains 50 successful classical demonstrations
+(32,652 steps); failed expert executions are not retained as training episodes.
 
-## Design principles
+ACT queue and Temporal Ensemble reuse the same trained weights according to
+the experiment report; the recorded ensemble checkpoint hash stayed unchanged.
+Native Temporal Ensemble combines overlapping past chunk predictions. Diffusion
+uses two observations, a 16-action prediction, and eight executed actions per
+sample. The comparison changes complete inference formulations and does not
+isolate one causal factor. These learned results concern **Push only**, not
+learned Pick/Place or arbitrary manipulation.
 
-- A Goal is not a Plan; the original Goal survives replanning.
-- Plan completion is not goal completion; fresh world state decides success.
-- Planner output is structured data and must pass deterministic validation.
-- Semantic layers never command joints, primitives, or raw simulator actions.
-- Skills own bounded local recovery; the Agent owns semantic deviations.
-- Physical Push execution is interchangeable behind `PushBackend`.
-- Learned policies remain behind the same trusted safety/controller boundary.
-- Results stay layered so failures remain attributable and auditable.
+No datasets or learned checkpoints are published in this repository. Inspecting
+saved evidence works from a fresh clone; learned demos require local data
+collection and training. Exact historical weights/results are not guaranteed by
+retraining. [Training/evaluation prerequisites](docs/reproducing.md#learned-push-is-not-a-one-command-demo)
 
-## Limitations
+Run `python evaluation/audit_saved_results.py` to recount all nine retained
+backend variants without installing simulation dependencies. See the
+[evidence audit](docs/evidence_audit.md) and [experiment index](docs/experiments.md)
+for sample selection, controls, failure distributions, and interpretation.
 
-- observations are state-only and derived from MuJoCo ground truth;
-- the world is a fixed tabletop scene with no real perception or real robot;
-- public Push supports only the explicit `right_side` region;
-- there is no open-world task learning or general manipulation policy;
-- ACT Temporal Ensemble and Diffusion Policy each reached 20/20 only on the frozen matched
-  distribution and does not establish task or scene generalization;
-- motion planning is not obstacle-aware or force-controlled;
-- the system has no production or formally verified safety guarantee.
+## Scope and limits
 
-## Roadmap
+- Fixed tabletop geometry and state-only simulator ground truth; no visual
+  perception, real robot, open-scene validation, or general task learning.
+- Push supports only `right_side`; contact is a geometric proximity proxy.
+  Motion is not obstacle-aware or force-controlled.
+- Local skill retry and Agent-level replanning are distinct mechanisms. The
+  recorded recovery demonstrates the latter under a scripted intervention.
+- Learned targets pass finite/workspace/step limits and the shared Cartesian
+  path; this is not a production or formally verified safety guarantee.
+- Historical Diffusion CPU sampling averaged 244 ms per call versus a 50 ms
+  simulation control period; simulation success does not establish real-time
+  deployment. No matched ACT latency comparison was recorded.
+- M0–M7.6 are documented milestones; M8/execution monitoring has not started.
 
-The stable checkpoint is the semantic Agent with trusted classical skills and
-classical, ACT Temporal Ensemble, and state-based Diffusion Push
-implementations. M7.6 completes the requested learned-policy reproductions;
-M8 and execution monitoring have not been started.
+## Repository guide
 
-See [docs/milestones.md](docs/milestones.md) for the completed M0–M7 sequence.
+| Area | Entry points |
+|---|---|
+| Scene and execution | `sim/`, `robot/`, `primitives/`, `skills/` |
+| Task reasoning and state | `planner/`, `runtime/`, `world/`, `playground/` |
+| Learning and evaluation | `datasets/`, `learning/`, `evaluation/`, `analysis/` |
+| Runnable examples and tests | `demos/`, `tests/` |
+| Evidence and documentation | `artifacts/`, `docs/` |
+
+The earlier README mentioned a local `side_projects/agent_act_reproduction/`
+project; it is not tracked in this public repository and is not a reproducible
+component of the main stack. Historical implementation reports remain in
+`docs/`. There is no repository-wide LICENSE; upstream notices do not license
+the author's original code. [Third-party notices](docs/third_party_notices.md)

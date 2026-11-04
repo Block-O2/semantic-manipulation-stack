@@ -1,5 +1,11 @@
 # State-Based Diffusion Policy Push Backend
 
+> Reproduction note (2026-11-05): datasets and trained checkpoints are not
+> published. The matched 20-state diagnostic includes 17 training and 3 validation
+> episode states. See [the reproduction guide](reproducing.md) for prerequisites,
+> new output paths, and the distinction between saved evidence and rerunning.
+
+
 M7.6 asks whether a second mature sequence-policy paradigm can drive the same
 physical Push skill without changing its task, safety, controller, or semantic
 success boundary:

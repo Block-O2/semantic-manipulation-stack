@@ -18,6 +18,8 @@ dependencies = [
 [project.optional-dependencies]
 dev = ["pytest>=8,<10"]
 analysis = ["scipy>=1.10,<2"]
+# Historical ACT environment; fresh resolution currently conflicts on
+# LeRobot -> rerun-sdk -> NumPy >=2. See docs/reproducing.md before installing.
 act = [
     "lerobot==0.4.4",
     "torch==2.10.0",

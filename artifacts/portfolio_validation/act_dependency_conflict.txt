@@ -1,0 +1,4 @@
+Fresh full-extra dry-run failed during resolver backtracking.
+Bounded confirmation: python -m pip install --dry-run -e '.[dev,act,diffusion]' rerun-sdk==0.24.0 numpy==1.26.4 numba==0.68.1
+Exit 1: ResolutionImpossible: rerun-sdk 0.24.0 depends on numpy>=2.
+Existing full-test environment: pip check exit 1, rerun-sdk 0.26.2 requires numpy>=2; installed numpy 1.26.4.
